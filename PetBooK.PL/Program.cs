@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using PetBooK.BL.UOW;
 using PetBooK.DAL.Models;
 using Microsoft.Extensions.Logging;
+using PetBooK.BL.Config;
 
 namespace PetBooK.PL
 {
@@ -44,6 +45,10 @@ namespace PetBooK.PL
                 });
             });
 
+            /// For Auto Mapper:
+            builder.Services.AddAutoMapper(typeof(AutoMapConfig).Assembly);
+
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -58,6 +63,8 @@ namespace PetBooK.PL
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+
+
 
             app.UseHttpsRedirection();
 
