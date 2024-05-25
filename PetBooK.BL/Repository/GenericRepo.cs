@@ -1,4 +1,5 @@
-﻿using PetBooK.DAL.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using PetBooK.DAL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,19 @@ namespace PetBooK.BL.Reo
         public List<TEntity> selectall()
         {
             return db.Set<TEntity>().ToList();
+        }
+
+        // EX: Reservation has a relation with clinic and pet, to get the pet data and the clinic data we need include not just select
+        public List<TEntity> SelectAll(params Expression<Func<TEntity, object>>[] includes)
+        {
+            IQueryable<TEntity> query = db.Set<TEntity>();
+
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+
+            return query.ToList();
         }
 
         public TEntity selectbyid(int id)
