@@ -104,6 +104,12 @@ namespace PetBooK.PL.Controllers
                 if (reservationDTO == null)
                     return BadRequest("Reservation data is null");
 
+                var existingReservation = unit.reservationRepository
+                .FirstOrDefault(c => c.ClinicID == reservationDTO.ClinicID && c.PetID == reservationDTO.PetID);
+
+                if (existingReservation != null)
+                    return BadRequest("Reservation already exists");
+
                 Reservation reservation = mapper.Map<Reservation>(reservationDTO);
                 unit.reservationRepository.add(reservation);
                 unit.SaveChanges();
