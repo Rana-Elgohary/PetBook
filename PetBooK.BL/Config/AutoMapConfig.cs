@@ -41,6 +41,8 @@ namespace PetBooK.BL.Config
             CreateMap<ReservationPostDTO, Reservation> ();
             CreateMap<Reservation, ReservationPostDTO>();
 
+            CreateMap<VaccinePetDTO, Vaccine_Pet>();
+            CreateMap<Vaccine_Pet, VaccinePetDTO>();
         }
     }
 }
