@@ -103,6 +103,12 @@ namespace PetBooK.PL.Controllers
                 if (vaccinePetDTO == null)
                     return BadRequest("Vaccine Pet data is null");
 
+                var existingVaccinePet = unit.vaccine_PetRepository
+                .FirstOrDefault(c => c.VaccineID == vaccinePetDTO.VaccineID && c.PetID == vaccinePetDTO.PetID);
+
+                if (existingVaccinePet != null)
+                    return BadRequest("Vaccine Pet already exists");
+
                 Vaccine_Pet vaccinePet = mapper.Map<Vaccine_Pet>(vaccinePetDTO);
                 unit.vaccine_PetRepository.add(vaccinePet);
                 unit.SaveChanges();
