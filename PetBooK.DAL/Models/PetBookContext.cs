@@ -157,28 +157,29 @@ public partial class PetBookContext : DbContext
                 .HasConstraintName("FK_Pet_Client");
         });
 
-            //    entity.HasMany(d => d.Breeds).WithMany(p => p.Pets)
-            //        .UsingEntity<Pet_Breed>(
-            //            j => j
-            //                .HasOne(pb => pb.Breed)
-            //                .WithMany(b => b.Pet_Breeds)
-            //                .HasForeignKey(pb => pb.BreedID)
-            //                .OnDelete(DeleteBehavior.ClientSetNull),
-            //            j => j
-            //                .HasOne(pb => pb.Pet)
-            //                .WithMany(p => p.Pet_Breeds)
-            //                .HasForeignKey(pb => pb.PetID)
-            //                .OnDelete(DeleteBehavior.ClientSetNull),
-            //            j =>
-            //            {
-            //                j.HasKey(t => new { t.PetID, t.BreedID });
-            //                j.ToTable("Pet_Breed");
-            //            });
-            //});
+        //    entity.HasMany(d => d.Breeds).WithMany(p => p.Pets)
+        //        .UsingEntity<Pet_Breed>(
+        //            j => j
+        //                .HasOne(pb => pb.Breed)
+        //                .WithMany(b => b.Pet_Breeds)
+        //                .HasForeignKey(pb => pb.BreedID)
+        //                .OnDelete(DeleteBehavior.ClientSetNull),
+        //            j => j
+        //                .HasOne(pb => pb.Pet)
+        //                .WithMany(p => p.Pet_Breeds)
+        //                .HasForeignKey(pb => pb.PetID)
+        //                .OnDelete(DeleteBehavior.ClientSetNull),
+        //            j =>
+        //            {
+        //                j.HasKey(t => new { t.PetID, t.BreedID });
+        //                j.ToTable("Pet_Breed");
+        //            });
+        //});
 
 
-            modelBuilder.Entity<Pet_Breed>(entity =>
+        modelBuilder.Entity<Pet_Breed>(entity =>
         {
+            entity.ToTable("Pet_Breed"); // Ensure this matches the actual table name
             entity.HasKey(pb => new { pb.PetID, pb.BreedID });
 
             entity.HasOne(pb => pb.Pet)
@@ -189,6 +190,7 @@ public partial class PetBookContext : DbContext
                 .WithMany(b => b.Pet_Breeds)
                 .HasForeignKey(pb => pb.BreedID);
         });
+
 
         modelBuilder.Entity<Request_For_Breed>(entity =>
         {

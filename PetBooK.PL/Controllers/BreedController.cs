@@ -20,6 +20,8 @@ namespace PetBooK.PL.Controllers
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
         }
+       
+        //------------------------------------------------------------------------------------------------------
 
         [HttpGet]
         public IActionResult Get()
@@ -35,15 +37,79 @@ namespace PetBooK.PL.Controllers
             return Ok(BreedDTO);
         }
 
+        //------------------------------------------------------------------------------------------------
+
         [HttpGet("id")]
         public IActionResult GetById(int id)
         {
-            var breed =unitOfWork.breedRepository.selectbyid(id);
-            return Ok(breed);
+            Breed breed =unitOfWork.breedRepository.selectbyid(id);
+            if(breed == null) return NotFound();
+
+            BreedGetDTO breedDto= mapper.Map<BreedGetDTO>(breed);
+            return Ok(breedDto);
         }
 
+        //-------------------------------------------------------------------------------------------------------
 
+        [HttpPost]
 
+        public IActionResult addBreed(BreedAddDTO newBreed)
+        {
+            if (newBreed == null) { return BadRequest(); }
+            Breed breed = mapper.Map<Breed>(newBreed);
+            unitOfWork.breedRepository.add(breed);
+            unitOfWork.SaveChanges();
+            return Ok(newBreed);
+
+        }
+
+        //------------------------------------------------------------------------------------------------------------
+
+        [HttpPut]
+
+        public IActionResult EditBreed(BreedGetDTO newBreed)
+        {
+            if (newBreed == null) { BadRequest(); }
+            Breed breed = mapper.Map<Breed>(newBreed);
+            unitOfWork.breedRepository.update(breed);
+            unitOfWork.SaveChanges();
+            return Ok(newBreed);
+        }
+
+        //-----------------------------------------------------------------------------------------------------------
+
+        [HttpDelete]
+
+        public IActionResult deleteBreed(int id)
+        {
+            List<Pet_Breed> PetBreeds = unitOfWork.pet_BreedRepository.FindBy(p => p.BreedID== id);
+            foreach (var item in PetBreeds)
+            {
+                unitOfWork.pet_BreedRepository.deleteEntity(item);
+            }
+            unitOfWork.SaveChanges();
+            unitOfWork.breedRepository.delete(id);
+            unitOfWork.SaveChanges();
+            return Ok();
+
+        }
+
+        //----------------------------------------------------------------------------------------------------------
+
+        [HttpGet("GetBreedByName/{name}")]
+        public IActionResult GetBreedByName(string name)
+        {
+            var petBreed = unitOfWork.breedRepository.FirstOrDefault(p => p.Breed1 == name);
+
+            if (petBreed == null)
+            {
+                return NotFound(new { Message = $"Breed with name '{name}' not found." });
+            }
+
+            return Ok(petBreed);
+        }
+
+        //---------------------------------------------------------------------------------------------------------
 
     }
 }

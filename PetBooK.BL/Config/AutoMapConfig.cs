@@ -14,6 +14,16 @@ namespace PetBooK.BL.Config
         public AutoMapConfig() 
         {
             CreateMap<Breed, BreedGetDTO>();
+            CreateMap<BreedGetDTO,Breed >();
+            CreateMap<BreedAddDTO, Breed>();
+            CreateMap<Pet_Breed, PetBreedAddDTO>();
+            CreateMap<PetBreedAddDTO , Pet_Breed >();
+            CreateMap<Pet, PetGetDTO>();
+            CreateMap<PetGetDTO, Pet>();
+            CreateMap<Pet, PetAddDTO>();
+            CreateMap<PetAddDTO, Pet>();
+
+
 
         }
     }

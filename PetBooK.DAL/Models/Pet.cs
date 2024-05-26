@@ -60,12 +60,12 @@ public partial class Pet
 
     [ForeignKey("UserID")]
     [InverseProperty("Pets")]
-    public virtual Client User { get; set; }
+    public virtual Client? User { get; set; }
 
     [InverseProperty("Pet")]
     public virtual ICollection<Vaccine_Pet> Vaccine_Pets { get; set; } = new List<Vaccine_Pet>();
 
     //[ForeignKey("PetID")]
-    //[InverseProperty("Pets")]
+    [InverseProperty("Pet")]
     public virtual ICollection<Pet_Breed> Pet_Breeds { get; set; } = new List<Pet_Breed>();
 }
