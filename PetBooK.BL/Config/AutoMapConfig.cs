@@ -13,6 +13,15 @@ namespace PetBooK.BL.Config
     {
         public AutoMapConfig() 
         {
+
+            CreateMap<BreedGetDTO, Breed>();
+            CreateMap<User, UserDTO>();
+            CreateMap<UserDTO, User>();
+            CreateMap<UserAddDTO, User>();
+            CreateMap<DoctorDTO, Doctor>();
+            CreateMap<Doctor, DoctorDTO>();
+            CreateMap<Doctor, DoctorAddDTO>();
+            CreateMap<DoctorAddDTO,Doctor>();
             CreateMap<Breed, BreedGetDTO>();
             CreateMap<BreedGetDTO,Breed >();
             CreateMap<BreedAddDTO, Breed>();
@@ -24,6 +33,12 @@ namespace PetBooK.BL.Config
             CreateMap<PetAddDTO, Pet>();
 
 
+
+            CreateMap<Reservation, ReservationGetDTO>()
+            .ForMember(dest => dest.ClinicName, opt => opt.MapFrom(src => src.Clinic.Name))
+            .ForMember(dest => dest.PetName, opt => opt.MapFrom(src => src.Pet.Name)); ;
+            
+            CreateMap<ReservationPostDTO, Reservation> ();
 
         }
     }
