@@ -57,6 +57,13 @@ namespace PetBooK.BL.Reo
             TEntity obj = db.Set<TEntity>().Find(id);
             db.Set<TEntity>().Remove(obj);
         }
+
+        public void deleteEntity(TEntity entity)
+        {
+            db.Set<TEntity>().Remove(entity);
+        }
+
+
         public int Count()
         {
             return db.Set<TEntity>().Count();

@@ -115,24 +115,31 @@ namespace PetBooK.PL.Controllers
             }
         }
 
-        //[HttpPut]
-        //public ActionResult UpdateReservation(ReservationPostDTO reservationDTO)
-        //{
-        //    try
-        //    {
-        //        if (reservationDTO == null)
-        //            return BadRequest("Reservation data is null");
+        [HttpPut]
+        public ActionResult UpdateReservation(ReservationPostDTO reservationDTO)
+        {
+            try
+            {
+                if (reservationDTO == null)
+                    return BadRequest("Reservation data is null");
 
-        //        Reservation reservation = mapper.Map<Reservation>(reservationDTO);
-        //        unit.reservationRepository.update(reservation);
-        //        unit.SaveChanges();
-        //        return Ok("Successfully updated");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, "An unexpected error occurred.");
-        //    }
-        //}
+                var existingReservation = unit.reservationRepository
+                .FirstOrDefault(c => c.ClinicID == reservationDTO.ClinicID && c.PetID == reservationDTO.PetID);
+
+                if (existingReservation == null)
+                    return NotFound("Reservation not found");
+
+                mapper.Map(reservationDTO, existingReservation);
+
+                unit.reservationRepository.update(existingReservation);
+                unit.SaveChanges();
+                return Ok("Successfully updated");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An unexpected error occurred.");
+            }
+        }
 
         [HttpDelete]
         public ActionResult DeleteReservation(int PetID, int ClinicID)
@@ -147,7 +154,7 @@ namespace PetBooK.PL.Controllers
                 if (reservation == null)
                     return NotFound("No Data to delete");
 
-                //unit.reservationRepository.delete();
+                unit.reservationRepository.deleteEntity(reservation);
                 unit.SaveChanges();
                 return Ok("Successfully deleted");
             }
