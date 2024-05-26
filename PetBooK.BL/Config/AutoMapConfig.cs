@@ -40,6 +40,10 @@ namespace PetBooK.BL.Config
             
             CreateMap<ReservationPostDTO, Reservation> ();
 
+            CreateMap<Breed, BreedWithPetDTO>()
+             .ForMember(dest => dest.PetID, opt => opt.MapFrom(src => src.Pet_Breeds.Select(p => p.PetID).ToList()));
+
+           
         }
     }
 }

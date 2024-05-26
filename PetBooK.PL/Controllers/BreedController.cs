@@ -99,14 +99,19 @@ namespace PetBooK.PL.Controllers
         [HttpGet("GetBreedByName/{name}")]
         public IActionResult GetBreedByName(string name)
         {
-            var petBreed = unitOfWork.breedRepository.FirstOrDefault(p => p.Breed1 == name);
+            List<Breed> petBreed = unitOfWork.breedRepository
+                   .SelectAll(p => p.Pet_Breeds)  // Include the navigation property
+                   .Where(p => p.Breed1 == name)  // Filter by the breed name
+                   .ToList();
 
             if (petBreed == null)
             {
                 return NotFound(new { Message = $"Breed with name '{name}' not found." });
             }
 
-            return Ok(petBreed);
+           List<BreedWithPetDTO>  breedPets = mapper.Map<List<BreedWithPetDTO>>(petBreed);
+
+            return Ok(breedPets);
         }
 
         //---------------------------------------------------------------------------------------------------------

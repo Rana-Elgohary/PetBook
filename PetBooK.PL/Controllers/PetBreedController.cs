@@ -21,6 +21,7 @@ namespace PetBooK.PL.Controllers
             this.mapper = mapper;
         }
 
+        //----------------------------------------------------------------------------------------------------
         [HttpGet]
 
         public IActionResult Get()
@@ -30,6 +31,7 @@ namespace PetBooK.PL.Controllers
 
             return Ok(PD);
         }
+        //-----------------------------------------------------------------------------------------------------------
 
         [HttpPost]
         public IActionResult AddNewPetBreed(PetBreedAddDTO PB)
@@ -45,6 +47,7 @@ namespace PetBooK.PL.Controllers
             return Ok();
 
         }
+        //------------------------------------------------------------------------------------------------------------------
 
         [HttpGet("id")]
 
@@ -59,7 +62,7 @@ namespace PetBooK.PL.Controllers
             PetBreedAddDTO PBDTO = mapper.Map<PetBreedAddDTO>(PB);
             return Ok(PBDTO);
         }
-
+        //--------------------------------------------------------------------------------------------------------------
 
         [HttpGet("BreedID")]
 
@@ -75,6 +78,7 @@ namespace PetBooK.PL.Controllers
             List<PetBreedAddDTO> PBDTO = mapper.Map<List<PetBreedAddDTO>>(PB);
             return Ok(PBDTO);
         }
+        //-----------------------------------------------------------------------------------------------------
 
         [HttpGet("PetID")]
 
@@ -89,6 +93,17 @@ namespace PetBooK.PL.Controllers
 
             List<PetBreedAddDTO> PBDTO = mapper.Map<List<PetBreedAddDTO>>(PB);
             return Ok(PBDTO);
+        }
+        //---------------------------------------------------------------------------------------------------------------
+        [HttpDelete]
+        public IActionResult deletePetBreed(int BreedID , int PetID)
+        {
+            Pet_Breed PB = unitOfWork.pet_BreedRepository.FirstOrDefault(p => p.BreedID == BreedID && p.PetID == PetID);
+            if (PB == null) { return NotFound(); }
+
+            unitOfWork.pet_BreedRepository.deleteEntity(PB);
+            unitOfWork.SaveChanges();
+            return Ok();
         }
 
     }
