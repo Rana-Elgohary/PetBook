@@ -79,6 +79,4 @@ namespace PetBooK.BL.Reo
         }
 
     }
-
-
 }

@@ -17,9 +17,11 @@ namespace PetBooK.BL.Config
 
             CreateMap<Reservation, ReservationGetDTO>()
             .ForMember(dest => dest.ClinicName, opt => opt.MapFrom(src => src.Clinic.Name))
-            .ForMember(dest => dest.PetName, opt => opt.MapFrom(src => src.Pet.Name)); ;
+            .ForMember(dest => dest.PetName, opt => opt.MapFrom(src => src.Pet.Name));
             
             CreateMap<ReservationPostDTO, Reservation> ();
+            CreateMap<Reservation, ReservationPostDTO>();
+
         }
     }
 }
