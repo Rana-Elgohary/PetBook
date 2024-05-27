@@ -13,14 +13,33 @@ namespace PetBooK.BL.Config
     {
         public AutoMapConfig() 
         {
-            //Mapping Breed
+
+
+            CreateMap<BreedGetDTO, Breed>();
+            CreateMap<User, UserDTO>();
+            CreateMap<UserDTO, User>();
+            CreateMap<UserAddDTO, User>();
+            CreateMap<DoctorDTO, Doctor>();
+            CreateMap<Doctor, DoctorDTO>();
+            CreateMap<Doctor, DoctorAddDTO>();
+            CreateMap<DoctorAddDTO,Doctor>();
             CreateMap<Breed, BreedGetDTO>();
+            CreateMap<BreedGetDTO,Breed >();
+            CreateMap<BreedAddDTO, Breed>();
+            CreateMap<Pet_Breed, PetBreedAddDTO>();
+            CreateMap<PetBreedAddDTO , Pet_Breed >();
+            CreateMap<Pet, PetGetDTO>();
+            CreateMap<PetGetDTO, Pet>();
+            CreateMap<Pet, PetAddDTO>();
+            CreateMap<PetAddDTO, Pet>();
+
+
 
 
             ///Mapping Reservations
             CreateMap<Reservation, ReservationGetDTO>()
             .ForMember(dest => dest.ClinicName, opt => opt.MapFrom(src => src.Clinic.Name))
-            .ForMember(dest => dest.PetName, opt => opt.MapFrom(src => src.Pet.Name)); ;
+            .ForMember(dest => dest.PetName, opt => opt.MapFrom(src => src.Pet.Name));
             
             CreateMap<ReservationPostDTO, Reservation> ();
 
@@ -36,6 +55,18 @@ namespace PetBooK.BL.Config
             CreateMap<Vaccine, VaccineDTO>();
             CreateMap<VaccineDTO, Vaccine>();
             CreateMap<VaccinePostDTO, Vaccine>();
+            CreateMap<Reservation, ReservationPostDTO>();
+
+            CreateMap<Breed, BreedWithPetDTO>()
+             .ForMember(dest => dest.PetID, opt => opt.MapFrom(src => src.Pet_Breeds.Select(p => p.PetID).ToList()));
+
+           
+
+            CreateMap<VaccinePetDTO, Vaccine_Pet>();
+            CreateMap<Vaccine_Pet, VaccinePetDTO>();
+
+            CreateMap<VaccineClinicDTO, Vaccine_Clinic>();
+            CreateMap<Vaccine_Clinic, VaccineClinicDTO>();
         }
     }
 }
