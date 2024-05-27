@@ -36,9 +36,9 @@ namespace PetBooK.BL.Reo
             return query.ToList();
         }
 
-        public TEntity selectbyid(int id)
+        public TEntity selectbyid(params object[] keyValues)
         {
-            return db.Set<TEntity>().Find(id);
+            return db.Set<TEntity>().Find(keyValues);
         }
 
         public void add(TEntity entity)
@@ -84,6 +84,41 @@ namespace PetBooK.BL.Reo
         {
             return db.Set<TEntity>().FirstOrDefault(predicate);
         }
+
+        public List<TEntity> SelectAllWithIncludes(params Expression<Func<TEntity, object>>[] includes)
+        {
+            IQueryable<TEntity> query = db.Set<TEntity>();
+
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+
+            return query.ToList();
+        }
+        public TEntity SelectByIdWithIncludes(int id, params Expression<Func<TEntity, object>>[] includes)
+        {
+            IQueryable<TEntity> query = db.Set<TEntity>();
+
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+
+            return query.FirstOrDefault(e => EF.Property<int>(e, "SecretaryID") == id);
+        }
+        public List<TEntity> FindByInclude(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes)
+        {
+            IQueryable<TEntity> query = db.Set<TEntity>();
+
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+
+            return query.Where(predicate).ToList();
+        }
+
 
     }
 }
