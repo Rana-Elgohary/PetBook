@@ -31,7 +31,10 @@ namespace PetBooK.BL.Config
             CreateMap<PetGetDTO, Pet>();
             CreateMap<Pet, PetAddDTO>();
             CreateMap<PetAddDTO, Pet>();
-
+            CreateMap<ClinicccDTO, Clinic>();
+            CreateMap<Clinic, ClinicccDTO>();
+            CreateMap<Clinic, ClinicAddDTO>();
+            CreateMap<ClinicAddDTO, Clinic>();
 
 
 
