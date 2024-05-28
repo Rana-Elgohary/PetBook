@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PetBooK.BL.DTO;
 using PetBooK.BL.UOW;
@@ -11,9 +12,11 @@ namespace PetBooK.PL.Controllers
     public class ClinicPhoneController : ControllerBase
     {
         UnitOfWork unit;
-        public ClinicPhoneController(UnitOfWork unit)
+        IMapper mapper;
+        public ClinicPhoneController(UnitOfWork unit, IMapper mapper)
         {
             this.unit = unit;
+            this.mapper = mapper;
         }
         [HttpGet]
         public ActionResult GetAllClinicPhone()
@@ -24,11 +27,9 @@ namespace PetBooK.PL.Controllers
                 if (clinicPhones == null || clinicPhones.Count == 0)
                     return NotFound("No clinic phones found");
 
-                List<ClinicPhoneDTO> clinicPhoneDTOs = clinicPhones.Select(cp => new ClinicPhoneDTO
-                {
-                    ClinicID = cp.ClinicID,
-                    PhoneNumber = cp.Phone
-                }).ToList();
+                
+                var clinicPhoneDTOs = mapper.Map<List<ClinicPhoneDTO>>(clinicPhones);
+
 
                 return Ok(clinicPhoneDTOs);
             }
@@ -48,11 +49,7 @@ namespace PetBooK.PL.Controllers
                 if (clinicPhones == null || clinicPhones.Count == 0)
                     return NotFound($"Phones for Clinic ID {ClinicId} not found.");
 
-                List<ClinicPhoneDTO> clinicPhoneDTOs = clinicPhones.Select(cp => new ClinicPhoneDTO
-                {
-                    ClinicID = cp.ClinicID,
-                    PhoneNumber = cp.Phone
-                }).ToList();
+                var clinicPhoneDTOs = mapper.Map<List<ClinicPhoneDTO>>(clinicPhones);
 
                 return Ok(clinicPhoneDTOs);
             }
@@ -72,11 +69,7 @@ namespace PetBooK.PL.Controllers
                 if (clinicPhone == null)
                     return NotFound($"Clinic Phone with Clinic ID {ClinicID} and Phone Number {PhoneNumber} not found.");
 
-                var clinicPhoneDTO = new ClinicPhoneDTO
-                {
-                    ClinicID = clinicPhone.ClinicID,
-                    PhoneNumber = clinicPhone.Phone
-                };
+                var clinicPhoneDTO = mapper.Map<ClinicPhoneDTO>(clinicPhone);
                 return Ok(clinicPhoneDTO);
             }
             catch (Exception ex)
@@ -116,18 +109,17 @@ namespace PetBooK.PL.Controllers
         }
 
         [HttpPut]
-        public ActionResult UpdatePhone(ClinicPhoneDTO phoneDTO)
+        public ActionResult UpdatePhone(ClinicPhoneUpdateDTO phoneDTO)
         {
             try                                                             
             {
-                var existingPhone = unit.clinic_PhoneRepository.FirstOrDefault(p => p.ClinicID == phoneDTO.ClinicID && p.Phone == phoneDTO.PhoneNumber);
+                var existingPhone = unit.clinic_PhoneRepository.FirstOrDefault(p => p.ClinicID == phoneDTO.ClinicID && p.Phone == phoneDTO.OldPhone);
 
                 if (existingPhone == null)
                     return NotFound("Phone not found");
 
 
-                existingPhone.ClinicID = phoneDTO.ClinicID;
-                existingPhone.Phone = phoneDTO.PhoneNumber;
+                mapper.Map(phoneDTO, existingPhone);
 
                 unit.clinic_PhoneRepository.update(existingPhone);
                 unit.SaveChanges();

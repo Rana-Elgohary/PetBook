@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using PetBooK.BL.UOW;
 using PetBooK.BL.DTO;
 using PetBooK.DAL.Models;
+using AutoMapper;
 
 namespace PetBooK.PL.Controllers
 {
@@ -12,9 +13,11 @@ namespace PetBooK.PL.Controllers
     public class SecretaryController : ControllerBase
     {
         UnitOfWork unit;
-        public SecretaryController(UnitOfWork unit)
+        IMapper mapper;
+        public SecretaryController(UnitOfWork unit, IMapper mapper)
         {
             this.unit = unit;
+            this.mapper = mapper;
         }
         [HttpGet]
         public ActionResult GetAll()
@@ -23,18 +26,7 @@ namespace PetBooK.PL.Controllers
             {
                 var secretaries = unit.secretaryRepository.SelectAllWithIncludes(s => s.SecretaryNavigation, s => s.Clinic);
 
-                var secrdto = secretaries.Select(s => new SecretaryDTO
-                {
-                    SecretaryID = s.SecretaryID,
-                    Name = s.SecretaryNavigation?.Name,
-                    Age = s.SecretaryNavigation?.Age,
-                    Phone = s.SecretaryNavigation?.Phone,
-                    Location = s.SecretaryNavigation?.Location,
-                    Salary = s.Salary,
-                    HiringDate = s.HiringDate,
-                    ClinicID = s.ClinicID,
-                    ClinicName = s.Clinic?.Name,
-                }).ToList();
+                var secrdto = mapper.Map<List<SecretaryDTO>>(secretaries);
 
                 return Ok(secrdto);
             }
@@ -58,19 +50,7 @@ namespace PetBooK.PL.Controllers
                 {
                     return NotFound();
                 }
-
-                var sc = new SecretaryDTO()
-                {
-                    SecretaryID = secretary.SecretaryID,
-                    Name = secretary.SecretaryNavigation?.Name,
-                    Age = secretary.SecretaryNavigation?.Age,
-                    Phone = secretary.SecretaryNavigation?.Phone,
-                    Location = secretary.SecretaryNavigation?.Location,
-                    Salary = secretary.Salary,
-                    HiringDate = secretary.HiringDate,
-                    ClinicID = secretary.ClinicID,
-                    ClinicName = secretary.Clinic?.Name,
-                };
+                var sc = mapper.Map<SecretaryDTO>(secretary);
 
                 return Ok(sc);
             }
@@ -93,25 +73,35 @@ namespace PetBooK.PL.Controllers
                     return NotFound();
                 }
 
+                var secretaryDTO = mapper.Map<SecretaryDTO>(secretary);
+
+             
                 unit.secretaryRepository.delete(id);
                 if (secretary.SecretaryNavigation != null)
                 {
                     unit.userRepository.delete(secretary.SecretaryNavigation.UserID);
                 }
                 unit.SaveChanges();
+
+               
+
                 return NoContent();
             }
             catch (Exception ex)
             {
-                
-
+               
                 return StatusCode(500, "An error occurred while processing your request.");
             }
         }
 
+
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] SecretaryDTO secretaryDTO)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             try
             {
                 var secretary = unit.secretaryRepository.SelectByIdWithIncludes(id, s => s.SecretaryNavigation, s => s.Clinic);
@@ -119,11 +109,7 @@ namespace PetBooK.PL.Controllers
                 {
                     return NotFound();
                 }
-
-                secretary.SecretaryNavigation.Name = secretaryDTO.Name;
-                secretary.SecretaryNavigation.Phone = secretaryDTO.Phone;
-                secretary.SecretaryNavigation.Location = secretaryDTO.Location;
-                secretary.Salary = secretaryDTO.Salary;
+                mapper.Map(secretaryDTO, secretary);
 
                 unit.secretaryRepository.update(secretary);
                 unit.SaveChanges();
@@ -133,8 +119,20 @@ namespace PetBooK.PL.Controllers
             catch (Exception ex)
             {
                 
-
                 return StatusCode(500, "An error occurred while processing your request.");
+            }
+        }
+        [HttpPost]
+        public ActionResult Addsecretary(SecretaryDTO secretaryaddDTO)
+        {
+            if (secretaryaddDTO == null)
+                return BadRequest();
+            else
+            {
+                var secr = mapper.Map<Secretary>(secretaryaddDTO);
+                unit.secretaryRepository.add(secr);
+                unit.SaveChanges();
+                return Ok(secretaryaddDTO);
             }
         }
 

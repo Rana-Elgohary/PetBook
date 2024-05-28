@@ -13,10 +13,12 @@ namespace PetBooK.PL.Controllers
     public class ClinicLocationController : ControllerBase
     {
         UnitOfWork unit;
+        IMapper mapper;
 
-        public ClinicLocationController(UnitOfWork unit)
+        public ClinicLocationController(UnitOfWork unit, IMapper mapper)
         {
             this.unit = unit;
+            this.mapper = mapper;
         }
         [HttpGet("search")]
         public IActionResult SearchClinicByNameOrLocation(string query)
@@ -56,11 +58,8 @@ namespace PetBooK.PL.Controllers
                 if (clinicLocations == null || !clinicLocations.Any())
                     return NotFound("No Data");
 
-                List<ClinicLocationDTO> clinicLocationDTOs = clinicLocations.Select(cl => new ClinicLocationDTO
-                {
-                    ClinicID = cl.ClinicID,
-                    Location = cl.Location
-                }).ToList();
+                var clinicLocationDTOs = mapper.Map<List<ClinicLocationDTO>>(clinicLocations);
+
 
                 return Ok(clinicLocationDTOs);
             }
@@ -82,11 +81,7 @@ namespace PetBooK.PL.Controllers
                 if (clinicLocations == null || !clinicLocations.Any())
                     return NotFound($"Locations for Clinic ID {ClinicId} not found.");
 
-                List<ClinicLocationDTO> clinicLocationDTOs = clinicLocations.Select(cl => new ClinicLocationDTO
-                {
-                    ClinicID = cl.ClinicID,
-                    Location = cl.Location
-                }).ToList();
+                var clinicLocationDTOs = mapper.Map<List<ClinicLocationDTO>>(clinicLocations);
 
                 return Ok(clinicLocationDTOs);
             }
@@ -107,11 +102,7 @@ namespace PetBooK.PL.Controllers
                 if (clinicLocation == null)
                     return NotFound($"Clinic Location with Clinic ID {ClinicID} and Location {Location} not found.");
 
-                var clinicLocationDTO = new ClinicLocationDTO
-                {
-                    ClinicID = clinicLocation.ClinicID,
-                    Location = clinicLocation.Location
-                };
+                var clinicLocationDTO = mapper.Map<ClinicLocationDTO>(clinicLocation);
                 return Ok(clinicLocationDTO);
             }
             catch (Exception ex)
