@@ -67,10 +67,16 @@ namespace PetBooK.BL.Config
             CreateMap<Clinic_Phone, ClinicPhoneDTO>();
             CreateMap<Clinic_Phone, ClinicPhoneUpdateDTO>();
             CreateMap<Clinic_Location, ClinicLocationDTO>();
-            CreateMap<Clinic_Phone, ClinicPhoneUpdateDTO>()
-           .ForMember(dest => dest.NewPhone, opt => opt.MapFrom(src => src.Phone));
+            CreateMap<ClinicPhoneUpdateDTO,Clinic_Phone>()
+           .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.NewPhone));
             CreateMap<Clinic_Phone, ClinicPhoneDTO>()
            .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.Phone));
+            CreateMap<ClinicPhoneDTO, Clinic_Phone>();
+            CreateMap<Clinic_Location, ClinicLocationUpdateDTO>();
+            CreateMap<Clinic_Location, ClinicLocationUpdateDTO>()
+           .ForMember(dest => dest.NewLocation, opt => opt.MapFrom(src => src.Location))
+           .ForMember(dest => dest.ClinicID, opt => opt.MapFrom(src => src.ClinicID));
+
 
 
 

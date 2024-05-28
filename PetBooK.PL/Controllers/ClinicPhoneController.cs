@@ -119,7 +119,7 @@ namespace PetBooK.PL.Controllers
                     return NotFound("Phone not found");
 
 
-                mapper.Map(phoneDTO, existingPhone);
+                mapper.Map(existingPhone, phoneDTO);
 
                 unit.clinic_PhoneRepository.update(existingPhone);
                 unit.SaveChanges();

@@ -147,7 +147,7 @@ namespace PetBooK.PL.Controllers
         }
 
         [HttpPut]
-        public ActionResult UpdateLocation( ClinicLocationDTO locationDTO)
+        public ActionResult UpdateLocation( ClinicLocationUpdateDTO locationDTO)
         {
             try
             {
@@ -155,14 +155,13 @@ namespace PetBooK.PL.Controllers
                     return BadRequest("Location data is null");
 
                 var existingLocation = unit.clinic_LocationRepository
-                    .FirstOrDefault(l => l.ClinicID == locationDTO.ClinicID && l.Location == locationDTO.Location);
+                    .FirstOrDefault(l => l.ClinicID == locationDTO.ClinicID && l.Location == locationDTO.OldLocation);
 
                 if (existingLocation == null)
                     return NotFound("Location not found");
 
 
-                existingLocation.ClinicID = locationDTO.ClinicID;
-                existingLocation.Location = locationDTO.Location;
+                mapper.Map(existingLocation, locationDTO);
 
 
                 unit.clinic_LocationRepository.update(existingLocation);
