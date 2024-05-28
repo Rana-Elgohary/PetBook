@@ -105,5 +105,28 @@ namespace PetBooK.PL.Controllers
                 return StatusCode(500, "An error occurred while processing your request");
             }
         }
+        [HttpDelete("{id}")]
+        public IActionResult DeleteVaccine(int id)
+        {
+            try
+            {
+                List<Vaccine_Clinic> VC= unit.vaccine_ClinicRepository.FindBy(s=>s.VaccineID==id);
+                unit.vaccine_ClinicRepository.DeleteEntities(VC);
+
+                List<Vaccine_Pet> VP = unit.vaccine_PetRepository.FindBy(s=>s.VaccineID==id);
+                unit.vaccine_PetRepository.DeleteEntities(VP);
+
+                List<Reservation_For_Vaccine> RFV = unit.reservation_For_VaccineRepository.FindBy(s => s.VaccineID == id);
+                unit.reservation_For_VaccineRepository.DeleteEntities(RFV);
+
+                unit.vaccineRepository.delete(id);
+                unit.SaveChanges();
+                return Ok();
+            }
+            catch
+            {
+                return StatusCode(500, "An error occurred while processing your request");
+            }
+        }
     }
 }

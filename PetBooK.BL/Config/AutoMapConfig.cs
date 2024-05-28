@@ -57,6 +57,18 @@ namespace PetBooK.BL.Config
             CreateMap<VaccinePostDTO, Vaccine>();
             CreateMap<Reservation, ReservationPostDTO>();
 
+            //Mapping Clinic_Doctor
+           
+            CreateMap<Clinic_Doctor, ClinicDoctorDTO>()
+            .ForMember(dest => dest.DoctorName, opt => opt.MapFrom(src => src.doctor.DoctorNavigation.Name))
+            .ForMember(dest => dest.ClinicName, opt => opt.MapFrom(src => src.clinic.Name));
+
+            CreateMap<ClinicDoctorDTO, Clinic_Doctor>();
+            CreateMap < ClinicDoctorPostDTO,Clinic_Doctor> (); 
+
+
+
+
             CreateMap<Breed, BreedWithPetDTO>()
              .ForMember(dest => dest.PetID, opt => opt.MapFrom(src => src.Pet_Breeds.Select(p => p.PetID).ToList()));
 

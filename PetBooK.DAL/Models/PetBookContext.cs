@@ -70,49 +70,28 @@ public partial class PetBookContext : DbContext
                 .HasConstraintName("FK_Client_User");
         });
 
-        //modelBuilder.Entity<Clinic>(entity =>
-        //{
-        //    entity.HasKey(e => e.ClinicID).HasName("PK__Clinic__3347C2FD592461AC");
-
-        //    entity.Property(e => e.BankAccount).HasDefaultValueSql("(NULL)");
-
-        //    entity.HasMany(d => d.Doctors).WithMany(p => p.Clinics)
-        //        .UsingEntity<Dictionary<string, object>>(
-        //            "Clinic_Doctor",
-        //            r => r.HasOne<Doctor>().WithMany()
-        //                .HasForeignKey("DoctorID")
-        //                .OnDelete(DeleteBehavior.ClientSetNull)
-        //                .HasConstraintName("FK__Clinic_Do__Docto__4D94879B"),
-        //            l => l.HasOne<Clinic>().WithMany()
-        //                .HasForeignKey("ClinicID")
-        //                .OnDelete(DeleteBehavior.ClientSetNull)
-        //                .HasConstraintName("FK__Clinic_Do__Clini__4CA06362"),
-        //            j =>
-        //            {
-        //                j.HasKey("ClinicID", "DoctorID").HasName("PK__Clinic_D__D19BC210EAEC7E04");
-        //                j.ToTable("Clinic_Doctor");
-        //            });
-        //});
-
-
         modelBuilder.Entity<Clinic>(entity =>
         {
             entity.HasKey(e => e.ClinicID).HasName("PK__Clinic__3347C2FD592461AC");
+
         });
+
 
         modelBuilder.Entity<Clinic_Doctor>(entity =>
         {
-            entity.HasKey(e => new { e.ClinicID, e.DoctorID });
+            entity.ToTable("Clinic_Doctor"); // Ensure this matches the actual table name
+
+            entity.HasKey(cd => new { cd.ClinicID, cd.DoctorID });
 
             entity.HasOne(cd => cd.clinic)
-                .WithMany(c => c.Clinic_Doctors)
-                .HasForeignKey(cd => cd.ClinicID)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                  .WithMany(c => c.Clinic_Doctors)
+                  .HasForeignKey(cd => cd.ClinicID)
+                  .OnDelete(DeleteBehavior.ClientSetNull);
 
             entity.HasOne(cd => cd.doctor)
-                .WithMany(d => d.Clinic_Doctors)
-                .HasForeignKey(cd => cd.DoctorID)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                  .WithMany(d => d.Clinic_Doctors)
+                  .HasForeignKey(cd => cd.DoctorID)
+                  .OnDelete(DeleteBehavior.ClientSetNull);
         });
 
 
@@ -140,10 +119,22 @@ public partial class PetBookContext : DbContext
 
             entity.Property(e => e.DoctorID).ValueGeneratedNever();
 
-            entity.HasOne(d => d.DoctorNavigation).WithOne(p => p.Doctor)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Doctor_User");
+            entity.Property(e => e.Degree)
+                  .IsRequired()
+                  .HasMaxLength(255)
+                  .IsUnicode(false);
+
+            entity.Property(e => e.Salary)
+                  .HasColumnType("decimal(18, 2)");
+
+            entity.HasOne(d => d.DoctorNavigation)
+                  .WithOne(p => p.Doctor)
+                  .HasForeignKey<Doctor>(d => d.DoctorID)
+                  .OnDelete(DeleteBehavior.ClientSetNull)
+                  .HasConstraintName("FK_Doctor_User");
         });
+
+
 
         modelBuilder.Entity<Pet>(entity =>
         {

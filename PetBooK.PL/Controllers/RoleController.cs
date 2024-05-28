@@ -112,7 +112,19 @@ namespace PetBooK.PL.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteRole(int id)
         {
-            return Ok();
+            try
+            {
+                unit.userRepository.FindByAndSetForeignKeyToNull(user => user.RoleID == id,user => user.RoleID);
+
+                unit.roleRepository.delete(id);
+                unit.SaveChanges();
+                return Ok();
+            }
+            catch
+            {
+                return StatusCode(500, "An error occurred while processing your request");
+            }
+
         }
 
     }

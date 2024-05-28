@@ -49,6 +49,6 @@ public partial class Clinic
     public virtual ICollection<Vaccine_Clinic> Vaccine_Clinics { get; set; } = new List<Vaccine_Clinic>();
 
     //[ForeignKey("ClinicID")]
-    //[InverseProperty("Clinics")]
+    [InverseProperty("Clinic")]
     public virtual ICollection<Clinic_Doctor> Clinic_Doctors { get; set; } = new List<Clinic_Doctor>();
 }

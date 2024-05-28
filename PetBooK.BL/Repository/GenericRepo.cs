@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -63,6 +64,10 @@ namespace PetBooK.BL.Reo
             db.Set<TEntity>().Remove(entity);
         }
 
+        public void DeleteEntities(List<TEntity> entities)
+        {
+            db.Set<TEntity>().RemoveRange(entities);
+        }
 
         public int Count()
         {
@@ -83,6 +88,53 @@ namespace PetBooK.BL.Reo
         public TEntity FirstOrDefault(Expression<Func<TEntity, bool>> predicate)
         {
             return db.Set<TEntity>().FirstOrDefault(predicate);
+        }
+
+
+        //This method returns the first entity that matches a given predicate and include 
+        public TEntity SelectByIDInclude(int id, string IdName, params Expression<Func<TEntity, object>>[] includes)
+        {
+            IQueryable<TEntity> query = db.Set<TEntity>();
+
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+            return query.FirstOrDefault(e => EF.Property<int>(e, IdName) == id);
+        }
+
+        //takes 2 integers
+        public TEntity SelectByCompositeKeyInclude(string FID,int id1,string SID, int id2, params Expression<Func<TEntity, object>>[] includes)
+        {
+            IQueryable<TEntity> query = db.Set<TEntity>();
+
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+
+            return query.FirstOrDefault(e => EF.Property<int>(e, FID) == id1 && EF.Property<int>(e, SID) == id2);
+        }
+
+        //This method set a certain columns of specific predicate with null
+        public List<TEntity> FindByAndSetForeignKeyToNull(
+         Expression<Func<TEntity, bool>> predicate,
+            Expression<Func<TEntity, object>> foreignKeySelector) 
+        {
+
+            var entities = db.Set<TEntity>().Where(predicate).ToList();
+            var foreignKeyProperty = (foreignKeySelector.Body as MemberExpression ??
+                                      ((UnaryExpression)foreignKeySelector.Body).Operand as MemberExpression).Member as PropertyInfo;
+
+            
+
+            foreach (var entity in entities)
+            {
+                foreignKeyProperty.SetValue(entity, null);
+            }
+
+
+            return entities;
         }
 
     }
