@@ -82,6 +82,31 @@ namespace PetBooK.BL.Config
 
             CreateMap<VaccineClinicDTO, Vaccine_Clinic>();
             CreateMap<Vaccine_Clinic, VaccineClinicDTO>();
+            CreateMap<Secretary, SecretaryDTO>();
+            CreateMap<Secretary, SecretaryDTO>()
+             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.SecretaryNavigation.Name))
+             .ForMember(dest => dest.Age, opt => opt.MapFrom(src => src.SecretaryNavigation.Age))
+             .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.SecretaryNavigation.Phone))
+             .ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.SecretaryNavigation.Location))
+             .ForMember(dest => dest.ClinicID, opt => opt.MapFrom(src => src.Clinic.ClinicID))
+             .ForMember(dest => dest.ClinicName, opt => opt.MapFrom(src => src.Clinic.Name));
+
+            CreateMap<Clinic_Phone, ClinicPhoneDTO>();
+            CreateMap<Clinic_Phone, ClinicPhoneUpdateDTO>();
+            CreateMap<Clinic_Location, ClinicLocationDTO>();
+            CreateMap<ClinicPhoneUpdateDTO,Clinic_Phone>()
+           .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.NewPhone));
+            CreateMap<Clinic_Phone, ClinicPhoneDTO>()
+           .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.Phone));
+            CreateMap<ClinicPhoneDTO, Clinic_Phone>();
+            CreateMap<Clinic_Location, ClinicLocationUpdateDTO>();
+            CreateMap<Clinic_Location, ClinicLocationUpdateDTO>()
+           .ForMember(dest => dest.NewLocation, opt => opt.MapFrom(src => src.Location))
+           .ForMember(dest => dest.ClinicID, opt => opt.MapFrom(src => src.ClinicID));
+
+
+
+
         }
     }
 }
