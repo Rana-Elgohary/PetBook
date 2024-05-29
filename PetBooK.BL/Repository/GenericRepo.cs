@@ -144,6 +144,8 @@ namespace PetBooK.BL.Reo
             }
             return query.FirstOrDefault(e => EF.Property<int>(e, FID) == id1 && EF.Property<int>(e, SID) == id2);
         }
+
+
         public List<TEntity> FindByAndSetForeignKeyToNull(
          Expression<Func<TEntity, bool>> predicate,
             Expression<Func<TEntity, object>> foreignKeySelector)
@@ -162,6 +164,17 @@ namespace PetBooK.BL.Reo
 
 
             return entities;
+        }
+
+        public TEntity SelectBy3CompositeKeyInclude(string FID, int id1, string SID, int id2, string THID, int id3 ,params Expression<Func<TEntity, object>>[] includes)
+        {
+            IQueryable<TEntity> query = db.Set<TEntity>();
+
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+            return query.FirstOrDefault(e => EF.Property<int>(e, FID) == id1 && EF.Property<int>(e, SID) == id2 && EF.Property<int>(e, THID)==id3);
         }
 
 

@@ -104,9 +104,37 @@ namespace PetBooK.BL.Config
            .ForMember(dest => dest.NewLocation, opt => opt.MapFrom(src => src.Location))
            .ForMember(dest => dest.ClinicID, opt => opt.MapFrom(src => src.ClinicID));
 
+            //Mapping Client:
+            CreateMap<Client, ClientDTO>()
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.ClientNavigation.Name))
+            .ForMember(dest => dest.ClientID, opt => opt.MapFrom(src => src.ClientID))
+            .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => src.ClientNavigation.Sex))
+            .ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.ClientNavigation.Password))
+            .ForMember(dest => dest.Age, opt => opt.MapFrom(src => src.ClientNavigation.Age))
+            .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.ClientNavigation.UserName))
+            .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.ClientNavigation.Email))
+            .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.ClientNavigation.Phone))
+            .ForMember(dest => dest.Photo, opt => opt.MapFrom(src => src.ClientNavigation.Photo))
+            .ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.ClientNavigation.Location))
+            .ForMember(dest => dest.petsNames, opt => opt.MapFrom(src => src.Pets
+            .Where(p => p.UserID == src.ClientNavigation.UserID) // Filter pets belonging to the client
+            .Select(p => p.Name)
+            .ToList()));
 
+            CreateMap<ClientDTO, Client>();
 
+            //Mapping Request For Breed:
+            CreateMap<Request_For_Breed, RequestBreedDTO>()
+                .ForMember(dest => dest.senderPetName, opt => opt.MapFrom(src => src.PetIDSenderNavigation.Name))
+                .ForMember(dest => dest.receiverPetName, opt => opt.MapFrom(src => src.PetIDReceiverNavigation.Name));
 
-        }
+            CreateMap<RequestBreedAddDTO, Request_For_Breed>();
+
+            CreateMap<RequestBreedUpdateDTO, Request_For_Breed>();
+
+            //Mapping Reservation For Vaccine:
+            CreateMap<Reservation_For_Vaccine, ReservationForVaccineDTO>();
+            CreateMap<ReservationForVaccineAddDTO, Reservation_For_Vaccine>();
+;        }
     }
 }
