@@ -28,6 +28,7 @@ namespace PetBooK.BL.UOW
         GenericRepo<Vaccine> VaccineRepository;
         GenericRepo<Vaccine_Clinic> Vaccine_ClinicRepository;
         GenericRepo<Vaccine_Pet> Vaccine_PetRepository;
+        GenericRepo<Clinic_Location> Clinic_LocationRepository;
 
 
 
@@ -249,6 +250,17 @@ namespace PetBooK.BL.UOW
         public void SaveChanges()
         {
             db.SaveChanges();
+        }
+        public GenericRepo<Clinic_Location> clinic_LocationRepository
+        {
+            get
+            {
+                if (Clinic_LocationRepository == null)
+                {
+                    Clinic_LocationRepository = new GenericRepo<Clinic_Location>(db);
+                }
+                return Clinic_LocationRepository;
+            }
         }
 
     }

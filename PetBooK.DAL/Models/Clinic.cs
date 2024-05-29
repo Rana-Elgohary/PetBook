@@ -25,10 +25,10 @@ public partial class Clinic
     [Unicode(false)]
     public string BankAccount { get; set; }
 
-    [Required]
-    [StringLength(255)]
-    [Unicode(false)]
-    public string Location { get; set; }
+    //[Required]
+    //[StringLength(255)]
+    //[Unicode(false)]
+    //public string Location { get; set; }
 
     [InverseProperty("Clinic")]
     public virtual ICollection<Clinic_Location> Clinic_Locations { get; set; } = new List<Clinic_Location>();
