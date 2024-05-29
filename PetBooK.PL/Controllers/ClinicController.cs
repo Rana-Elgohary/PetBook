@@ -79,7 +79,7 @@ namespace PetBooK.PL.Controllers
             }
             else
             {
-                List<ClinicccDTO> clinicDTO = mapper.Map<List<ClinicccDTO>>(clinics);  
+                List<ClinicccDTO> clinicDTO = mapper.Map<List<ClinicccDTO>>(clinics);
 
                 return Ok(clinicDTO);
             }
@@ -120,16 +120,76 @@ namespace PetBooK.PL.Controllers
         //--------------------------------Delete----------------------
         [HttpDelete]
         public IActionResult DeleteClinic(int id)
-        {
-            if (id == null)
-                return NotFound();
-            Clinic clinic = unitOfWork.clinicRepository.selectbyid(id);
-            if (clinic == null)
-                return NotFound();
-            unitOfWork.clinicRepository.delete(id);
-            unitOfWork.SaveChanges();
-            return Ok("clinic has Successfully been deleted");
-        }
+        { //--delete_secr
+               Secretary secr = unitOfWork.secretaryRepository.FirstOrDefault(p => p.ClinicID == id);
+                unitOfWork.secretaryRepository.deleteEntity(secr);
+                unitOfWork.SaveChanges();
 
+
+
+
+            //-------------delete clinic_doc-----------
+
+            List<Clinic_Doctor> clinics = unitOfWork.clinic_DoctorRepository.FindBy(p => p.ClinicID == id);
+            foreach (var items in clinics)
+            {
+                unitOfWork.clinic_DoctorRepository.deleteEntity(items);
+                }
+                unitOfWork.SaveChanges();
+
+            //---------delete clinic_phone------------------------
+
+            List<Clinic_Phone> phones = unitOfWork.clinic_PhoneRepository.FindBy(p => p.ClinicID == id);
+            foreach (var items in phones)
+            {
+                unitOfWork.clinic_PhoneRepository.deleteEntity(items);
+            }
+            unitOfWork.SaveChanges();
+            //---vaccine_clinic------------
+
+            List<Vaccine_Clinic> VC = unitOfWork.vaccine_ClinicRepository.FindBy(p => p.ClinicID == id);
+            foreach (var items in VC)
+            {
+                unitOfWork.vaccine_ClinicRepository.deleteEntity(items);
+            }
+            unitOfWork.SaveChanges();
+
+            //---------------------delete clinicloc--------------------
+            List < Clinic_Location> loc = unitOfWork.clinic_LocationRepository.FindBy(p => p.ClinicID == id);
+            foreach (var items in phones)
+            {
+                unitOfWork.clinic_PhoneRepository.deleteEntity(items);
+            }
+            unitOfWork.SaveChanges();
+
+            //-----------------------delete reservation for vaccine ---------------
+
+
+            List<Reservation_For_Vaccine> res = unitOfWork.reservation_For_VaccineRepository.FindBy(p => p.ClinicID == id);
+            foreach (var items in res)
+            {
+                unitOfWork.reservation_For_VaccineRepository.deleteEntity(items);
+            }
+            unitOfWork.SaveChanges();
+
+            //--------resevation------------------
+
+            List<Reservation> resv = unitOfWork.reservationRepository.FindBy(p => p.ClinicID == id);
+            foreach (var items in res)
+            {
+                unitOfWork.reservation_For_VaccineRepository.deleteEntity(items);
+            }
+            unitOfWork.SaveChanges();
+
+           
+            //-------------clinic------------------
+
+
+                unitOfWork.clinicRepository.delete(id);
+                unitOfWork.SaveChanges();
+                return Ok("clinic has Successfully been deleted");
+            }
+
+        }
     }
-}
+
