@@ -100,21 +100,25 @@ namespace PetBooK.PL.Controllers
                 }
             }
 
-            //--------------------------------Delete----------------------
-            [HttpDelete]
-            public IActionResult DeleteDoctor(int id)
+        //--------------------------------Delete----------------------
+        [HttpDelete("id")]
+        public IActionResult DeleteDoctorr(int id)
+        {
+            List<Clinic_Doctor> doctors = unitOfWork.clinic_DoctorRepository.FindBy(p => p.DoctorID == id);
+            foreach (var item in doctors)
             {
-                if (id == null)
-                    return NotFound();
-                Doctor user = unitOfWork.doctorRepository.selectbyid(id);
-                if (user == null)
-                    return NotFound();
-                unitOfWork.doctorRepository.delete(id);
-                unitOfWork.SaveChanges();
-                return Ok("Doctor Has been deleted Successfully deleted");
+                unitOfWork.clinic_DoctorRepository.deleteEntity(item);
+
             }
+            unitOfWork.SaveChanges();
 
+            Doctor doctor = unitOfWork.doctorRepository.FirstOrDefault(p => p.DoctorID == id);
+            unitOfWork.doctorRepository.deleteEntity(doctor);
 
+            unitOfWork.SaveChanges();
+            return Ok("Doctor Has been deleted Successfully deleted");
+
+        }
         }
 
     }

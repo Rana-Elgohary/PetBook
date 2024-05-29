@@ -103,18 +103,117 @@ namespace PetBooK.PL.Controllers
         }
 
         //--------------------------------Delete----------------------
-        [HttpDelete]
+
+        //--------------------------------delete relations------------------------
+        [HttpDelete("id")]
         public IActionResult DeleteUser(int id)
+
         {
-            if (id == null)
-               return NotFound();
-            User user = unitOfWork.userRepository.selectbyid(id);
-            if (user == null)
-                return NotFound();
-            unitOfWork.userRepository.delete(id);
+            //before deleting user ,flow secretary=>then user
+
+            //delete secertary
+
+            List<Secretary> secertarys = unitOfWork.secretaryRepository.FindBy(p => p.SecretaryID == id);
+            foreach (var item in secertarys)
+            {
+                unitOfWork.secretaryRepository.deleteEntity(item);
+            }
             unitOfWork.SaveChanges();
-            return Ok("User Is Successfully deleted");
+            //----------------------------delete doctor----------------------
+            //delete clinic_doctor first from clinic_doctor before deleting doctor himselfs
+
+            List<Clinic_Doctor> doctors = unitOfWork.clinic_DoctorRepository.FindBy(p => p.DoctorID == id);
+            foreach (var item in doctors)
+            {
+                unitOfWork.clinic_DoctorRepository.deleteEntity(item);
+
+            }
+            unitOfWork.SaveChanges();
+
+            Doctor doctorss = unitOfWork.doctorRepository.FirstOrDefault(p => p.DoctorID == id);
+              unitOfWork.doctorRepository.deleteEntity(doctorss);
+            
+            unitOfWork.SaveChanges();
+
+
+            //-------------------delete pet for deleting client-------------------------
+
+
+
+            //before deleting client, flow petbreed, vaccinepet , reservation , reservation vaccine ==> then delete pet
+            //delete client
+
+            //delete PetBreed
+            List<Pet> pets = unitOfWork.petRepository.FindBy(p => p.UserID == id);
+            foreach (var items in pets)
+            {
+                List<Pet_Breed> petBreeds = unitOfWork.pet_BreedRepository.FindBy(p => p.PetID == items.PetID);
+                foreach (var item in petBreeds)
+                {
+                    unitOfWork.pet_BreedRepository.deleteEntity(item);
+                }
+                unitOfWork.SaveChanges();
+
+                //delete Vaccine-Pet
+                List<Vaccine_Pet> vaccine_Pets = unitOfWork.vaccine_PetRepository.FindBy(p => p.PetID == items.PetID);
+                foreach (var item in vaccine_Pets)
+                {
+                    unitOfWork.vaccine_PetRepository.deleteEntity(item);
+                }
+                unitOfWork.SaveChanges();
+
+                //delete Reservation For Vaccine
+
+                List<Reservation_For_Vaccine> reservation_For_Vaccines = unitOfWork.reservation_For_VaccineRepository.FindBy(p => p.PetID == items.PetID);
+                foreach (var item in reservation_For_Vaccines)
+                {
+                    unitOfWork.reservation_For_VaccineRepository.deleteEntity(item);
+                }
+                unitOfWork.SaveChanges();
+
+                //delete Reservation 
+
+                List<Reservation> reservations = unitOfWork.reservationRepository.FindBy(p => p.PetID == items.PetID);
+                foreach (var item in reservations)
+                {
+                    unitOfWork.reservationRepository.deleteEntity(item);
+                }
+                unitOfWork.SaveChanges();
+
+                //delete RequestForBreed
+
+                List<Request_For_Breed> request_For_Breeds = unitOfWork.request_For_BreedRepository.FindBy(p => p.PetIDSender == items.PetID || p.PetIDReceiver == items.PetID);
+                foreach (var item in request_For_Breeds)
+                {
+                    unitOfWork.request_For_BreedRepository.deleteEntity(item);
+                }
+                unitOfWork.SaveChanges();
+
+                //delete pet 
+
+                Pet pet = unitOfWork.petRepository.selectbyid(items.PetID);
+                unitOfWork.petRepository.deleteEntity(pet);
+                unitOfWork.SaveChanges();
+            }
+            //andddd -------------------------delete clienttt-------------------
+            Client client= unitOfWork.clientRepository.FirstOrDefault(p => p.ClientID == id);     
+                unitOfWork.clientRepository.deleteEntity(client);
+            unitOfWork.SaveChanges();
+
+
+
+
+            //-------------------------------delete user--------------------------------------
+
+            User user = unitOfWork.userRepository.selectbyid(id);
+            unitOfWork.userRepository.deleteEntity(user);
+            unitOfWork.SaveChanges();
+            return Ok();
+
+
+
         }
+
 
 
     }
