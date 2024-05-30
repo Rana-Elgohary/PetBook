@@ -97,17 +97,17 @@ namespace PetBooK.BL.Reo
 
             return query.ToList();
         }
-        public TEntity SelectByIdWithIncludes(int id, params Expression<Func<TEntity, object>>[] includes)
-        {
-            IQueryable<TEntity> query = db.Set<TEntity>();
+       
 
-            foreach (var include in includes)
-            {
-                query = query.Include(include);
-            }
 
-            return query.FirstOrDefault(e => EF.Property<int>(e, "SecretaryID") == id);
-        }
+
+
+
+
+
+
+
+
         public List<TEntity> FindByInclude(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes)
         {
             IQueryable<TEntity> query = db.Set<TEntity>();
