@@ -44,7 +44,7 @@ namespace PetBooK.PL.Controllers
         {
             try
             {
-                var secretary = unit.secretaryRepository.SelectByIdWithIncludes(id, s => s.SecretaryNavigation, s => s.Clinic);
+                var secretary = unit.secretaryRepository.SelectByIDInclude(id, "SecretaryID", s => s.SecretaryNavigation, s => s.Clinic);
 
                 if (secretary == null)
                 {
