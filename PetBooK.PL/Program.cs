@@ -6,6 +6,8 @@ using PetBooK.BL.UOW;
 using PetBooK.DAL.Models;
 using Microsoft.Extensions.Logging;
 using PetBooK.BL.Config;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace PetBooK.PL
 {
@@ -31,6 +33,28 @@ namespace PetBooK.PL
             //--------------------- Register UnitOfWork ---------------------//
             builder.Services.AddScoped<UnitOfWork>();
 
+
+            //------------------------validate token------------------------//
+
+            builder.Services.AddAuthentication(option => option.DefaultAuthenticateScheme = "myscheme")
+                .AddJwtBearer("myscheme",
+                //validate token
+                op =>
+                {
+                    #region secret key
+                    string key = "welcome to my secret key PetBook Alex";
+                    var secertkey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key));
+                    #endregion
+                    op.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        IssuerSigningKey = secertkey,
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+
+                    };
+                }
+                );
+
             //--------------------- Define CORS policy name ---------------------//
             string corsPolicyName = "AllowAll";
 
@@ -50,6 +74,8 @@ namespace PetBooK.PL
 
 
             var app = builder.Build();
+
+
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
