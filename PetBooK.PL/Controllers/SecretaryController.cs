@@ -56,7 +56,7 @@ namespace PetBooK.PL.Controllers
             }
             catch (Exception ex)
             {
-                
+
 
                 return StatusCode(500, "An error occurred while processing your request.");
             }
