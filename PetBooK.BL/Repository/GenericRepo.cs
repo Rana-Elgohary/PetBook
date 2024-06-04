@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,7 +12,7 @@ namespace PetBooK.BL.Reo
 {
     public class GenericRepo<TEntity> where TEntity : class
     {
-        PetBookContext db; 
+        PetBookContext db;
 
         public GenericRepo(PetBookContext db)
         {
@@ -36,9 +37,9 @@ namespace PetBooK.BL.Reo
             return query.ToList();
         }
 
-        public TEntity selectbyid(int id)
+        public TEntity selectbyid(params object[] keyValues)
         {
-            return db.Set<TEntity>().Find(id);
+            return db.Set<TEntity>().Find(keyValues);
         }
 
         public void add(TEntity entity)
@@ -84,6 +85,98 @@ namespace PetBooK.BL.Reo
         {
             return db.Set<TEntity>().FirstOrDefault(predicate);
         }
+
+        public List<TEntity> SelectAllWithIncludes(params Expression<Func<TEntity, object>>[] includes)
+        {
+            IQueryable<TEntity> query = db.Set<TEntity>();
+
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+
+            return query.ToList();
+        }
+       
+
+
+
+
+
+
+
+
+
+
+        public List<TEntity> FindByInclude(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes)
+        {
+            IQueryable<TEntity> query = db.Set<TEntity>();
+
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+
+            return query.Where(predicate).ToList();
+        }
+        public void DeleteEntities(List<TEntity> entities)
+        {
+            db.Set<TEntity>().RemoveRange(entities);
+        }
+        public TEntity SelectByIDInclude(int id, string IdName, params Expression<Func<TEntity, object>>[] includes)
+        {
+            IQueryable<TEntity> query = db.Set<TEntity>();
+
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+            return query.FirstOrDefault(e => EF.Property<int>(e, IdName) == id);
+        }
+
+        public TEntity SelectByCompositeKeyInclude(string FID, int id1, string SID, int id2, params Expression<Func<TEntity, object>>[] includes)
+        {
+            IQueryable<TEntity> query = db.Set<TEntity>();
+
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+            return query.FirstOrDefault(e => EF.Property<int>(e, FID) == id1 && EF.Property<int>(e, SID) == id2);
+        }
+
+
+        public List<TEntity> FindByAndSetForeignKeyToNull(
+         Expression<Func<TEntity, bool>> predicate,
+            Expression<Func<TEntity, object>> foreignKeySelector)
+        {
+
+            var entities = db.Set<TEntity>().Where(predicate).ToList();
+            var foreignKeyProperty = (foreignKeySelector.Body as MemberExpression ??
+                                      ((UnaryExpression)foreignKeySelector.Body).Operand as MemberExpression).Member as PropertyInfo;
+
+
+
+            foreach (var entity in entities)
+            {
+                foreignKeyProperty.SetValue(entity, null);
+            }
+
+
+            return entities;
+        }
+
+        public TEntity SelectBy3CompositeKeyInclude(string FID, int id1, string SID, int id2, string THID, int id3 ,params Expression<Func<TEntity, object>>[] includes)
+        {
+            IQueryable<TEntity> query = db.Set<TEntity>();
+
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+            return query.FirstOrDefault(e => EF.Property<int>(e, FID) == id1 && EF.Property<int>(e, SID) == id2 && EF.Property<int>(e, THID)==id3);
+        }
+
 
     }
 }

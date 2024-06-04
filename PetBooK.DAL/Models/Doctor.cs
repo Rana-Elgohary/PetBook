@@ -29,6 +29,6 @@ public partial class Doctor
     public virtual User DoctorNavigation { get; set; }
 
     //[ForeignKey("DoctorID")]
-    //[InverseProperty("Doctors")]
+    [InverseProperty("Doctor")]
     public virtual ICollection<Clinic_Doctor> Clinic_Doctors { get; set; } = new List<Clinic_Doctor>();
 }
