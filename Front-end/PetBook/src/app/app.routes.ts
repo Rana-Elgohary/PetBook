@@ -6,6 +6,6 @@ import { noNavigateToLoginPageIfTokenGuard } from './Guard/no-navigate-to-login-
 
 export const routes: Routes = [
     {path: "Login", component:UserLoginComponent, title:"Login", canActivate: [noNavigateToLoginPageIfTokenGuard]},
-    {path: "UserSignUp", component:UserSignUpComponent, title:"User Sign-Up"},
+    {path: "UserSignUp", component:UserSignUpComponent, title:"User Sign-Up", canActivate: [noNavigateToLoginPageIfTokenGuard]},
     {path: "PetRegister", component:PetRegisterComponent, title:"Pet Register"}
 ];
