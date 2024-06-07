@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -15,7 +16,7 @@ export class AccountServiceService {
   }
 
   isAuthenticated=false;
-  baseUrl="";
+  baseUrl="https://localhost:7066/api/Account";
   
   private CheckToken(): void {
     const token = localStorage.getItem("token");
@@ -34,14 +35,14 @@ export class AccountServiceService {
   Login(email: string, password: string) {
     const params = new HttpParams().set('email', email).set('password', password);
     
-    this.http.get(this.baseUrl + '/login', { params, responseType: 'text' }).subscribe(d => {
+    this.http.get(`${this.baseUrl}/login?email=${email}&password=${password}`, { params, responseType: 'text' }).subscribe(d => {
       this.isAuthenticated = true;
       localStorage.setItem("token", d);
       try {
         this.r = jwtDecode(d);
         console.log(this.r);
 
-        this.router.navigateByUrl("/home");
+        // this.router.navigateByUrl("");
       } catch (error) {
         console.error('Failed to decode token:', error);
       }
