@@ -1,8 +1,8 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
-
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +10,7 @@ import { jwtDecode } from 'jwt-decode';
 export class AccountServiceService {
   // r ==> to get the claim results in this variable
   r: { UserName:string, Name:string, id:string, RoleId:string } = { UserName:"", Name:"", id:"", RoleId:"" };
-  constructor(public http:HttpClient, private router: Router) 
+  constructor(public http:HttpClient, private router: Router, private snackBar: MatSnackBar) 
   { 
     this.CheckToken()
   }
@@ -35,18 +35,32 @@ export class AccountServiceService {
   Login(email: string, password: string) {
     const params = new HttpParams().set('email', email).set('password', password);
     
-    this.http.get(`${this.baseUrl}/login?email=${email}&password=${password}`, { params, responseType: 'text' }).subscribe(d => {
+    this.http.get(`${this.baseUrl}?email=${email}&password=${password}`, { params, responseType: 'text' })
+    .subscribe(d => {
       this.isAuthenticated = true;
       localStorage.setItem("token", d);
       try {
         this.r = jwtDecode(d);
         console.log(this.r);
 
-        // this.router.navigateByUrl("");
+        this.router.navigateByUrl("");
       } catch (error) {
         console.error('Failed to decode token:', error);
       }
-    });
+    },
+      (error: HttpErrorResponse) => {
+        if (error.status === 401) {
+          // Show a snackbar for invalid email or password
+          this.snackBar.open('Invalid email or password', 'Close', {
+            duration: 5000, // Duration in milliseconds
+            verticalPosition: 'top' // Position of the snackbar
+          });
+        } else {
+          // Handle other errors
+          console.error('An error occurred:', error.error);
+        }
+      }
+    );
   }
  
   logout(){
