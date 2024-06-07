@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class InputSectionComponent {
   @Input() typeOfInput = "text"
+  @Input() LabelType = "text"
 
   inputValue: string = '';
 

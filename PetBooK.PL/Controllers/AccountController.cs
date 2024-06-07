@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using PetBooK.BL.DTO;
 using PetBooK.BL.UOW;
 using PetBooK.DAL.Models;
+using PetBooK.DAL.Services;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -17,12 +18,13 @@ namespace PetBooK.PL.Controllers
     {
         UnitOfWork unitofwork;
         IMapper mapper;
+        IFileService fileService;
 
-
-        public AccountController(UnitOfWork unitofwork, IMapper mapper)
+        public AccountController(UnitOfWork unitofwork, IMapper mapper, IFileService fileService)
         {
             this.unitofwork = unitofwork;
             this.mapper = mapper;
+            this.fileService = fileService;
         }
 
         [HttpGet]
@@ -73,11 +75,28 @@ namespace PetBooK.PL.Controllers
 
         [HttpPost("Register")]
 
-        public ActionResult Register(RegisterDTO userDto)
+        public async Task<ActionResult> RegisterAsync([FromForm] RegisterDTO userDto)
         {
+            string[] allowedFileExtentions = [".jpg", ".jpeg", ".png", ".webp"];
+
+            string createdImageName = await fileService.SaveFileAsync(userDto.Photo, allowedFileExtentions);
+
             if (ModelState.IsValid)
             {
-                User user = mapper.Map<User>(userDto);
+                //User user = mapper.Map<User>(userDto);
+                User user = new User
+                {
+                    Name = userDto.Name,
+                    Location = userDto.Location,
+                    Email = userDto.Email,
+                    Password = userDto.Password,
+                    Photo = createdImageName,
+                    UserName = userDto.Name,
+                    Phone = userDto.Phone,
+                    Age = userDto.Age,
+                    Sex = userDto.Sex,
+                    RoleID = userDto.RoleID,
+                };
                 unitofwork.userRepository.add(user);
                 unitofwork.SaveChanges();
                 return Created();
