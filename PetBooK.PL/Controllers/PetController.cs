@@ -61,6 +61,18 @@ namespace PetBooK.PL.Controllers
 
         //-----------------------------------------------------------------------------------------------------
 
+
+        [HttpGet("userid")]
+        public IActionResult GetAllPetByUserId(int id)
+        {
+            List<Pet> pet = unitOfWork.petRepository.FindBy(s=>s.UserID==id);
+            if (pet == null) { return BadRequest(); }
+            List<PetGetDTO> petDTO = mapper.Map<List<PetGetDTO>>(pet);
+            return Ok(petDTO);
+        }
+
+        //-----------------------------------------------------------------------------------------------------
+
         [HttpPut]
 
         public IActionResult Edit(PetGetDTO NewPet)
@@ -150,3 +162,4 @@ namespace PetBooK.PL.Controllers
         }
     }
 }
+
