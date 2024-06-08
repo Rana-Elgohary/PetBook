@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using PetBooK.BL.DTO;
 using PetBooK.BL.UOW;
 using PetBooK.DAL.Models;
+using PetBooK.DAL.Services;
 
 namespace PetBooK.PL.Controllers
 {
@@ -14,12 +15,13 @@ namespace PetBooK.PL.Controllers
     {
         UnitOfWork unitOfWork;
         IMapper mapper;
+        IFileService fileService;
 
-
-        public PetController(UnitOfWork unitOfWork, IMapper mapper)
+        public PetController(UnitOfWork unitOfWork, IMapper mapper , IFileService fileService)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
+            this.fileService = fileService;
         }
 
         //------------------------------------------------------------------------------------------------------
@@ -79,16 +81,36 @@ namespace PetBooK.PL.Controllers
             return Ok(petDTOs);
         }
         //-----------------------------------
-        [HttpPost]
-        public IActionResult PostPet(PetAddDTO NewPet)
+        [HttpPost] //Edit By Amira
+        public async Task<IActionResult> PostPet(PetAddDTO NewPet)
         {
-            if(NewPet == null) { return BadRequest(); };
+            string[] allowedFileExtentions = [".jpg", ".jpeg", ".png", ".webp"];
 
-            Pet pet = mapper.Map<Pet>(NewPet);
+            string createdImageName = await fileService.SaveFileAsync(NewPet.Photo, allowedFileExtentions);
+            if (NewPet == null)
+            {
+                return BadRequest();
+            }
 
-            unitOfWork.petRepository.add(pet);
-            unitOfWork.SaveChanges();
-            return Ok(pet);
+            else
+            {
+                Pet pet = new Pet
+                {
+                    Name = NewPet.Name,
+                    Photo = createdImageName,
+                    AgeInMonth = NewPet.AgeInMonth,
+                    Sex = NewPet.Sex,
+                    IDNoteBookImage = NewPet.IDNoteBookImage,
+                    ReadyForBreeding = NewPet.ReadyForBreeding,
+                    UserID = NewPet.UserID,
+                    Type = NewPet.Type,
+                    Other = NewPet.Other,
+                };
+
+                unitOfWork.petRepository.add(pet);
+                unitOfWork.SaveChanges();
+                return Ok(pet);
+            }
         }
 
         //------------------------------------------------------------------------------------------------
@@ -104,18 +126,50 @@ namespace PetBooK.PL.Controllers
 
         //-----------------------------------------------------------------------------------------------------
 
-        [HttpPut]
+        [HttpPut] //Edit By Amira
 
-        public IActionResult Edit(PetGetDTO NewPet)
+        public async Task<IActionResult> Edit(int id,[FromForm]PetUpdateDTO NewPet)
         {
-            if(NewPet == null) { return BadRequest(); }
+            if (id != NewPet.PetID)
+            {
+                return BadRequest();
+            }
 
-            Pet pet= mapper.Map<Pet>(NewPet);
-            unitOfWork.petRepository.update(pet);
-            unitOfWork.SaveChanges();
-            return Ok(NewPet);
+            var existingPet = unitOfWork.petRepository.selectbyid(id);
+            if (existingPet == null)
+            {
+                return NotFound();
+            }
+
+            else
+            {
+                string oldImage = existingPet.Photo;
+
+                if (NewPet.Photo != null)
+                {
+
+                    string[] allowedFileExtentions = [".jpg", ".jpeg", ".png", ".webp"];
+                    string createdImageName = await fileService.SaveFileAsync(NewPet.Photo, allowedFileExtentions);
+
+
+                    existingPet.Name = NewPet.Name;
+                    existingPet.Photo = createdImageName;
+                    existingPet.AgeInMonth = NewPet.AgeInMonth;
+                    existingPet.Sex = NewPet.Sex;
+                    existingPet.IDNoteBookImage = NewPet.IDNoteBookImage;
+                    existingPet.ReadyForBreeding = NewPet.ReadyForBreeding;
+                    existingPet.UserID = NewPet.UserID;
+                    existingPet.Type = NewPet.Type;
+                    existingPet.Other = NewPet.Other;
+                    unitOfWork.petRepository.update(existingPet);
+                    unitOfWork.SaveChanges();
+                }
+                if (NewPet.Photo != null)
+                    fileService.DeleteFile(oldImage);
+                return Ok(NewPet);
+            }
+
         }
-
         //-----------------------------------------------------------------------------------------------------------
         [HttpGet("GetAllPetswhosReadyToDate")]
         public IActionResult GetAllPetswhosReadyToDate()
@@ -188,6 +242,7 @@ namespace PetBooK.PL.Controllers
 
             Pet pet =unitOfWork.petRepository.selectbyid(id);
             unitOfWork.petRepository.deleteEntity(pet);
+            fileService.DeleteFile(pet.Photo); //Edit By Amira
             unitOfWork.SaveChanges();
             return Ok();
         }

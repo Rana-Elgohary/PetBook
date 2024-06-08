@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace PetBooK.BL.DTO
 {
-    public class PetAddDTO
+    public class PetUpdateDTO
     {
+        public int PetID { get; set; }
         public string Name { get; set; }
 
         public IFormFile Photo { get; set; }
