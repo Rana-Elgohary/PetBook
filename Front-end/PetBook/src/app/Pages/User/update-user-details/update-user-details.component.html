@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pet Owner Profile</title>
+</head>
+<body class="bg-gray-100">
+  <div class="max-w-4xl mx-auto py-16">
+    <div class="bg-white shadow-lg rounded-lg p-8">
+      <div class="flex flex-col items-center space-y-4">
+        <div class="flex items-center space-x-4">
+          <img class="w-24 h-24 rounded-full" src="https://via.placeholder.com/150" alt="User Profile Picture">
+        </div>
+        <button class="update-button" (click)="save()">Update Photo</button>
+      </div>
+    </div>
+  <!-- Profile Section -->
+<div class="mt-8">
+  <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+      <h4 class="font-semibold">Name</h4>
+      <input type="text" class="mt-1 p-2 w-full border border-gray-300 rounded-md" [(ngModel)]="user.name">
+    </div>
+    <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+      <h4 class="font-semibold">UserName</h4>
+      <input type="text" class="mt-1 p-2 w-full border border-gray-300 rounded-md" [(ngModel)]="user.userName">
+    </div>
+    <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+      <h4 class="font-semibold">Email</h4>
+      <input type="email" class="mt-1 p-2 w-full border border-gray-300 rounded-md" [(ngModel)]="user.email">
+    </div>
+    <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+      <h4 class="font-semibold">Phone</h4>
+      <input type="text" class="mt-1 p-2 w-full border border-gray-300 rounded-md" [(ngModel)]="user.phone">
+    </div>
+    <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+      <h4 class="font-semibold">Location</h4>
+      <input type="text" class="mt-1 p-2 w-full border border-gray-300 rounded-md" [(ngModel)]="user.location">
+    </div>
+    <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+      <h4 class="font-semibold">Age</h4>
+      <input type="number" class="mt-1 p-2 w-full border border-gray-300 rounded-md" [(ngModel)]="user.age">
+    </div>
+    <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+      <h4 class="font-semibold">Gender</h4>
+      <input type="text" class="mt-1 p-2 w-full border border-gray-300 rounded-md" [(ngModel)]="user.sex">
+    </div>
+  </div>
+</div>
+<!-- Save Button -->
+<div class="center">
+  <button class="update-button" (click)="save()">Save Changes</button>
+</div>
+</div>
+</body>
+</html>
+

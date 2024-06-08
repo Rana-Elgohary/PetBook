@@ -2,16 +2,16 @@ export class PetDetails {
   
     constructor(
 
-    petID: number,
-    name: string,
-    photo: string,
-    ageInMonth: number,
-    sex: string,
-    idNoteBookImage: string,
-    userID: number,
-    readyForBreeding: boolean,
-    type: string,
-    other: string){}
+   public petID: number,
+   public  name: string,
+   public photo: string,
+   public ageInMonth: number,
+   public  sex: string,
+   public  idNoteBookImage: string,
+   public  userID: number,
+   public  readyForBreeding: boolean,
+   public  type: string,
+   public other: string){}
   
   
 }

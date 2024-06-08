@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -19,7 +20,7 @@ namespace PetBooK.BL.DTO
         public string Location { get; set; }
         public int? Age { get; set; }
         public string Sex { get; set; }
-        public string Photo { get; set; }
+        public IFormFile? Photo { get; set; }
         public int? RoleID { get; set; }
 
     }

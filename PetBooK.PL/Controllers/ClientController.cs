@@ -4,6 +4,7 @@ using PetBooK.BL.DTO;
 using PetBooK.DAL.Models;
 using AutoMapper;
 using PetBooK.BL.UOW;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace PetBooK.PL.Controllers
@@ -41,9 +42,9 @@ namespace PetBooK.PL.Controllers
 
         //----------Get Client by id----------//
         [HttpGet("{clientId}")]
-        public IActionResult getClient(int clientId, string ClientIdName)
+        public IActionResult getClient(int clientId)
         {
-            Client Client = unit.clientRepository.SelectByIDInclude(clientId, ClientIdName, r => r.Pets, r => r.ClientNavigation);
+            Client Client = unit.clientRepository.SelectByIDInclude(clientId, "ClientID", r => r.Pets, r => r.ClientNavigation);
             if (Client == null)
             {
                 return NotFound();
@@ -128,5 +129,10 @@ namespace PetBooK.PL.Controllers
         //{
 
         //}
+
+     
+
+
     }
 }
+

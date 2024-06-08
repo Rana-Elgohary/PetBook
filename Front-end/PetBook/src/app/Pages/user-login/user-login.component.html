@@ -6,11 +6,11 @@
            
             <section class="my-9">
                 <div class="relative">
-                    <app-input-section typeOfInput="email" (inputValueChange)="email=$event"></app-input-section>
+                    <app-input-section typeOfInput="email" LabelType="email" (inputValueChange)="email=$event"></app-input-section>
                 </div>
 
                 <div class="relative mt-8">
-                    <app-input-section typeOfInput="password" (inputValueChange)="password=$event"></app-input-section>
+                    <app-input-section typeOfInput="password" LabelType="password" (inputValueChange)="password=$event"></app-input-section>
                 </div>
             </section>
 
@@ -24,7 +24,7 @@
         </div>
     </div>
 
-    <div class="w-1/2">
+    <div class="image w-1/2">
         <img class="h-[100%] w-[100%]" src="../../../assets/Images/pet.png">
     </div>
 </div>

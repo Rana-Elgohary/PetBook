@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { UserClient } from '../Models/user-client';
 
 @Injectable({
   providedIn: 'root'
@@ -67,6 +68,26 @@ export class AccountServiceService {
     this.isAuthenticated=false;
     localStorage.removeItem("token");
   }
+
+  SignUp(user:UserClient){
+    const formData = new FormData();
+    formData.append('name', user.name);
+    formData.append('email', user.email);
+    formData.append('password', user.password);
+    formData.append('phone', user.phone);
+    formData.append('userName', user.userName);
+    formData.append('location', user.location);
+    formData.append('age', user.age.toString()); // Convert age to string before appending
+    formData.append('sex', user.sex);
+    formData.append('roleID', user.roleID.toString()); // Convert roleID to string before appending
+
+    if (user.photo) {
+      formData.append('photo', user.photo);
+    }
+
+    return this.http.post(`${this.baseUrl}/Register`, formData);
+      // return this.http.post(`${this.baseUrl}/Register`, user);
+    }
 }
  
  
