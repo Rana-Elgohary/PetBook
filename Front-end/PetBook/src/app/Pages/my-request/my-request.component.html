@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<head>
+  <!-- Add your head content here -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+</head>
+
+<body>
+  <div class="px-8 mt-8"> <!-- Added padding to the container div and margin-top -->
+    <table class="min-w-full divide-y divide-gray-200 mx-auto max-w-7xl"> <!-- Added margin auto and max-width classes here -->
+      <thead class="bg-white">
+        <tr>
+          <th scope="col" class="px-6 py-7 text-left  font-bold text-black text-lg tracking-wider font-sans">My Pet</th>
+          <th scope="col" class="px-6 py-7 text-left  font-bold text-black text-lg tracking-wider font-sans">Pair Pet</th>
+          <th scope="col" class="px-6 py-7 text-left  font-bold text-black text-lg tracking-wider font-sans">Owned By</th>
+          <th scope="col" class="px-6 py-7 text-left  font-bold text-black text-lg tracking-wider font-sans">Remove</th>
+        </tr>
+      </thead>
+      <tbody class="bg-gray-50">
+        <tr *ngFor="let item of request; let i = index">
+          <td class="px-6 py-4 whitespace-nowrap font-sans text-black font-bold text-lg">{{ item.senderPetName }}</td> <!-- Increased font size here -->
+          <td class="px-6 py-4 whitespace-nowrap font-sans text-orange-500 font-bold text-lg">{{ item.receiverPetName }}</td> <!-- Increased font size here -->
+          <td class="px-6 py-4 whitespace-nowrap font-sans text-black font-bold text-lg">{{ item.ownerreceiverName }}</td> <!-- Increased font size here -->
+          <td class="px-6 py-4 whitespace-nowrap font-sans">
+            <button class="text-red-600 hover:text-red-900 font-bold" (click)="removeRequest(item.petIDSender,item.petIDReceiver)"><i class="fas fa-trash"></i></button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
