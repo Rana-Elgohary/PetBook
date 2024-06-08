@@ -7,7 +7,10 @@ import { PetDetailsComponent } from './Pages/PetInfo/pet-detailss/pet-details.co
 
 export const routes: Routes = [
     {path: "Login", component:UserLoginComponent, title:"Login", canActivate: [noNavigateToLoginPageIfTokenGuard]},
+
     {path: "UserSignUp", component:UserSignUpComponent, title:"User Sign-Up"},
     {path: "PetRegister", component:PetRegisterComponent, title:"Pet Register"},
 { path: 'Pet/details/:id', component: PetDetailsComponent },
+
+
 ];

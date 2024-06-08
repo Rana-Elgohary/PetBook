@@ -8,6 +8,8 @@ using Microsoft.Extensions.Logging;
 using PetBooK.BL.Config;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using PetBooK.DAL.Services;
+using Microsoft.Extensions.FileProviders;
 
 namespace PetBooK.PL
 {
@@ -55,6 +57,9 @@ namespace PetBooK.PL
                 }
                 );
 
+            //------------------------ Inject File Service ------------------------//
+            builder.Services.AddTransient<IFileService, FileService>();
+
             //--------------------- Define CORS policy name ---------------------//
             string corsPolicyName = "AllowAll";
 
@@ -75,6 +80,13 @@ namespace PetBooK.PL
 
             var app = builder.Build();
 
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(builder.Environment.ContentRootPath, "Uploads")),
+                RequestPath = "/Resources"
+            });
 
 
             // Configure the HTTP request pipeline.

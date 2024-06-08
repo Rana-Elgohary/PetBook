@@ -6,17 +6,17 @@
            
             <section class="my-9">
                 <div class="relative">
-                    <app-input-section typeOfInput="email" (inputValueChange)="email=$event"></app-input-section>
+                    <app-input-section typeOfInput="email" LabelType="email" (inputValueChange)="email=$event"></app-input-section>
                 </div>
 
                 <div class="relative mt-8">
-                    <app-input-section typeOfInput="password" (inputValueChange)="password=$event"></app-input-section>
+                    <app-input-section typeOfInput="password" LabelType="password" (inputValueChange)="password=$event"></app-input-section>
                 </div>
             </section>
 
             <section class="flex justify-around mb-5">
                 <p class="text-slate-400">Don't have an account?</p>
-                <a class="border-b-2 border-transparent text-orange-400 hover:text-orange-600 hover:border-orange-600 hover:cursor-pointer transition duration-200 hover:scale-105">Sign-Up</a>            
+                <a routerLink="/UserSignUp" class="border-b-2 border-transparent text-orange-400 hover:text-orange-600 hover:border-orange-600 hover:cursor-pointer transition duration-200 hover:scale-105">Sign-Up</a>            
             </section>
 
             <button class="text-white bg-orange-400 w-[100%] py-2 rounded-md hover:bg-orange-500 hover:text-gray-200 transition duration-200 ease-in hover:-translate-x-1 hover:scale-105" (click)="Login()">Log in</button>
@@ -24,7 +24,7 @@
         </div>
     </div>
 
-    <div class="w-1/2">
-        <img class="h-[100%] w-[100%]" src="../../../assets/Images/pet3.webp">
+    <div class="image w-1/2">
+        <img class="h-[100%] w-[100%]" src="../../../assets/Images/pet.png">
     </div>
 </div>
