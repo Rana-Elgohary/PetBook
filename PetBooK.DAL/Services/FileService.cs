@@ -48,8 +48,19 @@ namespace PetBooK.DAL.Services
 
         public void DeleteFile(string fileNameWithExtension)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(fileNameWithExtension))
+            {
+                throw new ArgumentNullException(nameof(fileNameWithExtension));
+            }
+            var contentPath = environment.ContentRootPath;
+            var path = Path.Combine(contentPath, $"Uploads", fileNameWithExtension);
+
+            if (!File.Exists(path))
+            {
+                throw new FileNotFoundException($"Invalid file path");
+            }
+            File.Delete(path);
         }
+    }
 
     }
-}
