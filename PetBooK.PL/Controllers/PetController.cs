@@ -115,12 +115,19 @@ namespace PetBooK.PL.Controllers
 
         //------------------------------------------------------------------------------------------------
 
-        [HttpGet("id")]
-        public IActionResult GetId(int id )
+        [HttpGet("{id}")]
+        public IActionResult GetId(int id)
         {
-           Pet pet= unitOfWork.petRepository.selectbyid(id);
-            if(pet == null) { return BadRequest(); }
-            PetGetDTO petDTO =mapper.Map<PetGetDTO>(pet);
+            Pet pet = unitOfWork.petRepository.selectbyid(id);
+            if (pet == null)
+            {
+                return BadRequest();
+            }
+
+            
+            PetGetDTO petDTO = mapper.Map<PetGetDTO>(pet);
+           
+
             return Ok(petDTO);
         }
 
@@ -246,5 +253,8 @@ namespace PetBooK.PL.Controllers
             unitOfWork.SaveChanges();
             return Ok();
         }
+
+
+
     }
 }
