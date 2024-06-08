@@ -1,0 +1,122 @@
+<!-- <div class="bg-gray-100 h-screen relative">
+    <div class="absolute">
+        <img src="../../../../assets/Images/Search Page BG.png">
+    </div>
+    <div>
+    <div class="absolute w-64 left-60 top-52">
+        <img src="../../../../assets/Images/pet.png">
+    </div>
+    
+    <div class="bg-[#FFEFD8] shadow-2xl rounded-lg top-10 absolute right-64 p-10 space-y-5">
+        <div class="flex justify-around space-x-5">
+            <div class="text-lg w-20">Name</div>
+            <input class="bg-[#FFEFD8] border-[1px] border-amber-500 w-56">
+        </div>
+
+        <div class="flex justify-around space-x-5">
+            <div class="text-lg w-20">Age</div>
+            <input class="bg-[#FFEFD8] border-[1px] border-amber-500 w-56">
+        </div>
+
+        <div class="flex justify-around space-x-5">
+            <div class="text-lg w-20">Sex</div>
+            <input class="bg-[#FFEFD8] border-[1px] border-amber-500 w-56">
+        </div>
+
+        <div class="flex justify-evenly space-x-5">
+            <div class="text-lg pt-20 w-28">Note Book</div>
+            <div class="w-56">
+                <img src="../../../../assets/Images/pet2.webp">
+            </div>
+        </div>
+
+        <div class="flex justify-around space-x-5">
+            <div class="text-lg w-20">Type</div>
+            <input class="bg-[#FFEFD8] border-[1px] border-amber-500 w-56">
+        </div>
+
+        <div class="flex justify-around space-x-5">
+            <div class="text-lg w-20">Pair With</div>
+            <input class="bg-[#FFEFD8] border-[1px] border-amber-500 w-56">
+        </div>
+
+        <div class="flex justify-around space-x-5">
+            <div class="text-lg w-20">Other</div>
+            <input class="bg-[#FFEFD8] border-[1px] border-amber-500 w-56">
+        </div>
+
+        <div class="pt-3 ml-24">
+            <a class="rounded-lg p-3 text-lg  cursor-pointer tracking-wider bg-[#FDBD68] hover:bg-[#ce7604]">Ready For Breed</a>
+        </div>
+    </div>
+    </div>
+    
+
+    <div class="bottom-5">
+        <a class="rounded-lg p-3 text-lg  cursor-pointer tracking-wider bg-[#FDBD68] hover:bg-[#ce7604]">Add New Pet</a>
+
+    </div>
+</div>
+ -->
+
+ <!-- Main Content -->
+ <div class="justify-center bg-gray-100 relative">
+    <div class="absolute">
+        <img src="../../../../assets/Images/Search Page BG.png">
+    </div>
+   
+    <!-- @for(item of userPetList; track item.Name){ -->
+    <div *ngFor="let item of userPetList" class="flex items-center w-full">
+    <div class=" top-60 ml-24">
+        <img src="../../../../assets/Images/pet.png" alt="Pet Image" class="rounded-full w-60">
+    </div>
+    <!-- Form -->
+    <div class="bg-[#FFFBF1] p-8 rounded-lg shadow-md w-5/12 relative left-72 top-10 h-screen mb-5">
+        <div >
+            <div class="mb-4">
+                <label class="block text-gray-700">Name:</label>
+                <input type="text" class="mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" [value]="item.Name">
+               
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700">Age:</label>
+                <input type="text" class="mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" [value]="item.AgeInMonth">
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700">NoteBook:</label>
+                <textarea class="mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50 h-32"></textarea>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700">Sex:</label>
+                <input type="text" class="mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" [value]="item.Sex">
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700">Type:</label>
+                <input type="text" class="mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" [value]="item.Type">
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700">Pair With:</label>
+                <input type="text" class="mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" value="lk">
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700">Other Info:</label>
+                <input type="text" class="mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" [value]="item.Other">
+            </div>
+            <div class="flex justify-between">
+            <div class="flex justify-center">
+                <button class="bg-[#FDBD68] hover:bg-[#ce7604] text-white font-bold py-2 px-4 rounded-lg">Ready For Breeding</button>
+            </div>
+            <div class="flex justify-center">
+                <button class="bg-[#FDBD68] hover:bg-[#ce7604] text-white font-bold py-2 px-4 rounded-lg">Edit</button>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <!-- }  -->
+    <div class="ml-6 mt-10 mb-10 w-80 ">
+        <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg">+ Add New Pet</button>
+
+        <!-- <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg" (click)="navigateToAdd()">+ Add New Pet</button> -->
+    </div>
+</div>

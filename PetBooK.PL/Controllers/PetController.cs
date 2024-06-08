@@ -25,12 +25,12 @@ namespace PetBooK.PL.Controllers
         //------------------------------------------------------------------------------------------------------
 
         [HttpGet]
-        public IActionResult GetAllPets() 
+        public IActionResult GetAllPets()
         {
             List<Pet> pets = unitOfWork.petRepository.selectall();
             if (pets == null) { return BadRequest(); }
 
-            List<PetGetDTO> PetDTO=mapper.Map<List<PetGetDTO>>(pets);
+            List<PetGetDTO> PetDTO = mapper.Map<List<PetGetDTO>>(pets);
             return Ok(PetDTO);
         }
 
@@ -39,7 +39,7 @@ namespace PetBooK.PL.Controllers
         [HttpPost]
         public IActionResult PostPet(PetAddDTO NewPet)
         {
-            if(NewPet == null) { return BadRequest(); };
+            if (NewPet == null) { return BadRequest(); };
 
             Pet pet = mapper.Map<Pet>(NewPet);
 
@@ -50,15 +50,25 @@ namespace PetBooK.PL.Controllers
 
         //------------------------------------------------------------------------------------------------
 
-        [HttpGet("id")]
-        public IActionResult GetId(int id )
+        [HttpGet("{id}")]
+        public IActionResult GetId(int id)
         {
-           Pet pet= unitOfWork.petRepository.selectbyid(id);
-            if(pet == null) { return BadRequest(); }
-            PetGetDTO petDTO =mapper.Map<PetGetDTO>(pet);
+            Pet pet = unitOfWork.petRepository.selectbyid(id);
+            if (pet == null) { return BadRequest(); }
+            PetGetDTO petDTO = mapper.Map<PetGetDTO>(pet);
             return Ok(petDTO);
         }
 
+        //------------------------------------------------------------------------------------------------
+
+        [HttpGet("GetByUserID/{userId}")]
+        public IActionResult GetPetByUserId(int userId)
+        {
+            List<Pet> pets = unitOfWork.petRepository.FindByForeignKey(p=>p.UserID==userId);
+            if (pets == null) { return BadRequest(); }
+            List<PetGetDTO> petDTO = mapper.Map<List<PetGetDTO>>(pets);
+            return Ok(petDTO);
+        }
         //-----------------------------------------------------------------------------------------------------
 
         [HttpPut]

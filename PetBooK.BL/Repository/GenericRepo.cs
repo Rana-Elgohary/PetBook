@@ -178,5 +178,11 @@ namespace PetBooK.BL.Reo
         }
 
 
+        public List<TEntity> FindByForeignKey(Expression<Func<TEntity, bool>> predicate)
+        {
+
+            return db.Set<TEntity>().Where(predicate).ToList();
+
+        }
     }
 }
