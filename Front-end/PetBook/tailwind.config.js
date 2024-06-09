@@ -4,7 +4,14 @@ module.exports = {
     "./src/**/*.{html,ts}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily:{
+        aclonica: ['Aclonica'],
+        glutin:['Gluten'],
+        inter:['Inter']
+
+      }
+    },
   },
   plugins: [],
 }

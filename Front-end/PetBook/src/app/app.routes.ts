@@ -6,6 +6,12 @@ import { noNavigateToLoginPageIfTokenGuard } from './Guard/no-navigate-to-login-
 import { MyRequestComponent } from './Pages/my-request/my-request.component';
 import { PendingRequestComponent } from './Pages/pending-request/pending-request.component';
 
+
+import { UserDetailsComponent } from './Pages/User/user-details/user-details.component';
+import { UpdateUserDetailsComponent } from './Pages/User/update-user-details/update-user-details.component';
+import { LandingPageComponent } from './Pages/LandingPage/landing-page/landing-page.component';
+import { PetDetailsComponent } from './Pages/PetInfo/pet-detailss/pet-details.component';
+
 export const routes: Routes = [
     {path: "Login", component:UserLoginComponent, title:"Login", canActivate: [noNavigateToLoginPageIfTokenGuard]},
     {path: "UserSignUp", component:UserSignUpComponent, title:"User Sign-Up"},
@@ -14,5 +20,12 @@ export const routes: Routes = [
 
     {path: "UserSignUp", component:UserSignUpComponent, title:"User Sign-Up", canActivate: [noNavigateToLoginPageIfTokenGuard]},
     {path: "PetRegister", component:PetRegisterComponent, title:"Pet Register"},
-    {path:"pendingRequest" , component:PendingRequestComponent , title:"pending Request"}
+    {path:"pendingRequest" , component:PendingRequestComponent , title:"pending Request"},
+    {path: "Account", component:UserDetailsComponent, title:"Account"},
+    {path: "UpdateUser", component:UpdateUserDetailsComponent, title:"Edit"},
+    {path:"",component:LandingPageComponent,title:"PetBook"},
+    { path: 'Pet/details/:id', component: PetDetailsComponent }
+
+
+
 ];

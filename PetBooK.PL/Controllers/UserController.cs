@@ -57,7 +57,7 @@ namespace PetBooK.PL.Controllers
         [HttpGet("Loc")]
         public IActionResult GetByLoc(string Loc)
         {
-             List <User> users = unitOfWork.userRepository.FindBy(l => l.Location == Loc);
+            List<User> users = unitOfWork.userRepository.FindBy(l => l.Location == Loc);
             if (users == null)
             {
                 return NotFound();
@@ -72,7 +72,7 @@ namespace PetBooK.PL.Controllers
 
 
 
-        //-------------------------------ADD------------------------------
+        //-------------------------------ADD------------------------------//Edit By Rana & Amira
         [HttpPost]
         public async Task<ActionResult> AddUserAsync(UserAddDTO useraddDTO)
         {
@@ -92,7 +92,7 @@ namespace PetBooK.PL.Controllers
                     Email = useraddDTO.Email,
                     Password = useraddDTO.Password,
                     Photo = createdImageName,
-                    UserName = useraddDTO.Name, 
+                    UserName = useraddDTO.Name,
                     Phone = useraddDTO.Phone,
                     Age = useraddDTO.Age,
                     Sex = useraddDTO.Sex,
@@ -105,21 +105,53 @@ namespace PetBooK.PL.Controllers
             }
         }
 
-        //-------------------------Update------------------------------
+        //-------------------------Update------------------------------//Edit By Amira
         [HttpPut]
-        public ActionResult UpdateUser(UserDTO userDTO)
+        public async Task<ActionResult> UpdateUser(int id, [FromForm] UserUpdateDTO userDTO)
         {
-            if (userDTO == null)
+            if (id != userDTO.Id)
+            {
                 return BadRequest();
+            }
+
+            var existingUser = unitOfWork.userRepository.selectbyid(id);
+            if (existingUser == null)
+            {
+                return NotFound();
+            }
+
             else
             {
+                string oldImage = existingUser.Photo;
 
-                User user = mapper.Map<User>(userDTO);
-                unitOfWork.userRepository.update(user);
-                unitOfWork.SaveChanges();
+                if (userDTO.Photo != null)
+                {
+
+                    string[] allowedFileExtentions = [".jpg", ".jpeg", ".png", ".webp"];
+                    string createdImageName = await fileService.SaveFileAsync(userDTO.Photo, allowedFileExtentions);
+
+                    existingUser.UserID = userDTO.Id;
+                    existingUser.Name = userDTO.Name;
+                    existingUser.UserName = userDTO.UserName;
+                    existingUser.Email = userDTO.Email;
+                    existingUser.Password = userDTO.Password;
+                    existingUser.Age = userDTO.Age;
+                    existingUser.Sex = userDTO.Sex;
+                    existingUser.Location = userDTO.Location;
+                    existingUser.Phone = userDTO.Phone;
+                    existingUser.Photo = createdImageName;
+                    existingUser.RoleID = userDTO.RoleID;
+
+                    unitOfWork.userRepository.update(existingUser);
+                    unitOfWork.SaveChanges();
+                }
+                if (userDTO.Photo != null)
+                    fileService.DeleteFile(oldImage);
                 return Ok(userDTO);
             }
+           
         }
+    
 
         //--------------------------------Delete----------------------
 
@@ -226,6 +258,7 @@ namespace PetBooK.PL.Controllers
 
             User user = unitOfWork.userRepository.selectbyid(id);
             unitOfWork.userRepository.deleteEntity(user);
+            fileService.DeleteFile(user.Photo);
             unitOfWork.SaveChanges();
             return Ok();
 
