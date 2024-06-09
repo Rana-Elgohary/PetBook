@@ -18,7 +18,7 @@ namespace PetBooK.BL.DTO
         public string Location { get; set; }
         public int? Age { get; set; }
         public string Sex { get; set; }
-        public IFormFile Photo { get; set; } // to upload the image
+        public IFormFile? Photo { get; set; } 
         public int? RoleID { get; set; }
     }
 }

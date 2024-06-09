@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PetBooK.BL.DTO;
 using PetBooK.BL.UOW;
 using PetBooK.DAL.Models;
@@ -76,37 +77,70 @@ namespace PetBooK.PL.Controllers
         [HttpPost]
         public async Task<ActionResult> AddUserAsync(UserAddDTO useraddDTO)
         {
-            string[] allowedFileExtentions = [".jpg", ".jpeg", ".png", ".webp"];
-
-            string createdImageName = await fileService.SaveFileAsync(useraddDTO.Photo, allowedFileExtentions);
+            string[] allowedFileExtensions = new string[] { ".jpg", ".jpeg", ".png", ".webp" };
 
             if (useraddDTO == null)
-                return BadRequest();
-            else
             {
-                //User user = mapper.Map<User>(useraddDTO);
-                User user = new User
-                {
-                    Name = useraddDTO.Name,
-                    Location = useraddDTO.Location,
-                    Email = useraddDTO.Email,
-                    Password = useraddDTO.Password,
-                    Photo = createdImageName,
-                    UserName = useraddDTO.Name,
-                    Phone = useraddDTO.Phone,
-                    Age = useraddDTO.Age,
-                    Sex = useraddDTO.Sex,
-                    RoleID = useraddDTO.RoleID,
-                };
-                unitOfWork.userRepository.add(user);
-                unitOfWork.SaveChanges();
-
-                return Ok(useraddDTO);
+                return BadRequest();
             }
+
+            string createdImageName = await fileService.SaveFileAsync(useraddDTO.Photo, allowedFileExtensions);
+
+            User user = new User
+            {
+                Name = useraddDTO.Name,
+                Location = useraddDTO.Location,
+                Email = useraddDTO.Email,
+                Password = useraddDTO.Password,
+                Photo = createdImageName,
+                UserName = useraddDTO.Name,
+                Phone = useraddDTO.Phone,
+                Age = useraddDTO.Age,
+                Sex = useraddDTO.Sex,
+                RoleID = useraddDTO.RoleID,
+            };
+
+            unitOfWork.userRepository.add(user);
+            unitOfWork.SaveChanges(); 
+
+            switch (useraddDTO.RoleID)
+            {
+                case 1: // Client
+                    Client client = new Client
+                    {
+                        ClientID = user.UserID,
+                    };
+                    unitOfWork.clientRepository.add(client);
+                    break;
+
+                case 2: //Secretary
+                    Secretary secretary = new Secretary
+                    {
+                        SecretaryID = user.UserID, 
+                    };
+                    unitOfWork.secretaryRepository.add(secretary);
+                    break;
+
+                case 3: // Doctor
+                    Doctor doctor = new Doctor
+                    {
+                        DoctorID = user.UserID, 
+                    };
+                    unitOfWork.doctorRepository.add(doctor);
+                    break;
+
+                default:
+                    return BadRequest("Invalid RoleID");
+            }
+
+            unitOfWork.SaveChanges();
+
+            return Ok(useraddDTO);
         }
 
+
         //-------------------------Update------------------------------//Edit By Amira
-        [HttpPut]
+        [HttpPut("id")]
         public async Task<ActionResult> UpdateUser(int id, [FromForm] UserUpdateDTO userDTO)
         {
             if (id != userDTO.Id)
@@ -120,38 +154,45 @@ namespace PetBooK.PL.Controllers
                 return NotFound();
             }
 
-            else
+            if (userDTO.Photo == null)
             {
-                string oldImage = existingUser.Photo;
-
-                if (userDTO.Photo != null)
-                {
-
-                    string[] allowedFileExtentions = [".jpg", ".jpeg", ".png", ".webp"];
-                    string createdImageName = await fileService.SaveFileAsync(userDTO.Photo, allowedFileExtentions);
-
-                    existingUser.UserID = userDTO.Id;
-                    existingUser.Name = userDTO.Name;
-                    existingUser.UserName = userDTO.UserName;
-                    existingUser.Email = userDTO.Email;
-                    existingUser.Password = userDTO.Password;
-                    existingUser.Age = userDTO.Age;
-                    existingUser.Sex = userDTO.Sex;
-                    existingUser.Location = userDTO.Location;
-                    existingUser.Phone = userDTO.Phone;
-                    existingUser.Photo = createdImageName;
-                    existingUser.RoleID = userDTO.RoleID;
-
-                    unitOfWork.userRepository.update(existingUser);
-                    unitOfWork.SaveChanges();
-                }
-                if (userDTO.Photo != null)
-                    fileService.DeleteFile(oldImage);
-                return Ok(userDTO);
+                ModelState.Remove(nameof(userDTO.Photo));
             }
-           
+
+            if (!ModelState.IsValid)
+            {
+                return ValidationProblem(ModelState);
+            }
+
+            if (userDTO.Photo != null)
+            {
+                string[] allowedFileExtentions = { ".jpg", ".jpeg", ".png", ".webp" };
+                string createdImageName = await fileService.SaveFileAsync(userDTO.Photo, allowedFileExtentions);
+                string oldImage = existingUser.Photo;
+                existingUser.Photo = createdImageName;
+
+                if (!string.IsNullOrEmpty(oldImage))
+                {
+                    fileService.DeleteFile(oldImage);
+                }
+            }
+
+            existingUser.UserID = userDTO.Id;
+            existingUser.Name = userDTO.Name;
+            existingUser.UserName = userDTO.UserName;
+            existingUser.Email = userDTO.Email;
+            existingUser.Password = userDTO.Password;
+            existingUser.Age = userDTO.Age;
+            existingUser.Sex = userDTO.Sex;
+            existingUser.Location = userDTO.Location;
+            existingUser.Phone = userDTO.Phone;
+            existingUser.RoleID = userDTO.RoleID;
+
+            unitOfWork.userRepository.update(existingUser);
+            unitOfWork.SaveChanges();
+
+            return Ok(userDTO);
         }
-    
 
         //--------------------------------Delete----------------------
 

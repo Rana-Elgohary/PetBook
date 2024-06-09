@@ -41,14 +41,15 @@ namespace PetBooK.PL.Controllers
 
         [HttpGet("RequestPet")]
         public IActionResult GetAllTypesWithoutFilterWhenRequestIsTrue()
-        {    
-            List<Pet> pets = unitOfWork.petRepository.FindBy(p => p.ReadyForBreeding == true );
+        {
+            List<Pet> pets = unitOfWork.petRepository.FindBy(p => p.ReadyForBreeding == true);
             if (pets == null) { return BadRequest(); }
 
 
             List<PetGetDTO> PetDTO = mapper.Map<List<PetGetDTO>>(pets);
             return Ok(PetDTO);
         }
+
         //---------------------------------search for both dogs orrr cats which are ready-----------------------------
         [HttpGet("SearchPetsReadyForBreeding")]
         public IActionResult GetAllPetsReadyForBreeding()
@@ -59,6 +60,7 @@ namespace PetBooK.PL.Controllers
             var petDTOs = mapper.Map<List<PetGetDTO>>(pets);
             return Ok(petDTOs);
         }
+
         //-----------------------------------search for dogs only which are readyfor breading-------------
         [HttpGet("SearchDogsReadyForBreeding")]
         public IActionResult GetAllDogsReadyForBreeding()
@@ -69,6 +71,30 @@ namespace PetBooK.PL.Controllers
             var petDTOs = mapper.Map<List<PetGetDTO>>(pets);
             return Ok(petDTOs);
         }
+        //-----------------------------------search breedname-------------
+        [HttpGet("SearchBreedNameOfPetsReadyForBreeding")]
+        public IActionResult BreedNameOfPetsReadyForBreeding(string name)
+        {
+            var targetBreed = unitOfWork.breedRepository.FindBy(b => b.Breed1 == name).FirstOrDefault();
+            if (targetBreed == null)
+            {
+                return NotFound($"Breed '{name}' not found.");
+            }
+
+            var petBreedRelationships = unitOfWork.pet_BreedRepository.FindBy(pb => pb.BreedID == targetBreed.BreedID).ToList();
+            var petIds = petBreedRelationships.Select(pb => pb.PetID).ToList();
+
+            var pets = unitOfWork.petRepository.FindBy(p => p.ReadyForBreeding==true && petIds.Contains(p.PetID)).ToList();
+            if (!pets.Any())
+            {
+                return NotFound("No pets ready for breeding found.");
+            }
+
+            var petDTOs = mapper.Map<List<PetGetDTO>>(pets);
+            return Ok(petDTOs);
+          
+        }
+        
         //-----------------------------------
 
         [HttpGet("SearchCatsReadyForBreeding")]
@@ -84,34 +110,37 @@ namespace PetBooK.PL.Controllers
         [HttpPost] //Edit By Amira
         public async Task<IActionResult> PostPet(PetAddDTO NewPet)
         {
-            string[] allowedFileExtentions = [".jpg", ".jpeg", ".png", ".webp"];
-
-            string createdImageName = await fileService.SaveFileAsync(NewPet.Photo, allowedFileExtentions);
             if (NewPet == null)
             {
                 return BadRequest();
             }
 
-            else
-            {
-                Pet pet = new Pet
-                {
-                    Name = NewPet.Name,
-                    Photo = createdImageName,
-                    AgeInMonth = NewPet.AgeInMonth,
-                    Sex = NewPet.Sex,
-                    IDNoteBookImage = NewPet.IDNoteBookImage,
-                    ReadyForBreeding = NewPet.ReadyForBreeding,
-                    UserID = NewPet.UserID,
-                    Type = NewPet.Type,
-                    Other = NewPet.Other,
-                };
+            // Save pet photo
+            string[] allowedFileExtentions = new string[] { ".jpg", ".jpeg", ".png", ".webp" };
+            string petPhotoName = await fileService.SaveFileAsync(NewPet.Photo, allowedFileExtentions);
 
-                unitOfWork.petRepository.add(pet);
-                unitOfWork.SaveChanges();
-                return Ok(pet);
-            }
+            // Save ID notebook photo
+            string[] idNotebookAllowedFileExtentions = new string[] { ".jpg", ".jpeg", ".png", ".webp" };
+            string idNotebookPhotoName = await fileService.SaveFileAsync(NewPet.IDNoteBookImage, idNotebookAllowedFileExtentions);
+
+            Pet pet = new Pet
+            {
+                Name = NewPet.Name,
+                Photo = petPhotoName,
+                AgeInMonth = NewPet.AgeInMonth,
+                Sex = NewPet.Sex,
+                IDNoteBookImage = idNotebookPhotoName,
+                ReadyForBreeding = NewPet.ReadyForBreeding,
+                UserID = NewPet.UserID,
+                Type = NewPet.Type,
+                Other = NewPet.Other,
+            };
+
+            unitOfWork.petRepository.add(pet);
+            unitOfWork.SaveChanges();
+            return Ok(pet);
         }
+
 
         //------------------------------------------------------------------------------------------------
 
@@ -126,7 +155,10 @@ namespace PetBooK.PL.Controllers
 
         //-----------------------------------------------------------------------------------------------------
 
-        [HttpPut] //Edit By Amira
+       
+
+
+        [HttpPut]
 
         public async Task<IActionResult> Edit(int id,[FromForm]PetUpdateDTO NewPet)
         {
@@ -141,35 +173,73 @@ namespace PetBooK.PL.Controllers
                 return NotFound();
             }
 
-            else
+            // Separate photo handling for PetPhoto
+            if (NewPet.Photo == null)
             {
-                string oldImage = existingPet.Photo;
-
-                if (NewPet.Photo != null)
-                {
-
-                    string[] allowedFileExtentions = [".jpg", ".jpeg", ".png", ".webp"];
-                    string createdImageName = await fileService.SaveFileAsync(NewPet.Photo, allowedFileExtentions);
-
-
-                    existingPet.Name = NewPet.Name;
-                    existingPet.Photo = createdImageName;
-                    existingPet.AgeInMonth = NewPet.AgeInMonth;
-                    existingPet.Sex = NewPet.Sex;
-                    existingPet.IDNoteBookImage = NewPet.IDNoteBookImage;
-                    existingPet.ReadyForBreeding = NewPet.ReadyForBreeding;
-                    existingPet.UserID = NewPet.UserID;
-                    existingPet.Type = NewPet.Type;
-                    existingPet.Other = NewPet.Other;
-                    unitOfWork.petRepository.update(existingPet);
-                    unitOfWork.SaveChanges();
-                }
-                if (NewPet.Photo != null)
-                    fileService.DeleteFile(oldImage);
-                return Ok(NewPet);
+                ModelState.Remove(nameof(NewPet.Photo));
             }
 
+            // Separate photo handling for IDNoteBookImage
+            if (NewPet.IDNoteBookImage == null)
+            {
+                ModelState.Remove(nameof(NewPet.IDNoteBookImage));
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return ValidationProblem(ModelState);
+            }
+
+            try
+            {
+                // Process PetPhoto
+                if (NewPet.Photo != null)
+                {
+                    string[] allowedFileExtensions = { ".jpg", ".jpeg", ".png", ".webp" };
+                    string createdPetImageName = await fileService.SaveFileAsync(NewPet.Photo, allowedFileExtensions);
+                    string oldPetImage = existingPet.Photo;
+                    existingPet.Photo = createdPetImageName;
+
+                    if (!string.IsNullOrEmpty(oldPetImage))
+                    {
+                        fileService.DeleteFile(oldPetImage);
+                    }
+                }
+
+                // Process IDNoteBookImage
+                if (NewPet.IDNoteBookImage != null)
+                {
+                    string[] allowedFileExtensions = { ".jpg", ".jpeg", ".png", ".webp" };
+                    string createdIDNoteBookImageName = await fileService.SaveFileAsync(NewPet.IDNoteBookImage, allowedFileExtensions);
+                    string oldIDNoteBookImage = existingPet.IDNoteBookImage;
+                    existingPet.IDNoteBookImage = createdIDNoteBookImageName;
+
+                    if (!string.IsNullOrEmpty(oldIDNoteBookImage))
+                    {
+                        fileService.DeleteFile(oldIDNoteBookImage);
+                    }
+                }
+
+                existingPet.Name = NewPet.Name;
+                existingPet.AgeInMonth = NewPet.AgeInMonth;
+                existingPet.Sex = NewPet.Sex;
+                existingPet.ReadyForBreeding = NewPet.ReadyForBreeding;
+                existingPet.UserID = NewPet.UserID;
+                existingPet.Type = NewPet.Type;
+                existingPet.Other = NewPet.Other;
+                unitOfWork.petRepository.update(existingPet);
+                unitOfWork.SaveChanges();
+
+                return Ok(NewPet);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (you can replace this with your preferred logging framework)
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "Internal server error");
+            }
         }
+
         //-----------------------------------------------------------------------------------------------------------
         [HttpGet("GetAllPetswhosReadyToDate")]
         public IActionResult GetAllPetswhosReadyToDate()
@@ -270,21 +340,6 @@ namespace PetBooK.PL.Controllers
             return Ok(breedType);
         }
 
-
-        //[HttpPost("{petId}/pair")]
-        //public IActionResult PairPets(int petId, [FromBody] int userId)
-        //{
-        //    var success = unitOfWork.petRepository.PairPets(petId, userId);
-        //    if (success)
-        //    {
-        //        return Ok(true);
-        //    }
-
-
-        //        // Handle any other failure scenarios
-        //        return BadRequest("An error occurred while processing the request.");
-
-        //}
         [HttpPost("{petId}/pair")]
         public IActionResult PairPets(int petId, [FromBody] int userId)
         {
@@ -307,3 +362,4 @@ namespace PetBooK.PL.Controllers
 
     }
 }
+

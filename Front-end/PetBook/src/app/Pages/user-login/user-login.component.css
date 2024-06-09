@@ -1,5 +1,9 @@
 .image{
+
     background-image: url("../../../assets/Images/PetInfoBG.png");
+
+   
+
     background-size: cover;
     background-position: center;
 }

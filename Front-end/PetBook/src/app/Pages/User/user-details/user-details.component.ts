@@ -13,7 +13,7 @@ import { UserDetails } from '../../../Models/UserDetails';
 })
 export class UserDetailsComponent {
 
-User:UserDetails=new UserDetails("","","","","","",0,"","",0);
+User:UserDetails=new UserDetails(0,"","","","","","",0,"","",0);
 userid :number= parseInt(this.AccountService.r.id);
 private imageUrlBase: string = 'https://localhost:7066/Resources/';
   constructor(public userService:UserService,public AccountService:AccountServiceService ,public  router:Router){}

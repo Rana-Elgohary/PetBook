@@ -119,6 +119,8 @@ namespace PetBooK.BL.Reo
 
             return query.Where(predicate).ToList();
         }
+
+
         public void DeleteEntities(List<TEntity> entities)
         {
             db.Set<TEntity>().RemoveRange(entities);
