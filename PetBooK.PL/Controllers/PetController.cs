@@ -247,6 +247,62 @@ namespace PetBooK.PL.Controllers
             return Ok();
         }
 
+        [HttpGet("user/{userId}")]
+        public ActionResult GetPetsByUserId(int userId)
+        {
+            var pets = unitOfWork.petRepository.GetEntitiesByUserId(userId, "UserID");
+            if (pets == null || !pets.Any())
+            {
+                return NotFound();
+            }
+            List<PetGetDTO> petDTO = mapper.Map<List<PetGetDTO>>(pets);
+            return Ok(petDTO);
+        }
+
+        [HttpGet("{petId}/breed")]
+        public ActionResult<string> GetBreedTypeByPetId(int petId)
+        {
+            var breedType = unitOfWork.petRepository.GetBreedTypeByPetId(petId);
+            if (breedType == null)
+            {
+                return NotFound();
+            }
+            return Ok(breedType);
+        }
+
+
+        //[HttpPost("{petId}/pair")]
+        //public IActionResult PairPets(int petId, [FromBody] int userId)
+        //{
+        //    var success = unitOfWork.petRepository.PairPets(petId, userId);
+        //    if (success)
+        //    {
+        //        return Ok(true);
+        //    }
+
+
+        //        // Handle any other failure scenarios
+        //        return BadRequest("An error occurred while processing the request.");
+
+        //}
+        [HttpPost("{petId}/pair")]
+        public IActionResult PairPets(int petId, [FromBody] int userId)
+        {
+            var success = unitOfWork.petRepository.PairPets(petId, userId);
+            if (success)
+            {
+                return Ok(true);
+            }
+            var currentPet = unitOfWork.petRepository.selectbyid(petId);
+            if (currentPet != null && !currentPet.ReadyForBreeding)
+            {
+                return Ok(false);
+            }
+
+            return BadRequest(false);
+        }
+
+
 
 
     }

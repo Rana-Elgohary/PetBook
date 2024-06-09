@@ -9,6 +9,7 @@ import { UserDetailsComponent } from './Pages/User/user-details/user-details.com
 import { UpdateUserDetailsComponent } from './Pages/User/update-user-details/update-user-details.component';
 import { LandingPageComponent } from './Pages/LandingPage/landing-page/landing-page.component';
 import { PetDetailsComponent } from './Pages/PetInfo/pet-detailss/pet-details.component';
+import { UserPetInfoComponent } from './Pages/PetInfo/Pet-Inf/user-pet-info/user-pet-info.component';
 
 export const routes: Routes = [
     {path: "Login", component:UserLoginComponent, title:"Login", canActivate: [noNavigateToLoginPageIfTokenGuard]},
@@ -17,8 +18,10 @@ export const routes: Routes = [
     {path: "Account", component:UserDetailsComponent, title:"Account"},
     {path: "UpdateUser", component:UpdateUserDetailsComponent, title:"Edit"},
     {path:"",component:LandingPageComponent,title:"PetBook"},
-    { path: 'Pet/details/:id', component: PetDetailsComponent }
+    { path: 'Pet/details/:id', component: PetDetailsComponent,title:"Pet Details" },
+    { path: 'Pet/information/:id', component: UserPetInfoComponent,title:"User Pet Information" }
 
 
 
 ];
+

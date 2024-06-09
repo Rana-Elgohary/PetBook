@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { PetDetails } from '../Models/pet-details';
 import { Observable, catchError, throwError } from 'rxjs';
@@ -32,11 +32,10 @@ export class PetDetailsService {
       })
     );
   }
-getClientPets(clientId: number): Observable<PetDetails[]> {
-  return this.http.get<PetDetails[]>(`${this.baseurl}/api/Client/${clientId}/pets`);
+  pairPets(petId: number, userId: number): Observable<boolean> {
+    return this.http.post<boolean>(`${this.baseurl}/api/Pet/${petId}/pair`,userId)
+  }
+  
+  
 }
 
-getBreedRequests(): Observable<RequestForBreed[]> {
-  return this.http.get<RequestForBreed[]>(`${this.baseurl}/api/RequestForBreed`);
-}
-}
