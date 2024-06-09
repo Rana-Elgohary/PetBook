@@ -42,10 +42,10 @@ namespace PetBooK.PL.Controllers
 
         //-------Get Request of breed by id--------
         [HttpGet("{Sid}/{Rid}")]
-        public IActionResult getRequestBreedByID(int Sid,int Rid)
+        public IActionResult getRequestBreedByID(int Sid, int Rid)
         {
             Request_For_Breed requestOfBreed = unit.request_For_BreedRepository.SelectByCompositeKeyInclude("PetIDSender", Sid, "PetIDReceiver", Rid, rb => rb.PetIDSenderNavigation, rb => rb.PetIDReceiverNavigation);
-            if(requestOfBreed == null)
+            if (requestOfBreed == null)
             {
                 return NotFound("the data required is not found");
             }
@@ -54,6 +54,161 @@ namespace PetBooK.PL.Controllers
                 RequestBreedDTO requestOfBreedDTO = mapper.Map<RequestBreedDTO>(requestOfBreed);
                 return Ok(requestOfBreedDTO);
             }
+        }
+        ////-------Get Request of breed by Sender id--------
+        [HttpGet("SenderID/{Sid}")]
+        public IActionResult getRequestBreedBySenderID(int Sid)
+        {
+            List<Request_For_Breed> requestOfBreed = unit.request_For_BreedRepository.FindByInclude(s => s.PetIDSender == Sid, s => s.PetIDSenderNavigation, s => s.PetIDReceiverNavigation);
+            if (requestOfBreed == null)
+            {
+                return NotFound("the data required is not found");
+            }
+            else
+            {
+                List<RequestBreedDTO> requestOfBreedDTO = mapper.Map<List<RequestBreedDTO>>(requestOfBreed);
+                foreach (var item in requestOfBreedDTO)
+                {
+                    var pet = unit.petRepository.SelectByIDInclude(Sid, "PetID", s => s.User);
+                    var user = unit.userRepository.selectbyid(pet.User.ClientID);
+                    item.OwnersenderName = user.Name;
+
+                    var pet2 = unit.petRepository.SelectByIDInclude(item.PetIDReceiver, "PetID", s => s.User);
+                    var user2 = unit.userRepository.selectbyid(pet2.User.ClientID);
+                    item.OwnerreceiverName = user2.Name;
+                }
+                return Ok(requestOfBreedDTO);
+            }
+        }
+
+        ////-------Get Request of breed by Sender id--------
+        [HttpGet("UserSenderID/{USERid}")]
+        public IActionResult getRequestBreedByUserSenderID(int USERid)
+        {
+            List<Pet> pets = unit.petRepository.FindBy(s => s.UserID == USERid);
+
+            if (pets == null || !pets.Any())
+            {
+                return NotFound("No pets found for the given user.");
+            }
+
+            List<RequestBreedDTO> allRequests = new List<RequestBreedDTO>();
+
+            foreach (var pet in pets)
+            {
+                List<Request_For_Breed> requestOfBreed = unit.request_For_BreedRepository.FindByInclude(
+                    s => s.PetIDSender == pet.PetID && s.Pair == false,
+                    s => s.PetIDSenderNavigation,
+                    s => s.PetIDReceiverNavigation
+                );
+
+                if (requestOfBreed == null || !requestOfBreed.Any())
+                {
+                    continue; // No requests found for this pet, continue to the next pet
+                }
+
+                List<RequestBreedDTO> requestOfBreedDTO = mapper.Map<List<RequestBreedDTO>>(requestOfBreed);
+
+                foreach (var request in requestOfBreedDTO)
+                {
+                    var petSender = unit.petRepository.SelectByIDInclude(request.PetIDSender, "PetID", p => p.User);
+                    var userSender = unit.userRepository.selectbyid(petSender.User.ClientID);
+                    request.OwnersenderName = userSender.Name;
+
+                    var petReceiver = unit.petRepository.SelectByIDInclude(request.PetIDReceiver, "PetID", p => p.User);
+                    var userReceiver = unit.userRepository.selectbyid(petReceiver.User.ClientID);
+                    request.OwnerreceiverName = userReceiver.Name;
+                }
+
+                allRequests.AddRange(requestOfBreedDTO);
+            }
+
+            if (!allRequests.Any())
+            {
+                return NotFound("No breed requests found for the given user's pets.");
+            }
+
+            return Ok(allRequests);
+        }
+
+
+        //////-------Get Request of breed by Receiver id--------
+
+        [HttpGet("ReceiverID/{Rid}")]
+        public IActionResult getRequestBreedByReceiverID(int Rid)
+        {
+            List<Request_For_Breed> requestOfBreed = unit.request_For_BreedRepository.FindByInclude(s => s.PetIDReceiver == Rid, s => s.PetIDSenderNavigation, s => s.PetIDReceiverNavigation);
+            if (requestOfBreed == null)
+            {
+                return NotFound("the data required is not found");
+            }
+            else
+            {
+                List<RequestBreedDTO> requestOfBreedDTO = mapper.Map<List<RequestBreedDTO>>(requestOfBreed);
+
+                foreach (var item in requestOfBreedDTO)
+                {
+                    var pet = unit.petRepository.SelectByIDInclude(item.PetIDSender, "PetID", s => s.User);
+                    var user = unit.userRepository.selectbyid(pet.User.ClientID);
+                    item.OwnerreceiverName = user.Name;
+
+                    var pet2 = unit.petRepository.SelectByIDInclude(Rid, "PetID", s => s.User);
+                    var user2 = unit.userRepository.selectbyid(pet2.User.ClientID);
+                    item.OwnersenderName = user2.Name;
+                }
+                return Ok(requestOfBreedDTO);
+            }
+        }
+
+
+        ////-------Get Request of breed by Sender id--------
+        [HttpGet("UserReceiverID/{USERid}")]
+        public IActionResult getRequestBreedByUserReceiverID(int USERid)
+        {
+            List<Pet> pets = unit.petRepository.FindBy(s => s.UserID == USERid);
+
+            if (pets == null || !pets.Any())
+            {
+                return NotFound("No pets found for the given user.");
+            }
+
+            List<RequestBreedDTO> allRequests = new List<RequestBreedDTO>();
+
+            foreach (var pet in pets)
+            {
+                List<Request_For_Breed> requestOfBreed = unit.request_For_BreedRepository.FindByInclude(
+                    s => s.PetIDReceiver == pet.PetID && s.Pair == false,
+                    s => s.PetIDSenderNavigation,
+                    s => s.PetIDReceiverNavigation
+                );
+
+                if (requestOfBreed == null || !requestOfBreed.Any())
+                {
+                    continue; // No requests found for this pet, continue to the next pet
+                }
+
+                List<RequestBreedDTO> requestOfBreedDTO = mapper.Map<List<RequestBreedDTO>>(requestOfBreed);
+
+                foreach (var request in requestOfBreedDTO)
+                {
+                    var petSender = unit.petRepository.SelectByIDInclude(request.PetIDSender, "PetID", p => p.User);
+                    var userSender = unit.userRepository.selectbyid(petSender.User.ClientID);
+                    request.OwnersenderName = userSender.Name;
+
+                    var petReceiver = unit.petRepository.SelectByIDInclude(request.PetIDReceiver, "PetID", p => p.User);
+                    var userReceiver = unit.userRepository.selectbyid(petReceiver.User.ClientID);
+                    request.OwnerreceiverName = userReceiver.Name;
+                }
+
+                allRequests.AddRange(requestOfBreedDTO);
+            }
+
+            if (!allRequests.Any())
+            {
+                return NotFound("No breed requests found for the given user's pets.");
+            }
+
+            return Ok(allRequests);
         }
 
         //-------Add Request of breed--------
@@ -64,7 +219,7 @@ namespace PetBooK.PL.Controllers
             {
                 return BadRequest("The data you sent is null");
             }
-            
+
             else
             {
                 Request_For_Breed requestOfBreed = mapper.Map<Request_For_Breed>(newRequestBreedDTO);
@@ -115,5 +270,43 @@ namespace PetBooK.PL.Controllers
                 return Ok("deleted");
             }
         }
+
+        //--------------check if this pet on date or not-------------//
+        [HttpGet("Turnthispettobenotavailable/{id}")]
+        public IActionResult MakethisPetNotAvailableforbreading(int id)
+        {
+            Pet pet = unit.petRepository.selectbyid(id);
+            if (pet == null)
+            {
+                Console.WriteLine($"Pet with ID {id} not found");
+                return NotFound();
+            }
+
+            pet.ReadyForBreeding = false;
+            unit.petRepository.update(pet);
+            unit.SaveChanges();
+            Console.WriteLine($"Pet with ID {id} marked as not ready for breeding");
+            return Ok();
+        }
+
+        [HttpGet("Turnthispettobeavailable/{id}")]
+        public IActionResult MakethisPetAvailableforbreading(int id)
+        {
+            Pet pet = unit.petRepository.selectbyid(id);
+            if (pet == null)
+            {
+                Console.WriteLine($"Pet with ID {id} not found");
+                return NotFound();
+            }
+
+            pet.ReadyForBreeding = true;
+            unit.petRepository.update(pet);
+            unit.SaveChanges();
+            Console.WriteLine($"Pet with ID {id} marked as ready for breeding");
+            return Ok();
+        }
+
+        //------------------------------------------------------//
+
     }
 }

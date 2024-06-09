@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { UserService } from '../../../Services/user.service';
 import { AccountServiceService } from '../../../Services/account-service.service';
 import { UserDetails } from '../../../Models/UserDetails';
+import { UserUpdateDetails } from '../../../Models/user-update-details';
 
 @Component({
   selector: 'app-update-user-details',
@@ -14,25 +15,39 @@ import { UserDetails } from '../../../Models/UserDetails';
 })
 export class UpdateUserDetailsComponent {
 
-  user:UserDetails=new UserDetails("","","","","","",0,"","",0);
+  user:UserUpdateDetails=new UserUpdateDetails(0,"","","","","","",0,"",null,0);
+  userid:number=parseInt(this.account.r.id);
+  private imageUrlBase: string = 'https://localhost:7066/Resources/';
   constructor(public userService:UserService
     ,public activatedRoute:ActivatedRoute,
   public router:Router ,
   public account:AccountServiceService
   ){}
   ngOnInit(): void {
-    let userid:number= parseInt(this.account.r.id)
-    this.activatedRoute.params.subscribe(p=>{
-      this.userService.getUserById(userid).subscribe(d=>{
-        this.user=d;
-        console.log(d);
-      })
-    })
+    this.loadUserData(this.userid)
+  }
+
+  loadUserData(userId: number): void {
+    this.userService.getUserById(userId).subscribe(user => {
+      user.photo = this.imageUrlBase + user.photo;
+      this.user = user;
+      console.log(user)
+    });
   }
   save(){
-    this.userService.UpdateUser(this.user).subscribe(d=>{
+    const updateUser = { ...this.user };
+
+    this.userService.updateUser(this.userid,this.user).subscribe(d=>{
       console.log(d);
       this.router.navigateByUrl("/Account");
     });
+  }
+
+  updateUserPhoto(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.user.photo = file;
+      this.save(); // Save immediately after updating the photo
+    }
   }
 }

@@ -97,7 +97,7 @@ namespace PetBooK.BL.Reo
 
             return query.ToList();
         }
-       
+
 
 
 
@@ -119,6 +119,8 @@ namespace PetBooK.BL.Reo
 
             return query.Where(predicate).ToList();
         }
+
+
         public void DeleteEntities(List<TEntity> entities)
         {
             db.Set<TEntity>().RemoveRange(entities);
@@ -166,7 +168,7 @@ namespace PetBooK.BL.Reo
             return entities;
         }
 
-        public TEntity SelectBy3CompositeKeyInclude(string FID, int id1, string SID, int id2, string THID, int id3 ,params Expression<Func<TEntity, object>>[] includes)
+        public TEntity SelectBy3CompositeKeyInclude(string FID, int id1, string SID, int id2, string THID, int id3, params Expression<Func<TEntity, object>>[] includes)
         {
             IQueryable<TEntity> query = db.Set<TEntity>();
 
@@ -174,9 +176,64 @@ namespace PetBooK.BL.Reo
             {
                 query = query.Include(include);
             }
-            return query.FirstOrDefault(e => EF.Property<int>(e, FID) == id1 && EF.Property<int>(e, SID) == id2 && EF.Property<int>(e, THID)==id3);
+            return query.FirstOrDefault(e => EF.Property<int>(e, FID) == id1 && EF.Property<int>(e, SID) == id2 && EF.Property<int>(e, THID) == id3);
+        }
+        public List<TEntity> GetEntitiesByUserId(int userId, string userIdPropertyName)
+        {
+            var parameter = Expression.Parameter(typeof(TEntity), "e");
+            var property = Expression.Property(parameter, userIdPropertyName);
+            var constant = Expression.Constant(userId);
+            var equality = Expression.Equal(property, constant);
+            var predicate = Expression.Lambda<Func<TEntity, bool>>(equality, parameter);
+
+            return db.Set<TEntity>().Where(predicate).ToList();
+        }
+        public string GetBreedTypeByPetId(int petId)
+        {
+            var breedType = (from pet in db.Pets
+                             join petBreed in db.Pet_Breeds on pet.PetID equals petBreed.PetID
+                             join breed in db.Breeds on petBreed.BreedID equals breed.BreedID
+                             where pet.PetID == petId
+                             select breed.Breed1).FirstOrDefault();
+
+            return breedType;
+        }
+        public bool PairPets(int petId, int userId)
+        {
+            var currentPet = db.Pets.Include(p => p.Pet_Breeds).ThenInclude(pb => pb.Breed)
+                                      .FirstOrDefault(p => p.PetID == petId);
+            if (currentPet == null || !currentPet.ReadyForBreeding)
+            {
+                return false;
+            }
+
+            var userPets = db.Pets.Include(p => p.Pet_Breeds).ThenInclude(pb => pb.Breed)
+                                    .Where(p => p.UserID == userId).ToList();
+
+            var matchingPet = userPets.FirstOrDefault(p => p.Pet_Breeds.Any(pb => currentPet.Pet_Breeds.Any(cpb => cpb.BreedID == pb.BreedID)));
+
+            if (matchingPet != null)
+            {
+                var requestForBreed = new Request_For_Breed
+                {
+                    PetIDSender = matchingPet.PetID,
+                    PetIDReceiver = petId,
+                    Pair = false
+                };
+
+                db.Request_For_Breeds.Add(requestForBreed);
+                db.SaveChanges();
+                return true;
+            }
+
+            return false;
         }
 
+        public List<TEntity> FindByForeignKey(Expression<Func<TEntity, bool>> predicate)
+        {
 
+            return db.Set<TEntity>().Where(predicate).ToList();
+
+        }
     }
 }

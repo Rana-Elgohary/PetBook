@@ -17,7 +17,7 @@ namespace PetBooK.PL.Controllers
         IMapper mapper;
         IFileService fileService;
 
-        public PetController(UnitOfWork unitOfWork, IMapper mapper , IFileService fileService)
+        public PetController(UnitOfWork unitOfWork, IMapper mapper, IFileService fileService)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
@@ -41,14 +41,15 @@ namespace PetBooK.PL.Controllers
 
         [HttpGet("RequestPet")]
         public IActionResult GetAllTypesWithoutFilterWhenRequestIsTrue()
-        {    
-            List<Pet> pets = unitOfWork.petRepository.FindBy(p => p.ReadyForBreeding == true );
+        {
+            List<Pet> pets = unitOfWork.petRepository.FindBy(p => p.ReadyForBreeding == true);
             if (pets == null) { return BadRequest(); }
 
 
             List<PetGetDTO> PetDTO = mapper.Map<List<PetGetDTO>>(pets);
             return Ok(PetDTO);
         }
+
         //---------------------------------search for both dogs orrr cats which are ready-----------------------------
         [HttpGet("SearchPetsReadyForBreeding")]
         public IActionResult GetAllPetsReadyForBreeding()
@@ -59,6 +60,7 @@ namespace PetBooK.PL.Controllers
             var petDTOs = mapper.Map<List<PetGetDTO>>(pets);
             return Ok(petDTOs);
         }
+
         //-----------------------------------search for dogs only which are readyfor breading-------------
         [HttpGet("SearchDogsReadyForBreeding")]
         public IActionResult GetAllDogsReadyForBreeding()
@@ -69,6 +71,30 @@ namespace PetBooK.PL.Controllers
             var petDTOs = mapper.Map<List<PetGetDTO>>(pets);
             return Ok(petDTOs);
         }
+        //-----------------------------------search breedname-------------
+        [HttpGet("SearchBreedNameOfPetsReadyForBreeding")]
+        public IActionResult BreedNameOfPetsReadyForBreeding(string name)
+        {
+            var targetBreed = unitOfWork.breedRepository.FindBy(b => b.Breed1 == name).FirstOrDefault();
+            if (targetBreed == null)
+            {
+                return NotFound($"Breed '{name}' not found.");
+            }
+
+            var petBreedRelationships = unitOfWork.pet_BreedRepository.FindBy(pb => pb.BreedID == targetBreed.BreedID).ToList();
+            var petIds = petBreedRelationships.Select(pb => pb.PetID).ToList();
+
+            var pets = unitOfWork.petRepository.FindBy(p => p.ReadyForBreeding == true && petIds.Contains(p.PetID)).ToList();
+            if (!pets.Any())
+            {
+                return NotFound("No pets ready for breeding found.");
+            }
+
+            var petDTOs = mapper.Map<List<PetGetDTO>>(pets);
+            return Ok(petDTOs);
+
+        }
+
         //-----------------------------------
 
         [HttpGet("SearchCatsReadyForBreeding")]
@@ -87,7 +113,7 @@ namespace PetBooK.PL.Controllers
             string[] allowedFileExtentions = [".jpg", ".jpeg", ".png", ".webp"];
 
             string createdImageName = await fileService.SaveFileAsync(NewPet.Photo, allowedFileExtentions);
-            string createdIDNoteBookImageName = await fileService.SaveFileAsync(NewPet.IDNoteBookImage, allowedFileExtentions);
+            string createdImageIDBook = await fileService.SaveFileAsync(NewPet.IDNoteBookImage, allowedFileExtentions);
 
             if (NewPet == null)
             {
@@ -102,7 +128,7 @@ namespace PetBooK.PL.Controllers
                     Photo = createdImageName,
                     AgeInMonth = NewPet.AgeInMonth,
                     Sex = NewPet.Sex,
-                    IDNoteBookImage = createdIDNoteBookImageName,
+                    IDNoteBookImage = createdImageIDBook,
                     ReadyForBreeding = NewPet.ReadyForBreeding,
                     UserID = NewPet.UserID,
                     Type = NewPet.Type,
@@ -114,142 +140,234 @@ namespace PetBooK.PL.Controllers
                 return Ok(pet);
             }
         }
-
         //------------------------------------------------------------------------------------------------
 
-        [HttpGet("id")]
-        public IActionResult GetId(int id)
-        {
-            Pet pet = unitOfWork.petRepository.selectbyid(id);
-            if (pet == null) { return BadRequest(); }
-            PetGetDTO petDTO = mapper.Map<PetGetDTO>(pet);
-            return Ok(petDTO);
-        }
 
-        //-----------------------------------------------------------------------------------------------------
-
-        [HttpPut] //Edit By Amira
-
-        public async Task<IActionResult> Edit(int id,[FromForm]PetUpdateDTO NewPet)
-        {
-            if (id != NewPet.PetID)
+        [HttpGet("{id}")]
+            public IActionResult GetId(int id)
             {
-                return BadRequest();
+                Pet pet = unitOfWork.petRepository.selectbyid(id);
+                if (pet == null) { return BadRequest(); }
+                PetGetDTO petDTO = mapper.Map<PetGetDTO>(pet);
+                return Ok(petDTO);
             }
 
-            var existingPet = unitOfWork.petRepository.selectbyid(id);
-            if (existingPet == null)
+            //------------------------------------------------------------------------------------------------
+
+            [HttpGet("GetByUserID/{userId}")]
+            public IActionResult GetPetByUserId(int userId)
             {
-                return NotFound();
+                List<Pet> pets = unitOfWork.petRepository.FindByForeignKey(p => p.UserID == userId);
+                if (pets == null) { return BadRequest(); }
+                List<PetGetDTO> petDTO = mapper.Map<List<PetGetDTO>>(pets);
+                return Ok(petDTO);
             }
+            //-----------------------------------------------------------------------------------------------------
 
-            else
+
+
+
+            [HttpPut]
+
+            public async Task<IActionResult> Edit(int id, [FromForm] PetUpdateDTO NewPet)
             {
-                string oldImage = existingPet.Photo;
-
-                if (NewPet.Photo != null)
+                if (id != NewPet.PetID)
                 {
+                    return BadRequest();
+                }
 
-                    string[] allowedFileExtentions = [".jpg", ".jpeg", ".png", ".webp"];
-                    string createdImageName = await fileService.SaveFileAsync(NewPet.Photo, allowedFileExtentions);
+                var existingPet = unitOfWork.petRepository.selectbyid(id);
+                if (existingPet == null)
+                {
+                    return NotFound();
+                }
 
+                // Separate photo handling for PetPhoto
+                if (NewPet.Photo == null)
+                {
+                    ModelState.Remove(nameof(NewPet.Photo));
+                }
+
+                // Separate photo handling for IDNoteBookImage
+                if (NewPet.IDNoteBookImage == null)
+                {
+                    ModelState.Remove(nameof(NewPet.IDNoteBookImage));
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    return ValidationProblem(ModelState);
+                }
+
+                try
+                {
+                    // Process PetPhoto
+                    if (NewPet.Photo != null)
+                    {
+                        string[] allowedFileExtensions = { ".jpg", ".jpeg", ".png", ".webp" };
+                        string createdPetImageName = await fileService.SaveFileAsync(NewPet.Photo, allowedFileExtensions);
+                        string oldPetImage = existingPet.Photo;
+                        existingPet.Photo = createdPetImageName;
+
+                        if (!string.IsNullOrEmpty(oldPetImage))
+                        {
+                            fileService.DeleteFile(oldPetImage);
+                        }
+                    }
+
+                    // Process IDNoteBookImage
+                    if (NewPet.IDNoteBookImage != null)
+                    {
+                        string[] allowedFileExtensions = { ".jpg", ".jpeg", ".png", ".webp" };
+                        string createdIDNoteBookImageName = await fileService.SaveFileAsync(NewPet.IDNoteBookImage, allowedFileExtensions);
+                        string oldIDNoteBookImage = existingPet.IDNoteBookImage;
+                        existingPet.IDNoteBookImage = createdIDNoteBookImageName;
+
+                        if (!string.IsNullOrEmpty(oldIDNoteBookImage))
+                        {
+                            fileService.DeleteFile(oldIDNoteBookImage);
+                        }
+                    }
 
                     existingPet.Name = NewPet.Name;
-                    existingPet.Photo = createdImageName;
                     existingPet.AgeInMonth = NewPet.AgeInMonth;
                     existingPet.Sex = NewPet.Sex;
-                    existingPet.IDNoteBookImage = NewPet.IDNoteBookImage;
                     existingPet.ReadyForBreeding = NewPet.ReadyForBreeding;
                     existingPet.UserID = NewPet.UserID;
                     existingPet.Type = NewPet.Type;
                     existingPet.Other = NewPet.Other;
                     unitOfWork.petRepository.update(existingPet);
                     unitOfWork.SaveChanges();
+
+                    return Ok(NewPet);
                 }
-                if (NewPet.Photo != null)
-                    fileService.DeleteFile(oldImage);
-                return Ok(NewPet);
+                catch (Exception ex)
+                {
+                    // Log the exception (you can replace this with your preferred logging framework)
+                    Console.WriteLine(ex.Message);
+                    return StatusCode(500, "Internal server error");
+                }
             }
+
+            //-----------------------------------------------------------------------------------------------------------
+            [HttpGet("GetAllPetswhosReadyToDate")]
+            public IActionResult GetAllPetswhosReadyToDate()
+            {
+                List<Pet> pet = unitOfWork.petRepository.FindBy(p => p.ReadyForBreeding == true);
+
+                if (pet == null)
+                {
+                    return NotFound();
+                }
+
+                List<PetGetDTO> petDTO = mapper.Map<List<PetGetDTO>>(pet);
+
+                return Ok(petDTO);
+            }
+
+
+            //----------------------------------------------------------------------------------------------------
+
+            [HttpDelete]
+
+            public IActionResult DeleteById(int id)
+            {
+                //delete PetBreed
+
+                List<Pet_Breed> petBreeds = unitOfWork.pet_BreedRepository.FindBy(p => p.PetID == id);
+                foreach (var item in petBreeds)
+                {
+                    unitOfWork.pet_BreedRepository.deleteEntity(item);
+                }
+                unitOfWork.SaveChanges();
+
+                //delete Vaccine-Pet
+
+                List<Vaccine_Pet> vaccine_Pets = unitOfWork.vaccine_PetRepository.FindBy(p => p.PetID == id);
+                foreach (var item in vaccine_Pets)
+                {
+                    unitOfWork.vaccine_PetRepository.deleteEntity(item);
+                }
+                unitOfWork.SaveChanges();
+
+                //delete Reservation For Vaccine
+
+                List<Reservation_For_Vaccine> reservation_For_Vaccines = unitOfWork.reservation_For_VaccineRepository.FindBy(p => p.PetID == id);
+                foreach (var item in reservation_For_Vaccines)
+                {
+                    unitOfWork.reservation_For_VaccineRepository.deleteEntity(item);
+                }
+                unitOfWork.SaveChanges();
+
+                //delete Reservation 
+
+                List<Reservation> reservations = unitOfWork.reservationRepository.FindBy(p => p.PetID == id);
+                foreach (var item in reservations)
+                {
+                    unitOfWork.reservationRepository.deleteEntity(item);
+                }
+                unitOfWork.SaveChanges();
+
+                //delete RequestForBreed
+
+                List<Request_For_Breed> request_For_Breeds = unitOfWork.request_For_BreedRepository.FindBy(p => p.PetIDSender == id || p.PetIDReceiver == id);
+                foreach (var item in request_For_Breeds)
+                {
+                    unitOfWork.request_For_BreedRepository.deleteEntity(item);
+                }
+                unitOfWork.SaveChanges();
+
+                //delete pet 
+
+                Pet pet = unitOfWork.petRepository.selectbyid(id);
+                unitOfWork.petRepository.deleteEntity(pet);
+                fileService.DeleteFile(pet.Photo); //Edit By Amira
+                unitOfWork.SaveChanges();
+                return Ok();
+            }
+
+            [HttpGet("user/{userId}")]
+            public ActionResult GetPetsByUserId(int userId)
+            {
+                var pets = unitOfWork.petRepository.GetEntitiesByUserId(userId, "UserID");
+                if (pets == null || !pets.Any())
+                {
+                    return NotFound();
+                }
+                List<PetGetDTO> petDTO = mapper.Map<List<PetGetDTO>>(pets);
+                return Ok(petDTO);
+            }
+
+            [HttpGet("{petId}/breed")]
+            public ActionResult<string> GetBreedTypeByPetId(int petId)
+            {
+                var breedType = unitOfWork.petRepository.GetBreedTypeByPetId(petId);
+                if (breedType == null)
+                {
+                    return NotFound();
+                }
+                return Ok(breedType);
+            }
+
+            [HttpPost("{petId}/pair")]
+            public IActionResult PairPets(int petId, [FromBody] int userId)
+            {
+                var success = unitOfWork.petRepository.PairPets(petId, userId);
+                if (success)
+                {
+                    return Ok(true);
+                }
+                var currentPet = unitOfWork.petRepository.selectbyid(petId);
+                if (currentPet != null && !currentPet.ReadyForBreeding)
+                {
+                    return Ok(false);
+                }
+
+                return BadRequest(false);
+            }
+
+
+
 
         }
-        //-----------------------------------------------------------------------------------------------------------
-        [HttpGet("GetAllPetswhosReadyToDate")]
-        public IActionResult GetAllPetswhosReadyToDate()
-        {
-            List<Pet> pet = unitOfWork.petRepository.FindBy(p => p.ReadyForBreeding == true);
-
-            if (pet == null)
-            {
-                return NotFound();
-            }
-
-            List<PetGetDTO> petDTO = mapper.Map<List<PetGetDTO>>(pet);
-
-            return Ok(petDTO);
-        }
-
-
-        //----------------------------------------------------------------------------------------------------
-
-        [HttpDelete]
-
-        public IActionResult DeleteById(int id)
-        {
-            //delete PetBreed
-
-             List<Pet_Breed> petBreeds =unitOfWork.pet_BreedRepository.FindBy(p=>p.PetID == id);
-            foreach (var item in petBreeds)
-            {
-                unitOfWork.pet_BreedRepository.deleteEntity(item);
-            }
-            unitOfWork.SaveChanges();
-
-            //delete Vaccine-Pet
-
-            List<Vaccine_Pet> vaccine_Pets = unitOfWork.vaccine_PetRepository.FindBy(p => p.PetID == id);
-            foreach (var item in vaccine_Pets)
-            {
-                unitOfWork.vaccine_PetRepository.deleteEntity(item);
-            }
-            unitOfWork.SaveChanges();
-
-            //delete Reservation For Vaccine
-
-            List<Reservation_For_Vaccine> reservation_For_Vaccines = unitOfWork.reservation_For_VaccineRepository.FindBy(p => p.PetID == id);
-            foreach (var item in reservation_For_Vaccines)
-            {
-                unitOfWork.reservation_For_VaccineRepository.deleteEntity(item);
-            }
-            unitOfWork.SaveChanges();
-
-            //delete Reservation 
-
-            List<Reservation> reservations = unitOfWork.reservationRepository.FindBy(p => p.PetID == id);
-            foreach (var item in reservations)
-            {
-                unitOfWork.reservationRepository.deleteEntity(item);
-            }
-            unitOfWork.SaveChanges();
-
-            //delete RequestForBreed
-
-            List<Request_For_Breed> request_For_Breeds = unitOfWork.request_For_BreedRepository.FindBy(p => p.PetIDSender == id ||p.PetIDReceiver==id);
-            foreach (var item in request_For_Breeds)
-            {
-                unitOfWork.request_For_BreedRepository.deleteEntity(item);
-            }
-            unitOfWork.SaveChanges();
-
-            //delete pet 
-
-            Pet pet =unitOfWork.petRepository.selectbyid(id);
-            unitOfWork.petRepository.deleteEntity(pet);
-            fileService.DeleteFile(pet.Photo); //Edit By Amira
-            unitOfWork.SaveChanges();
-            return Ok();
-        }
-
-
-
-    }
 }

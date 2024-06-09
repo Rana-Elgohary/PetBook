@@ -1,72 +1,67 @@
-
-  
-
-  
-  <!DOCTYPE html>
-  <html lang="en">
-  <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Pet Details</title>
-      <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-      <style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
         .background-image {
             background-image: url('../assets/Images/PetInfoBG.png'); 
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            height: 100vh; 
+            height: 109vh; 
             width: 100%;
         }
+
+        .slanted-text {
+            font-style: italic;
+        }
+
+        .notebook-image {
+            width: auto; 
+            height: 150px; 
+        }
     </style>
-    </head>
-  
+</head>
+<body class="bg-gray-100 background-image">
+    <div class="max-w-5xl mx-auto mt-4 p-6 rounded-lg flex flex-col md:flex-row">
+        <!-- Left Column -->
+        <div class="w-full md:w-1/3 mb-4 md:mb-0">
+            <img [src]="pet?.photo" alt="Pet" class="w-full h-auto mb-6">
+            <div class="flex justify-center mt-4">
+                <button (click)="pairPets()" class="bg-orange-300 text px-11 py-2 rounded-full slanted-text"><strong>Pair</strong></button>    
+            </div>
+        </div>
 
-    <body class="bg-gray-100 background-image">
-        <div class="max-w-5xl mx-auto mt-4 p-6  rounded-lg  flex">
-            <!-- Left Column -->
-            <div class="w-1/3 ">
-                <img src="../assets/Images/1.png" alt="Pet" class="w-full h-auto mb-6">
-                <div class="flex justify-center space-x-4">
-                    <div class="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
-                        <img src="path/to/your/pet1.png" alt="Pet 1" class="w-full h-full rounded-full">
-                    </div>
-                    <div class="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
-                        <img src="path/to/your/pet2.png" alt="Pet 2" class="w-full h-full rounded-full">
-                    </div>
-                </div>
-                <div class="flex justify-center mt-4">
-                    <button class="bg-orange-500 text-white px-11 py-2 rounded-full">Pair</button>
-
-
+        <!-- Right Column --> 
+        <div class="w-full md:w-2/3 md:pl-8">
+            <div class="bg-yellow-100 p-9 rounded-lg mb-9">
+                <h2 class="text-xl font-bold text-center slanted-text">Me</h2>
+                <p class="slanted-text mt-2"><strong class="text-orange-500">Name:</strong> {{ pet?.name }}</p>
+                <p class="slanted-text mt-2"><strong class="text-orange-500">Age:</strong> {{ pet?.ageInMonth }} Months</p>
+                <p class="slanted-text mt-2"><strong class="text-orange-500">Sex:</strong> {{ pet?.sex }}</p>
+                <p class="slanted-text mt-2"><strong class="text-orange-500">Type:</strong> {{ pet?.type }}</p>
+                <p class="slanted-text mt-2"><strong class="text-orange-500">Other Information:</strong> {{ pet?.other }}</p>
+                <div class="flex flex-col items-center mt-4">
+                    <strong class="slanted-text text-orange-500">vaccination certificate</strong>
+                    <img [src]="pet?.idNoteBookImage" alt="Notebook Image" class="notebook-image object-cover mt-2">
                 </div>
             </div>
-
-    
-            <!-- Right Column -->
-            <div class="w-3/4 pl-8">
-                <div class="bg-yellow-100 p-9 rounded-lg mb-9">
-                    <h2 class="text-xl font-bold text-center">Me</h2>
-                    <p class="mt-2 "><strong class="text-orange-500    ">Name:</strong> <strong>{{ pet?.name }}</strong></p>
-                    <p class="mt-2 "><strong class="text-orange-500 ">Age:</strong>  <strong>{{ pet?.ageInMonth}} Months</strong></p>
-                    <p class="mt-2 "><strong class="text-orange-500 ">Sex:</strong> <strong>{{ pet?.sex }}</strong></p>
-                    <p class="mt-2 "><strong class="text-orange-500 ">Type:</strong> <strong>{{ pet?.type }}</strong></p>
-                    <p class="mt-2 text-orange-500 "><strong class="text-orange-500 ">Other Info:</strong> {{ pet?.other }}<strong></strong></p>
-                    <div class="border p-2 mt-2 h-24"> <strong class="text-orange-500 ">Notebook</strong></div>
+            <div class="bg-blue-100 p-9 rounded-lg flex items-center justify-between">
+                <div class="flex-1">
+                    <h2 class="text-xl font-bold text-center slanted-text">My Owner</h2>
+                    <p class="slanted-text mt-2"><strong class="text-orange-500">Name:</strong> {{ owner?.name }}</p>
+                    <p class="slanted-text mt-2"><strong class="text-orange-500">Email:</strong> {{ owner?.email }}</p>
+                    <p class="slanted-text mt-2"><strong class="text-orange-500">Phone:</strong> {{ owner?.phone }}</p>
                 </div>
-                <div class="bg-blue-100 p-9 rounded-lg flex items-center justify-between">
-                    <div class="flex-1">
-                        <h2 class="text-xl font-bold text-center">My Owner</h2>
-                        <p class="mt-2"><strong class="text-orange-500">Name:</strong> <strong>{{ owner?.name }}</strong></p>
-                        <p class="mt-2"><strong class="text-orange-500">Email:</strong> <strong>{{ owner?.email }}</strong></p>
-                        <p class="mt-2"><strong class="text-orange-500">Phone:</strong> <strong>{{ owner?.phone }}</strong></p>
-                    </div>
-                    <div class="ml-2">
-                        <img src="../assets/Images/images.jpg" alt="Owner" class="w-24 h-24 rounded-full object-cover">
-                    </div>
+                <div class="ml-2">
+                    <img [src]="owner?.photo" alt="Owner" class="w-24 h-24 rounded-full object-cover">
                 </div>
             </div>
         </div>
-    </body>
-    </html>
-    
+    </div>
+</body>
+</html>
+
