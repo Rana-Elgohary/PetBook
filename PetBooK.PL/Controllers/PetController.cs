@@ -41,14 +41,15 @@ namespace PetBooK.PL.Controllers
 
         [HttpGet("RequestPet")]
         public IActionResult GetAllTypesWithoutFilterWhenRequestIsTrue()
-        {    
-            List<Pet> pets = unitOfWork.petRepository.FindBy(p => p.ReadyForBreeding == true );
+        {
+            List<Pet> pets = unitOfWork.petRepository.FindBy(p => p.ReadyForBreeding == true);
             if (pets == null) { return BadRequest(); }
 
 
             List<PetGetDTO> PetDTO = mapper.Map<List<PetGetDTO>>(pets);
             return Ok(PetDTO);
         }
+
         //---------------------------------search for both dogs orrr cats which are ready-----------------------------
         [HttpGet("SearchPetsReadyForBreeding")]
         public IActionResult GetAllPetsReadyForBreeding()
@@ -59,6 +60,7 @@ namespace PetBooK.PL.Controllers
             var petDTOs = mapper.Map<List<PetGetDTO>>(pets);
             return Ok(petDTOs);
         }
+
         //-----------------------------------search for dogs only which are readyfor breading-------------
         [HttpGet("SearchDogsReadyForBreeding")]
         public IActionResult GetAllDogsReadyForBreeding()
@@ -69,6 +71,30 @@ namespace PetBooK.PL.Controllers
             var petDTOs = mapper.Map<List<PetGetDTO>>(pets);
             return Ok(petDTOs);
         }
+        //-----------------------------------search breedname-------------
+        [HttpGet("SearchBreedNameOfPetsReadyForBreeding")]
+        public IActionResult BreedNameOfPetsReadyForBreeding(string name)
+        {
+            var targetBreed = unitOfWork.breedRepository.FindBy(b => b.Breed1 == name).FirstOrDefault();
+            if (targetBreed == null)
+            {
+                return NotFound($"Breed '{name}' not found.");
+            }
+
+            var petBreedRelationships = unitOfWork.pet_BreedRepository.FindBy(pb => pb.BreedID == targetBreed.BreedID).ToList();
+            var petIds = petBreedRelationships.Select(pb => pb.PetID).ToList();
+
+            var pets = unitOfWork.petRepository.FindBy(p => p.ReadyForBreeding==true && petIds.Contains(p.PetID)).ToList();
+            if (!pets.Any())
+            {
+                return NotFound("No pets ready for breeding found.");
+            }
+
+            var petDTOs = mapper.Map<List<PetGetDTO>>(pets);
+            return Ok(petDTOs);
+          
+        }
+        
         //-----------------------------------
 
         [HttpGet("SearchCatsReadyForBreeding")]
@@ -137,7 +163,19 @@ namespace PetBooK.PL.Controllers
         }
         //-----------------------------------------------------------------------------------------------------
 
-        [HttpPut] //Edit By Amira
+
+        [HttpGet("userid")]
+        public IActionResult GetAllPetByUserId(int id)
+        {
+            List<Pet> pet = unitOfWork.petRepository.FindBy(s=>s.UserID==id);
+            if (pet == null) { return BadRequest(); }
+            List<PetGetDTO> petDTO = mapper.Map<List<PetGetDTO>>(pet);
+            return Ok(petDTO);
+        }
+
+        //-----------------------------------------------------------------------------------------------------
+
+        [HttpPut]
 
         public async Task<IActionResult> Edit(int id,[FromForm]PetUpdateDTO NewPet)
         {
@@ -262,3 +300,4 @@ namespace PetBooK.PL.Controllers
 
     }
 }
+

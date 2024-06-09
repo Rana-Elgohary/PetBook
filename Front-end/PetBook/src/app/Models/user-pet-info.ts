@@ -1,6 +1,6 @@
 export class UserPetInfo {
     constructor(
-       
+    
         public ageInMonth: number,
         public idNoteBookImage: string,
         public name: string,

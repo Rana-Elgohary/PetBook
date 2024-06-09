@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { UserLoginComponent } from '../../user-login/user-login.component';
 import { AccountServiceService } from '../../../Services/account-service.service';
 import { CommonModule } from '@angular/common';
+import { MyRequestService } from '../../../Services/my-request.service';
 
 @Component({
   selector: 'app-user-pet-info',
@@ -15,28 +16,32 @@ import { CommonModule } from '@angular/common';
   styleUrl: './user-pet-info.component.css'
 })
 export class UserPetInfoComponent implements OnInit {
-constructor(public userpetInfoService: UserPetInfoServiceService, public account: AccountServiceService, public router: Router){}
+constructor(public userpetInfoService: UserPetInfoServiceService, public account: AccountServiceService, public router: Router, public requestForBreedService: MyRequestService){}
 
  userPetList : UserPetInfo[]=[];
   userPetInfoSub: Subscription|null= null;
   userID: number= Number(this.account.r.id);
+  isPaired:any= [];
   ngOnInit(): void{
-          this.userpetInfoService.getPetByUserId(5).subscribe({
-            next:(UserPetInfoData)=>{
+          this.userpetInfoService.getPetByUserId(5).subscribe(
+          {
+            next:(UserPetInfoData)=>
+            {
               this.userPetList=UserPetInfoData;
-              this.userPetList.forEach(element => {
-                console.log(element);
-              });
               console.log(this.userPetList)
-
-            }
-          }
-        )
-          };
-
+        
+          }});
+          this.userPetList.forEach(element => {
+            this.requestForBreedService.CheckIfThisPetOndate(element.petID).subscribe({
+             next:(d)=>{
+              this.isPaired.push(d);
+              console.log(this.isPaired);
+             }
+             })
+           })
+           
+        }
           // navigateToAdd(){
           //   this.router.navigateByUrl();
           // }
-    }
-  
-
+        }
