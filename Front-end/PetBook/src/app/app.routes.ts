@@ -16,9 +16,6 @@ export const routes: Routes = [
     {path: "PetRegister", component:PetRegisterComponent, title:"Pet Register"},
     {path: "Account", component:UserDetailsComponent, title:"Account"},
     {path: "UpdateUser", component:UpdateUserDetailsComponent, title:"Edit"},
+    {path: 'Pet/details/:id', component: PetDetailsComponent },
     {path:"",component:LandingPageComponent,title:"PetBook"},
-    { path: 'Pet/details/:id', component: PetDetailsComponent }
-
-
-
 ];

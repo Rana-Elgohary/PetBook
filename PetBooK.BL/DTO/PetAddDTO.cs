@@ -17,7 +17,7 @@ namespace PetBooK.BL.DTO
 
         public string Sex { get; set; }
 
-        public string IDNoteBookImage { get; set; }
+        public IFormFile IDNoteBookImage { get; set; }
 
         public int UserID { get; set; }
 

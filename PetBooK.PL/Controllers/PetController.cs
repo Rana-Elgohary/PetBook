@@ -87,6 +87,8 @@ namespace PetBooK.PL.Controllers
             string[] allowedFileExtentions = [".jpg", ".jpeg", ".png", ".webp"];
 
             string createdImageName = await fileService.SaveFileAsync(NewPet.Photo, allowedFileExtentions);
+            string createdIDNoteBookImageName = await fileService.SaveFileAsync(NewPet.IDNoteBookImage, allowedFileExtentions);
+
             if (NewPet == null)
             {
                 return BadRequest();
@@ -100,7 +102,7 @@ namespace PetBooK.PL.Controllers
                     Photo = createdImageName,
                     AgeInMonth = NewPet.AgeInMonth,
                     Sex = NewPet.Sex,
-                    IDNoteBookImage = NewPet.IDNoteBookImage,
+                    IDNoteBookImage = createdIDNoteBookImageName,
                     ReadyForBreeding = NewPet.ReadyForBreeding,
                     UserID = NewPet.UserID,
                     Type = NewPet.Type,
