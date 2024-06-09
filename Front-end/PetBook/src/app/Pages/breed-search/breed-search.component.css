@@ -1,20 +1,23 @@
+/* Global styles */
+* {
+  background-image: url('../../../assets/Images/PetInfoBG.png') !important;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
 
-  /* //------------------for cards ------------------ */ 
-  *{
-    background-image: url('../../../assets/Images/PetInfoBG.png') !important;; 
-    background-size: cover; /* Cover the entire viewport */
-  background-repeat: no-repeat; /* Prevent repetition of the image */
-  }
-  .search-icon {
+/* Search icon */
+.search-icon {
   border: none;
+  background: none;
   cursor: pointer;
   outline: none;
 }
 
+/* Input field */
 input[type="text"] {
   transition: width 0.4s ease-in-out;
   width: 100%;
-  max-width: 400px; /* Adjust the maximum width as needed */
+  max-width: 400px;
 }
 
 @media (max-width: 640px) {

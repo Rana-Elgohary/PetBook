@@ -1,7 +1,7 @@
 <div class="min-h-screen bg-gray-100 p-8">
   <div class="container mx-auto">
     <div class="flex justify-between items-center mb-8">
-      <div class="relative">
+      <div class="relative flex items-center">
         <input
           type="text"
           placeholder="Search..."
@@ -9,7 +9,7 @@
           [ngModel]="searchQuery"
           (ngModelChange)="searchQuery = $event"
         />
-        <button class="absolute right-4 top-2 text-yellow-500" (click)="searchBar()">
+        <button class="absolute right-16 top-2 text-yellow-500" (click)="searchBar()">
           <!-- Magnifying glass icon -->
           <svg
             class="w-6 h-6"
@@ -26,7 +26,12 @@
             ></path>
           </svg>
         </button>
-      </div>
+        <select class="ml-4 py-2 px-4 border rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500" [(ngModel)]="filterType" (change)="applyFilter()">
+          <option value="">All</option>
+          <option value="Dog">Dog</option>
+          <option value="Cat">Cat</option>
+        </select>
+        </div>
     </div>
     <!-- Rest of your content -->
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">

@@ -13,9 +13,13 @@ import { HttpClient } from '@angular/common/http';
   styleUrl: './breed-search.component.css'
 })
 export class BreedSearchComponent implements OnInit {
+
     pets: PetDetails[] = []; // get list of pets available for breeding
     Breeds: PetDetails[] = [];  //for search breedname to get the pets available for breed with this name 
     searchQuery: string = '';
+    showFilterMenu: boolean = false; // Variable to toggle filter menu visibility
+    filteredPets: PetDetails[] = []; // Filtered list based on search and filter criteria
+    filterType: string = ''; // For filtering by dog or cat
     showSearchBar: boolean = false; // Variable to toggle search bar visibility
     url:string='https://localhost:7066/Resources/';
     constructor(private http: HttpClient) {}
@@ -43,6 +47,49 @@ export class BreedSearchComponent implements OnInit {
     SearchBar() {
       this.showSearchBar = !this.showSearchBar;
     }
+  
+    toggleFilterMenu() {
+      this.showFilterMenu = !this.showFilterMenu;
+    }
+    
+    applyFilter() {
+      console.log(this.filterType)
+      if(this.filterType==''){
+        this.fetchPets();
+      }
+    else if(this.filterType=='Cat'){
+      this.http.get<PetDetails[]>('https://localhost:7066/api/Pet/SearchCatsReadyForBreeding')
+      .subscribe(
+        pets => {
+          for (let index = 0; index < pets.length; index++) {
+            pets[index].photo=this.url+pets[index].photo
+          }
+          this.pets = pets;
+          
+          console.log(pets);
+        },
+        error => {
+          console.error('Error fetching pets:', error);
+        }
+      );
+    }
+    else if(this.filterType=='Dog'){
+      this.http.get<PetDetails[]>('https://localhost:7066/api/Pet/SearchDogsReadyForBreeding')
+      .subscribe(
+        pets => {
+          for (let index = 0; index < pets.length; index++) {
+            pets[index].photo=this.url+pets[index].photo
+          }
+          this.pets = pets;
+          
+          console.log(pets);
+        },
+        error => {
+          console.error('Error fetching pets:', error);
+        }
+      );
+    }
+  }
   
     searchBar() {
       if (this.searchQuery.trim() !== '') {
