@@ -8,6 +8,7 @@ import { noNavigateToLoginPageIfTokenGuard } from './Guard/no-navigate-to-login-
 import { UserDetailsComponent } from './Pages/User/user-details/user-details.component';
 import { UpdateUserDetailsComponent } from './Pages/User/update-user-details/update-user-details.component';
 import { PetDetailsComponent } from './Pages/PetInfo/pet-detailss/pet-details.component';
+import { BreedSearchComponent } from './Pages/breed-search/breed-search.component';
 
 export const routes: Routes = [
     {path: "Login", component:UserLoginComponent, title:"Login", canActivate: [noNavigateToLoginPageIfTokenGuard]},
@@ -15,6 +16,7 @@ export const routes: Routes = [
     {path: "PetRegister", component:PetRegisterComponent, title:"Pet Register"},
     {path: "Account", component:UserDetailsComponent, title:"Account"},
     {path: "UpdateUser", component:UpdateUserDetailsComponent, title:"Edit"},
+    {path: "BreedSearch", component:BreedSearchComponent, title:"Search Breed"},
     { path: 'Pet/details/:id', component: PetDetailsComponent }
 
 

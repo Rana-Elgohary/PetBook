@@ -1,0 +1,35 @@
+
+  /* //------------------for cards ------------------ */ 
+  *{
+    background-image: url('../../../assets/Images/PetInfoBG.png') !important;; 
+    background-size: cover; /* Cover the entire viewport */
+  background-repeat: no-repeat; /* Prevent repetition of the image */
+  }
+  .search-icon {
+  border: none;
+  cursor: pointer;
+  outline: none;
+}
+
+input[type="text"] {
+  transition: width 0.4s ease-in-out;
+  width: 100%;
+  max-width: 400px; /* Adjust the maximum width as needed */
+}
+
+@media (max-width: 640px) {
+  .search-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  input[type="text"] {
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 768px) {
+  input[type="text"] {
+    max-width: 300px;
+  }
+}
