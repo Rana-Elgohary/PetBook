@@ -1,5 +1,9 @@
 .image{
+<<<<<<< HEAD
     /* background-image: url("../../../assets/Images/Pet\ Info\ BG.png"); */
+=======
+    /* background-image: url("../../../assets/Images/Pet/Info/BG.png"); */
+>>>>>>> 880225736a3b3face6bef57f9feaf7c466d93eb9
     background-size: cover;
     background-position: center;
 }

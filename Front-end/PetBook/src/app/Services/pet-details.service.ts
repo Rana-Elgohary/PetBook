@@ -31,7 +31,7 @@ export class PetDetailsService {
         return throwError(error);
       })
     );
-}
+  }
 getClientPets(clientId: number): Observable<PetDetails[]> {
   return this.http.get<PetDetails[]>(`${this.baseurl}/api/Client/${clientId}/pets`);
 }

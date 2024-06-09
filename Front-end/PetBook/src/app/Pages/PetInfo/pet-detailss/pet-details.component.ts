@@ -29,24 +29,37 @@ export class PetDetailsComponent {
     ngOnInit(): void {
       this.route.params.subscribe(params => {
         const petId = +params['id'];
+        console.log('ngOnInit: petId', petId);
         this.loadPetDetails(petId);
       });
     }
   
-    loadPetDetails(petId: number): void {
-      this.petDetailsService.getPetDetails(petId).subscribe(pet => {
-        this.pet = pet;
-        this.selectedPetType = pet.type;
-        this.loadOwnerDetails(pet.userID);
-      });
+  
+    loadPetDetails(petId: number) {
+      console.log('loadPetDetails: petId', petId);
+      this.petDetailsService.getPetDetails(petId).subscribe(
+        (pet: PetDetails) => {
+          console.log('loadPetDetails: pet', pet);
+          this.pet = pet;
+          this.loadOwnerDetails(pet.userID);
+        },
+        error => {
+          console.error('Error fetching pet details:', error);
+        }
+      );
     }
   
-    loadOwnerDetails(userId: number): void {
-      this.petDetailsService.getuserDetails(userId).subscribe(owner => {
-        this.owner = owner;
-        this.loadClientPets(owner.userID);
-        this.loadBreedRequests();
-      });
+    loadOwnerDetails(userId: number) {
+      console.log('loadOwnerDetails: userId', userId);
+      this.petDetailsService.getuserDetails(userId).subscribe(
+        (user: UserPetDetails) => {
+          console.log('loadOwnerDetails: user', user);
+          this.owner = user;
+        },
+        error => {
+          console.error('Error fetching user details:', error);
+        }
+      );
     }
   
     loadClientPets(clientId: number): void {

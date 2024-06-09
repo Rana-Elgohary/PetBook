@@ -142,17 +142,29 @@ namespace PetBooK.PL.Controllers
         //------------------------------------------------------------------------------------------------
 
         [HttpGet("id")]
-        public IActionResult GetId(int id )
+        public IActionResult GetId(int id)
         {
-           Pet pet= unitOfWork.petRepository.selectbyid(id);
-            if(pet == null) { return BadRequest(); }
-            PetGetDTO petDTO =mapper.Map<PetGetDTO>(pet);
+            Pet pet = unitOfWork.petRepository.selectbyid(id);
+            if (pet == null) { return BadRequest(); }
+            PetGetDTO petDTO = mapper.Map<PetGetDTO>(pet);
             return Ok(petDTO);
         }
 
         //-----------------------------------------------------------------------------------------------------
 
-        [HttpPut] //Edit By Amira
+
+        [HttpGet("userid")]
+        public IActionResult GetAllPetByUserId(int id)
+        {
+            List<Pet> pet = unitOfWork.petRepository.FindBy(s=>s.UserID==id);
+            if (pet == null) { return BadRequest(); }
+            List<PetGetDTO> petDTO = mapper.Map<List<PetGetDTO>>(pet);
+            return Ok(petDTO);
+        }
+
+        //-----------------------------------------------------------------------------------------------------
+
+        [HttpPut]
 
         public async Task<IActionResult> Edit(int id,[FromForm]PetUpdateDTO NewPet)
         {
@@ -272,5 +284,9 @@ namespace PetBooK.PL.Controllers
             unitOfWork.SaveChanges();
             return Ok();
         }
+
+
+
     }
 }
+
