@@ -10,8 +10,12 @@ namespace PetBooK.BL.DTO
     public class RequestBreedDTO
     {
         public string senderPetName { get; set; }
-
         public string receiverPetName { get; set; }
+
+        public string OwnersenderName { get; set; }
+
+        public string OwnerreceiverName { get; set; }
+
         public int PetIDSender { get; set; }
 
         public int PetIDReceiver { get; set; }
