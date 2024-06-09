@@ -4,11 +4,15 @@ import { UserSignUpComponent } from './Pages/user-sign-up/user-sign-up.component
 import { PetRegisterComponent } from './Pages/pet-register/pet-register.component';
 import { noNavigateToLoginPageIfTokenGuard } from './Guard/no-navigate-to-login-page-if-token.guard';
 import { MyRequestComponent } from './Pages/my-request/my-request.component';
+import { PendingRequestComponent } from './Pages/pending-request/pending-request.component';
 
 export const routes: Routes = [
     {path: "Login", component:UserLoginComponent, title:"Login", canActivate: [noNavigateToLoginPageIfTokenGuard]},
     {path: "UserSignUp", component:UserSignUpComponent, title:"User Sign-Up"},
     {path: "PetRegister", component:PetRegisterComponent, title:"Pet Register"},
-    {path: "MyRequest", component:MyRequestComponent, title:"MY Request"}
+    {path: "MyRequest", component:MyRequestComponent, title:"MY Request"},
 
+    {path: "UserSignUp", component:UserSignUpComponent, title:"User Sign-Up", canActivate: [noNavigateToLoginPageIfTokenGuard]},
+    {path: "PetRegister", component:PetRegisterComponent, title:"Pet Register"},
+    {path:"pendingRequest" , component:PendingRequestComponent , title:"pending Request"}
 ];

@@ -17,4 +17,8 @@
     <ProjectReference Include="..\PetBooK.BL\PetBooK.BL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Uploads\" />
+  </ItemGroup>
+
 </Project>

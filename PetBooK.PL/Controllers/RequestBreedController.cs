@@ -97,7 +97,7 @@ namespace PetBooK.PL.Controllers
             foreach (var pet in pets)
             {
                 List<Request_For_Breed> requestOfBreed = unit.request_For_BreedRepository.FindByInclude(
-                    s => s.PetIDSender == pet.PetID,
+                    s => s.PetIDSender == pet.PetID && s.Pair == false,
                     s => s.PetIDSenderNavigation,
                     s => s.PetIDReceiverNavigation
                 );
@@ -177,7 +177,7 @@ namespace PetBooK.PL.Controllers
             foreach (var pet in pets)
             {
                 List<Request_For_Breed> requestOfBreed = unit.request_For_BreedRepository.FindByInclude(
-                    s => s.PetIDReceiver == pet.PetID,
+                    s => s.PetIDReceiver == pet.PetID && s.Pair == false,
                     s => s.PetIDSenderNavigation,
                     s => s.PetIDReceiverNavigation
                 );
@@ -270,5 +270,44 @@ namespace PetBooK.PL.Controllers
                 return Ok("deleted");
             }
         }
+
+        //--------------check if this pet on date or not-------------//
+        [HttpGet("Turnthispettobenotavailable/{id}")]
+        public IActionResult MakethisPetNotAvailableforbreading(int id)
+        {
+            Pet pet = unit.petRepository.selectbyid(id);
+            if (pet == null)
+            {
+                Console.WriteLine($"Pet with ID {id} not found");
+                return NotFound();
+            }
+
+            pet.ReadyForBreeding = false;
+            unit.petRepository.update(pet);
+            unit.SaveChanges();
+            Console.WriteLine($"Pet with ID {id} marked as not ready for breeding");
+            return Ok();
+        }
+
+        [HttpGet("Turnthispettobeavailable/{id}")]
+        public IActionResult MakethisPetAvailableforbreading(int id)
+        {
+            Pet pet = unit.petRepository.selectbyid(id);
+            if (pet == null)
+            {
+                Console.WriteLine($"Pet with ID {id} not found");
+                return NotFound();
+            }
+
+            pet.ReadyForBreeding = true;
+            unit.petRepository.update(pet);
+            unit.SaveChanges();
+            Console.WriteLine($"Pet with ID {id} marked as ready for breeding");
+            return Ok();
+        }
+
+        //------------------------------------------------------//
+
+
     }
 }

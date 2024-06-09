@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using PetBooK.BL.DTO;
 using PetBooK.BL.UOW;
 using PetBooK.DAL.Models;
+using PetBooK.DAL.Services;
 
 namespace PetBooK.PL.Controllers
 {
@@ -13,12 +14,13 @@ namespace PetBooK.PL.Controllers
     {
         UnitOfWork unitOfWork;
         IMapper mapper;
+        IFileService fileService;
 
-
-        public UserController(UnitOfWork unitOfWork, IMapper mapper)
+        public UserController(UnitOfWork unitOfWork, IMapper mapper, IFileService fileService)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
+            this.fileService = fileService;
         }
         //------------------------------------------Get----------------------------------------
         //------------------GetAll-----------
@@ -72,13 +74,30 @@ namespace PetBooK.PL.Controllers
 
         //-------------------------------ADD------------------------------
         [HttpPost]
-        public ActionResult AddUser(UserAddDTO useraddDTO)
+        public async Task<ActionResult> AddUserAsync(UserAddDTO useraddDTO)
         {
+            string[] allowedFileExtentions = [".jpg", ".jpeg", ".png", ".webp"];
+
+            string createdImageName = await fileService.SaveFileAsync(useraddDTO.Photo, allowedFileExtentions);
+
             if (useraddDTO == null)
                 return BadRequest();
             else
             {
-                User user = mapper.Map<User>(useraddDTO);
+                //User user = mapper.Map<User>(useraddDTO);
+                User user = new User
+                {
+                    Name = useraddDTO.Name,
+                    Location = useraddDTO.Location,
+                    Email = useraddDTO.Email,
+                    Password = useraddDTO.Password,
+                    Photo = createdImageName,
+                    UserName = useraddDTO.Name, 
+                    Phone = useraddDTO.Phone,
+                    Age = useraddDTO.Age,
+                    Sex = useraddDTO.Sex,
+                    RoleID = useraddDTO.RoleID,
+                };
                 unitOfWork.userRepository.add(user);
                 unitOfWork.SaveChanges();
 

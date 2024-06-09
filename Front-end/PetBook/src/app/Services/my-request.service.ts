@@ -1,8 +1,9 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { RequestBreed } from '../Models/request-breed';
 import { catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { PetDetails } from '../Models/pet-details';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,10 @@ export class MyRequestService {
 
   baseUrl = 'https://localhost:7066/api/RequestBreed/UserSenderID/';
   url = 'https://localhost:7066/api/RequestBreed/';
+  pendingUrl='https://localhost:7066/api/RequestBreed/UserReceiverID/';
+  updateUrl='https://localhost:7066/api/RequestBreed';
+  petUrl='https://localhost:7066/api/Pet/id?id=';
+
 
   getallSendingReq(id: number) {
     return this.http.get<RequestBreed[]>(this.baseUrl + id).pipe(
@@ -27,6 +32,42 @@ export class MyRequestService {
       catchError(this.handleError)
     );
   }
+
+  getallPendingReq(id: number) {
+    return this.http.get<RequestBreed[]>(this.pendingUrl + id).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  makeThisPetBeNotReadyForBreeding(id: number): Observable<any> {
+    return this.http.get<any>(`${this.url}Turnthispettobenotavailable/${id}`).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+
+  CheckIfThisPetOndate(id: number) {
+    return this.http.get<PetDetails>(this.petUrl + id).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+    updateRequestBreed(petIDSender: number, petIDReceiver: number, pair: boolean): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'accept': '*/*'
+    });
+
+    const body = {
+      petIDSender: petIDSender,
+      petIDReceiver: petIDReceiver,
+      pair: pair
+    };
+
+    return this.http.put<any>(this.updateUrl, body, { headers: headers });
+  }
+
+
 
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {

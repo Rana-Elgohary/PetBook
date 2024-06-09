@@ -31,7 +31,7 @@ export class MyRequestComponent implements OnInit {
     this.myrequest.DeleteReq(SId, RId).subscribe(response => {
       console.log(response);  // Log the response
       if (response === 'deleted') {
-        console.error(' deleting');
+        this.request = this.request.filter(item => !(item.petIDSender === SId && item.petIDReceiver === RId));
       }
     }, error => {
       console.error('Error deleting request:', error);
