@@ -9,13 +9,13 @@ import { CommonModule } from '@angular/common';
 import { MyRequestService } from '../../../Services/my-request.service';
 
 @Component({
-  selector: 'app-user-pet-info',
+  selector: 'app-userProfile-pet-info',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './user-pet-info.component.html',
-  styleUrl: './user-pet-info.component.css'
+  templateUrl: './userProfile-pet-info.component.html',
+  styleUrl: './userProfile-pet-info.component.css'
 })
-export class UserPetInfoComponent implements OnInit {
+export class UserProfilePetInfoComponent implements OnInit {
 constructor(public userpetInfoService: UserPetInfoServiceService, public account: AccountServiceService, public router: Router, public requestForBreedService: MyRequestService){}
 
  userPetList : UserPetInfo[]=[];
