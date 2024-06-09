@@ -24,7 +24,7 @@ export class UserSignUpComponent {
     age: 0,
     sex: "",
     photo: null,
-    roleID: 1
+    roleID: 2
   }
 
   constructor(public accountService:AccountServiceService, public router:Router){  }
