@@ -1,12 +1,15 @@
 export class UserPetInfo {
     constructor(
-       public Name: string,
-       public Photo: string,
-       public AgeInMonth: number,
-       public Sex: string,
-       public IdNoteBookImage: string,
-       public ReadyForBreeding: boolean,
-       public Type: string,
-       public Other: string
+       
+        public ageInMonth: number,
+        public idNoteBookImage: string,
+        public name: string,
+        public other: string,
+        public petID : number,
+        public photo: string,
+        public readyForBreeding: boolean,
+        public sex: string,
+        public type:string ,
+        public userID: number
     ){};
 }
