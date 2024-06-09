@@ -13,7 +13,7 @@ import { RequestBreed } from '../../Models/request-breed';
 })
 export class MyRequestComponent implements OnInit {
 
-
+  UserId:number| null =null;
   request: RequestBreed[] = [];  // Ensure this is an array
 
   constructor(
@@ -22,7 +22,8 @@ export class MyRequestComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.myrequest.getallSendingReq(4).subscribe(data => {
+    this.UserId=4;
+    this.myrequest.getallSendingReq(this.UserId).subscribe(data => {
       this.request = data;
       console.log(this.request);
     });

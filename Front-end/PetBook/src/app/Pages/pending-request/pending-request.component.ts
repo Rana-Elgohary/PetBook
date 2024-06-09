@@ -17,7 +17,8 @@ export class PendingRequestComponent implements OnInit { // Implementing OnInit
   request: RequestBreed[] = [];  // Ensure this is an array
   pet1: PetDetails | null = null;  // Initialize properties
   pet2: PetDetails | null = null;  // Initialize properties
-
+  userId : number | null =null;
+  
   constructor(
     public myrequest: MyRequestService,
     public activateRoute: ActivatedRoute
@@ -57,7 +58,8 @@ export class PendingRequestComponent implements OnInit { // Implementing OnInit
   }
 
   ngOnInit(): void {
-    this.myrequest.getallPendingReq(6).subscribe(data => {
+    this.userId=6;
+    this.myrequest.getallPendingReq(this.userId).subscribe(data => {
       this.request = data;
       console.log(this.request);
     });
