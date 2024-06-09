@@ -12,13 +12,13 @@ namespace PetBooK.BL.DTO
         public int PetID { get; set; }
         public string Name { get; set; }
 
-        public IFormFile Photo { get; set; }
+        public IFormFile? Photo { get; set; }
 
         public int? AgeInMonth { get; set; }
 
         public string Sex { get; set; }
 
-        public string IDNoteBookImage { get; set; }
+        public IFormFile? IDNoteBookImage { get; set; }
 
         public int UserID { get; set; }
 
