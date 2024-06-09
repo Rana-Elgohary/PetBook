@@ -108,7 +108,7 @@ namespace PetBooK.PL.Controllers
         }
         //-----------------------------------
         [HttpPost] //Edit By Amira
-        public async Task<IActionResult> PostPet(PetAddDTO NewPet)
+        public async Task<IActionResult> PostPet([FromForm] PetAddDTO NewPet)
         {
             string[] allowedFileExtentions = [".jpg", ".jpeg", ".png", ".webp"];
 

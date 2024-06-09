@@ -12,12 +12,13 @@ import { PetDetailsComponent } from './Pages/PetInfo/pet-detailss/pet-details.co
 import { UserPetInfoComponent } from './Pages/PetInfo/Pet-Inf/user-pet-info/user-pet-info.component';
 import { BreedSearchComponent } from './Pages/breed-search/breed-search.component';
 import { UserProfilePetInfoComponent } from './Pages/userPetInfo/user-pet-info/userProfile-pet-info.component';
+import { noNavigateWithoutLoginGuard } from './Guard/no-navigate-without-login.guard';
 
 
 export const routes: Routes = [
     {path: "Login", component:UserLoginComponent, title:"Login", canActivate: [noNavigateToLoginPageIfTokenGuard]},
     {path: "UserSignUp", component:UserSignUpComponent, title:"User Sign-Up"},
-    {path: "PetRegister", component:PetRegisterComponent, title:"Pet Register"},
+    {path: "PetRegister", component:PetRegisterComponent, title:"Pet Register", canActivate:[noNavigateWithoutLoginGuard]},
     {path: "MyRequest", component:MyRequestComponent, title:"MY Request"},
     {path: "UserSignUp", component:UserSignUpComponent, title:"User Sign-Up", canActivate: [noNavigateToLoginPageIfTokenGuard]},
     {path: "PetRegister", component:PetRegisterComponent, title:"Pet Register"},

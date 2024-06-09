@@ -7,6 +7,8 @@ import { AddPetService } from '../../Services/add-pet.service';
 import { FormsModule } from '@angular/forms';
 import { AccountServiceService } from '../../Services/account-service.service';
 import { CommonModule } from '@angular/common';
+import { UserPetInfoServiceService } from '../../Services/user-pet-info-service.service';
+import { lastValueFrom, switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'app-pet-register',
@@ -16,7 +18,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './pet-register.component.css'
 })
 export class PetRegisterComponent implements OnInit {
-  constructor(public addPet:AddPetService, public account:AccountServiceService){}
+  constructor(public addPet:AddPetService, public account:AccountServiceService, public userPetInfo:UserPetInfoServiceService){}
 
   ngOnInit(): void {
     this.addPet.getBreed().subscribe({
@@ -44,7 +46,7 @@ export class PetRegisterComponent implements OnInit {
 
   breedPet:AddBreedToPet={
     petID:0,
-    breebID:0,
+    breedID:0,
   }
 
   breedsList:Breed[]=[]
@@ -55,24 +57,40 @@ export class PetRegisterComponent implements OnInit {
 
   onFileSelectedBookImage(event:any){
     this.Pet.idNoteBookImage = event.target.files[0];
-  } 
-
-  SignUp(){
-    this.addPet.AddPet(this.Pet).subscribe({
-      next: (response) => {
-        console.log(response)
-      },
-      error:(err) =>{
-        console.log(err)
-      }
-    });
-    this.addPet.AddPetBreed(this.breedPet).subscribe({
-      next: (response) => {
-        console.log(response)
-      },
-      error:(err) =>{
-        console.log(err)
-      }
-    })
   }
+
+  async SignUp() {
+    try {
+      // Step 1: Add the pet
+      const addPetResponse = await lastValueFrom(this.addPet.AddPet(this.Pet));
+      console.log('Pet added successfully:', addPetResponse);
+  
+      // Step 2: Get pet information by user ID
+      const petInfoResponse = await lastValueFrom(this.userPetInfo.getPetByUserId(this.Pet.userID)) || [];
+  
+      petInfoResponse.forEach(element => {
+        if (element.name === this.Pet.name && element.ageInMonth === this.Pet.ageInMonth && element.other === this.Pet.other &&
+            element.type === this.Pet.type && element.sex === this.Pet.sex) {
+          this.breedPet.petID = element.petID;
+        }
+      });
+  
+      // Step 3: Add pet breed
+      const addPetBreedResponse = await lastValueFrom(this.addPet.AddPetBreed(this.breedPet));
+      console.log('Pet breed added successfully:', addPetBreedResponse);
+  
+      // Success message or any further actions after successful signup
+    } catch (err: any) {
+      if (err.error && err.error.errors) {
+        // Log and display validation errors
+        console.log('Validation errors:', err.error.errors);
+        // Handle displaying errors to the user, e.g., show them in a dialog or form
+      } else {
+        // Handle other types of errors
+        console.error('An error occurred:', err);
+        // Display a generic error message to the user
+      }
+    }
+  }
+  
 }

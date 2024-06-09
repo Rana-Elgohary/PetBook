@@ -59,7 +59,7 @@
             <div class="relative mt-8">
                 <select class="p-2 w-[100%] border-b-2 border-gray-800 focus:outline-none transition duration-200 ease-in"
                         required
-                        [(ngModel)]="breedPet.breebID"
+                        [(ngModel)]="breedPet.breedID"
                         onfocus="this.nextElementSibling.style.transform = 'translateY(-35px)'; 
                                 this.nextElementSibling.style.fontSize = '20px'; 
                                 this.nextElementSibling.style.color = '#fb923c';
@@ -93,8 +93,8 @@
                                     this.style.borderColor = ''
                                 }">
                     <option value="" disabled selected hidden></option>
-                    <option value="F">False</option>
-                    <option value="T">True</option>
+                    <option value="false">False</option>
+                    <option value="true">True</option>
                 </select>
                 <label class="absolute left-2 bottom-2 text-slate-400 transition duration-200 ease-in capitalize">Ready For Breeding?</label>
             </div>

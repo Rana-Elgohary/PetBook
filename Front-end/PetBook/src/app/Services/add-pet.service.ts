@@ -13,11 +13,29 @@ export class AddPetService {
   constructor(public http: HttpClient) { }
 
   AddPet(pet: AddPet) {
-    return this.http.post(`${this.baseurl}/Pet`, pet);
+    
+    const formData = new FormData();
+    formData.append('name', pet.name);
+    formData.append('ageInMonth', pet.ageInMonth.toString());
+    formData.append('sex', pet.sex);
+    formData.append('userID', pet.userID.toString());
+    formData.append('readyForBreeding', pet.readyForBreeding.toString());
+    formData.append('type', pet.type);
+    formData.append('other', pet.other);
+    
+    if (pet.photo && pet.idNoteBookImage) {
+      formData.append('photo', pet.photo);
+      formData.append('idNoteBookImage', pet.idNoteBookImage);
+      }
+    
+    return this.http.post(`${this.baseurl}/Pet`, formData);
   }
 
   AddPetBreed(petBreed: AddBreedToPet){
-    return this.http.post(`${this.baseurl}/PetBreed`, petBreed);
+    const formData = new FormData();
+    formData.append('petID', petBreed.petID.toString());
+    formData.append('breedID', petBreed.breedID.toString());
+    return this.http.post(`${this.baseurl}/PetBreed`, formData);
   }
 
   getBreed(){
