@@ -21,7 +21,7 @@ constructor(public userpetInfoService: UserPetInfoServiceService, public account
  userPetList : UserPetInfo[]=[];
   userPetInfoSub: Subscription|null= null;
   userID: number= Number(this.account.r.id);
-  isPaired:any= [];
+  petInfo: UserPetInfo|null= null;
   ngOnInit(): void{
           this.userpetInfoService.getPetByUserId(5).subscribe(
           {
@@ -29,16 +29,15 @@ constructor(public userpetInfoService: UserPetInfoServiceService, public account
             {
               this.userPetList=UserPetInfoData;
               console.log(this.userPetList)
-        
+              this.userPetList.forEach(element => {
+                this.requestForBreedService.CheckIfThisPetOndate(element.petID).subscribe({
+                 next:(d)=>{
+                  element.pairWith=d;
+                  console.log(d);
+                 }
+                 })
+               })
           }});
-          this.userPetList.forEach(element => {
-            this.requestForBreedService.CheckIfThisPetOndate(element.petID).subscribe({
-             next:(d)=>{
-              this.isPaired.push(d);
-              console.log(this.isPaired);
-             }
-             })
-           })
            
         }
           // navigateToAdd(){
