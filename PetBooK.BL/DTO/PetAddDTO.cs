@@ -16,7 +16,6 @@ namespace PetBooK.BL.DTO
         public int? AgeInMonth { get; set; }
 
         public string Sex { get; set; }
-
         public IFormFile? IDNoteBookImage { get; set; }
 
         public int UserID { get; set; }
