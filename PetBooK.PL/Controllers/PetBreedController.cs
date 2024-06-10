@@ -34,7 +34,7 @@ namespace PetBooK.PL.Controllers
         //-----------------------------------------------------------------------------------------------------------
 
         [HttpPost]
-        public IActionResult AddNewPetBreed(PetBreedAddDTO PB)
+        public IActionResult AddNewPetBreed([FromForm] PetBreedAddDTO PB)
         {
             if (PB == null)
             {

@@ -47,7 +47,7 @@ export class MyRequestService {
 
 
   CheckIfThisPetOndate(id: number) {
-    return this.http.get<PetDetails>(this.petUrl + id).pipe(
+    return this.http.get<PetDetails>(`${this.petUrl}/${id}`).pipe(
       catchError(this.handleError)
     );
   }

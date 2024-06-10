@@ -1,13 +1,6 @@
 .main{
-<<<<<<< HEAD
-    background-image: url("../../../assets/Images/pet.png");
-=======
-<<<<<<< HEAD
-    /* background-image: url("../../../assets/Images/PetInfoBG.png"); */
-=======
-    /* background-image: url("../../../assets/Images/Pet/Info/BG.png"); */
->>>>>>> 880225736a3b3face6bef57f9feaf7c466d93eb9
->>>>>>> 45a4de7726bf4d9ee1d4f3a74ec972fb7e55d384
+    background-image: url("../../../assets/Images/PetInfoBG.png");
     background-size: cover;
     background-position: center;
 }
+
