@@ -16,7 +16,7 @@ export class MyRequestService {
   url = 'https://localhost:7066/api/RequestBreed/';
   pendingUrl='https://localhost:7066/api/RequestBreed/UserReceiverID/';
   updateUrl='https://localhost:7066/api/RequestBreed';
-  petUrl='https://localhost:7066/api/Pet/id?id=';
+  petUrl='https://localhost:7066/api/Pet/';
 
 
   getallSendingReq(id: number) {
@@ -47,7 +47,7 @@ export class MyRequestService {
 
 
   CheckIfThisPetOndate(id: number) {
-    return this.http.get<PetDetails>(`${this.petUrl}/${id}`).pipe(
+    return this.http.get<PetDetails>(`${this.petUrl}+${id}`).pipe(
       catchError(this.handleError)
     );
   }

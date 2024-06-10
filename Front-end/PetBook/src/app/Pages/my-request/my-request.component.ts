@@ -3,26 +3,29 @@ import { MyRequestService } from '../../Services/my-request.service';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { RequestBreed } from '../../Models/request-breed';
+import { UserDetails } from '../../Models/UserDetails';
+import { UserDetailsComponent } from '../User/user-details/user-details.component';
+import { AccountServiceService } from '../../Services/account-service.service';
 
 @Component({
   selector: 'app-my-request',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule , UserDetailsComponent],
   templateUrl: './my-request.component.html',
   styleUrls: ['./my-request.component.css']  // Corrected the typo here
 })
 export class MyRequestComponent implements OnInit {
 
-  UserId:number| null =null;
+  UserId:number= parseInt(this.AccountService.r.id);
   request: RequestBreed[] = [];  // Ensure this is an array
 
   constructor(
     public myrequest: MyRequestService,
-    public activateRoute: ActivatedRoute
+    public activateRoute: ActivatedRoute,
+    public AccountService:AccountServiceService 
   ) {}
 
   ngOnInit(): void {
-    this.UserId=4;
     this.myrequest.getallSendingReq(this.UserId).subscribe(data => {
       this.request = data;
       console.log(this.request);

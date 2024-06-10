@@ -4,6 +4,7 @@ import { MyRequestService } from '../../Services/my-request.service';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { PetDetails } from '../../Models/pet-details';
+import { AccountServiceService } from '../../Services/account-service.service';
 
 @Component({
   selector: 'app-pending-request',
@@ -17,19 +18,22 @@ export class PendingRequestComponent implements OnInit { // Implementing OnInit
   request: RequestBreed[] = [];  // Ensure this is an array
   pet1: PetDetails | null = null;  // Initialize properties
   pet2: PetDetails | null = null;  // Initialize properties
-  userId : number | null =null;
+  userId :number= parseInt(this.AccountService.r.id);
   
   constructor(
     public myrequest: MyRequestService,
-    public activateRoute: ActivatedRoute
+    public activateRoute: ActivatedRoute,
+    public AccountService:AccountServiceService 
+
   ) {}
 
   Confirm(petIDSender: number, petIDReceiver: number): void {
+    console.log("hello")
     this.myrequest.CheckIfThisPetOndate(petIDSender).subscribe(petDetailsSender => {
       this.pet1 = petDetailsSender;
       this.myrequest.CheckIfThisPetOndate(petIDReceiver).subscribe(petDetailsReceiver => {
         this.pet2 = petDetailsReceiver;
-
+          console.log(this.pet1?.readyForBreeding ,this.pet2?.readyForBreeding)
         if (this.pet1?.readyForBreeding && this.pet2?.readyForBreeding) {
           this.myrequest.updateRequestBreed(petIDSender, petIDReceiver, true)
             .subscribe(response => {
@@ -49,6 +53,10 @@ export class PendingRequestComponent implements OnInit { // Implementing OnInit
               err => console.error(`Error making pet ${petIDReceiver} not ready for breeding`, err)
             );
         }
+        else {
+          // Handle the else case where one or both pets are not ready for breeding
+          this.showPopup('One or both pets are not ready for breeding.');
+        }
       }, error => {
         console.error('Error fetching pet details for receiver', error);
       });
@@ -64,7 +72,9 @@ export class PendingRequestComponent implements OnInit { // Implementing OnInit
       console.log(this.request);
     });
   }
-
+  showPopup(message: string): void {
+    alert(message); // This is just a placeholder. Replace with actual popup implementation.
+  }
   removeRequest(SId: number, RId: number): void {
     this.myrequest.DeleteReq(SId, RId).subscribe(response => {
       console.log(response);  // Log the response
