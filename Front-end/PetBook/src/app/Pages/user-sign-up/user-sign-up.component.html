@@ -2,12 +2,12 @@
     <div class="m-24">
         <h1 class="tracking-wide font-medium text-2xl mb-3 text-slate-600">SignUp To PetBook</h1>
         <p class="text-slate-400 mb-3">Welcome to our website where you can find rare breeds and will be easy for you to find clinics.</p>
-       
+
         <section class="my-9">
             <div class="relative">
                 <app-input-section typeOfInput="text" LabelType="Name" (inputValueChange)="user.name=$event"></app-input-section>
             </div>
-           
+
             <div class="relative mt-8">
                 <app-input-section typeOfInput="text" LabelType="username" (inputValueChange)="user.userName=$event"></app-input-section>
             </div>
@@ -26,25 +26,25 @@
 
             <div class="relative mt-8">
                 <app-input-section typeOfInput="text" LabelType="location" (inputValueChange)="user.location=$event"></app-input-section>
-            </div>     
-            
+            </div>
+
             <div class="relative mt-8">
                 <app-input-section typeOfInput="number" LabelType="Age" (inputValueChange)="user.age= + $event"></app-input-section>
-            </div>   
-            
+            </div>
+
             <div class="relative mt-8">
                 <select class="p-2 w-[100%] border-b-2 border-gray-800 focus:outline-none transition duration-200 ease-in"
                         required
                         [(ngModel)]="user.sex"
-                        onfocus="this.nextElementSibling.style.transform = 'translateY(-35px)'; 
-                                this.nextElementSibling.style.fontSize = '20px'; 
+                        onfocus="this.nextElementSibling.style.transform = 'translateY(-35px)';
+                                this.nextElementSibling.style.fontSize = '20px';
                                 this.nextElementSibling.style.color = '#fb923c';
                                 this.style.borderColor = '#fb923c';"
-                        onblur="if(this.value==='') 
-                                { 
-                                    this.nextElementSibling.style.transform = ''; 
-                                    this.nextElementSibling.style.fontSize = ''; 
-                                    this.nextElementSibling.style.color = ''; 
+                        onblur="if(this.value==='')
+                                {
+                                    this.nextElementSibling.style.transform = '';
+                                    this.nextElementSibling.style.fontSize = '';
+                                    this.nextElementSibling.style.color = '';
                                     this.style.borderColor = ''
                                 }">
                     <option value="" disabled selected hidden></option>
@@ -53,7 +53,7 @@
                 </select>
                 <label class="absolute left-2 bottom-2 text-slate-400 transition duration-200 ease-in capitalize">Gender</label>
             </div>
-            
+
             <div class="mt-8">
                 <label class="block text-orange-400 font-medium mb-2">
                     Enter your Photo
