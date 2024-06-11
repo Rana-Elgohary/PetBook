@@ -17,21 +17,18 @@ import { noNavigateWithoutLoginGuard } from './Guard/no-navigate-without-login.g
 
 export const routes: Routes = [
     {path: "Login", component:UserLoginComponent, title:"Login", canActivate: [noNavigateToLoginPageIfTokenGuard]},
-    {path: "UserSignUp", component:UserSignUpComponent, title:"User Sign-Up"},
     {path: "PetRegister", component:PetRegisterComponent, title:"Pet Register", canActivate:[noNavigateWithoutLoginGuard]},
     {path: "MyRequest", component:MyRequestComponent, title:"MY Request"},
     {path: "UserSignUp", component:UserSignUpComponent, title:"User Sign-Up", canActivate: [noNavigateToLoginPageIfTokenGuard]},
-    {path: "PetRegister", component:PetRegisterComponent, title:"Pet Register"},
     {path:"pendingRequest" , component:PendingRequestComponent , title:"pending Request"},
     {path: "Account", component:UserDetailsComponent, title:"Account"},
     {path: "UpdateUser", component:UpdateUserDetailsComponent, title:"Edit"},
     {path: 'Pet/details/:id', component: PetDetailsComponent },
-    {path:"",component:LandingPageComponent,title:"PetBook"},
     {path: "BreedSearch", component:BreedSearchComponent, title:"Search Breed"},
-    {path:"",component:LandingPageComponent,title:"PetBook"},
-    { path: 'Pet/details/:id', component: PetDetailsComponent },
+    {path: 'Pet/details/:id', component: PetDetailsComponent },
     {path: "userPetInfo",component: UserProfilePetInfoComponent},
-    { path: 'Pet/details/:id', component: PetDetailsComponent,title:"Pet Details" },
-    { path: 'Pet/information/:id', component: UserPetInfoComponent,title:"User Pet Information" }
+    {path: 'Pet/details/:id', component: PetDetailsComponent,title:"Pet Details" },
+    {path: 'Pet/information/:id', component: UserPetInfoComponent,title:"User Pet Information" },
+    {path:"",component:LandingPageComponent,title:"PetBook"},
 ];
 
