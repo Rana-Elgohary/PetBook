@@ -18,7 +18,7 @@ public partial class Reservation
     [Key]
     public int ClinicID { get; set; }
 
-    public DateOnly? Date { get; set; }
+    public DateTime? Date { get; set; }
 
     [ForeignKey("ClinicID")]
     [InverseProperty("Reservations")]

@@ -10,10 +10,12 @@ namespace PetBooK.BL.DTO
     public class DoctorDTO
     {
         public int DoctorID { get; set; }
+
+        public string Name { get; set; }
         public string Degree { get; set; }
 
         public DateOnly HiringDate { get; set; }
-        public decimal Salary { get; set; }
+        
         
     }
 }

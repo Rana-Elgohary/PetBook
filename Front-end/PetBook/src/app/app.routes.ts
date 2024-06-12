@@ -15,6 +15,7 @@ import { PetDetailsComponent } from './Pages/PetInfo/pet-detailss/pet-details.co
 import { UserPetInfoComponent } from './Pages/PetInfo/Pet-Inf/user-pet-info/user-pet-info.component';
 
 import { BreedSearchComponent } from './Pages/breed-search/breed-search.component';
+import { ClinicComponent } from './Pages/clinic/clinic.component';
 
 
 export const routes: Routes = [
@@ -34,6 +35,9 @@ export const routes: Routes = [
     {path:"",component:LandingPageComponent,title:"PetBook"},
     { path: 'Pet/details/:id', component: PetDetailsComponent,title:"Pet Details" },
     { path: 'Pet/information/:id', component: UserPetInfoComponent,title:"User Pet Information" }
+
+
+    ,{ path: 'Clinic/:clinicId', component: ClinicComponent,title:"Clinic Details" }
 
 
 
