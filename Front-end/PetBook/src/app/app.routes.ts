@@ -13,12 +13,13 @@ import { UserPetInfoComponent } from './Pages/PetInfo/Pet-Inf/user-pet-info/user
 import { BreedSearchComponent } from './Pages/breed-search/breed-search.component';
 import { UserProfilePetInfoComponent } from './Pages/userPetInfo/user-pet-info/userProfile-pet-info.component';
 import { noNavigateWithoutLoginGuard } from './Guard/no-navigate-without-login.guard';
+import { UserPetInfoEditComponent } from './Pages/user-pet-info-edit/user-pet-info-edit.component';
 
 
 export const routes: Routes = [
     {path: "Login", component:UserLoginComponent, title:"Login", canActivate: [noNavigateToLoginPageIfTokenGuard]},
     {path: "UserSignUp", component:UserSignUpComponent, title:"User Sign-Up"},
-    {path: "PetRegister", component:PetRegisterComponent, title:"Pet Register", canActivate:[noNavigateWithoutLoginGuard]},
+    // {path: "PetRegister", component:PetRegisterComponent, title:"Pet Register", canActivate:[noNavigateWithoutLoginGuard]},
     {path: "MyRequest", component:MyRequestComponent, title:"MY Request"},
     {path: "UserSignUp", component:UserSignUpComponent, title:"User Sign-Up", canActivate: [noNavigateToLoginPageIfTokenGuard]},
     {path: "PetRegister", component:PetRegisterComponent, title:"Pet Register"},
@@ -32,6 +33,8 @@ export const routes: Routes = [
     { path: 'Pet/details/:id', component: PetDetailsComponent },
     {path: "userPetInfo",component: UserProfilePetInfoComponent},
     { path: 'Pet/details/:id', component: PetDetailsComponent,title:"Pet Details" },
-    { path: 'Pet/information/:id', component: UserPetInfoComponent,title:"User Pet Information" }
+    { path: 'Pet/information/:id', component: UserPetInfoComponent,title:"User Pet Information" },
+    {path:"userPetEdit/:id",component:UserPetInfoEditComponent}
+    
 ];
 

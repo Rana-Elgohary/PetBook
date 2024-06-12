@@ -235,5 +235,18 @@ namespace PetBooK.BL.Reo
             return db.Set<TEntity>().Where(predicate).ToList();
 
         }
+
+        public List<TEntity> FindByForeignKeyInclude(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes)
+        {
+            IQueryable<TEntity> query = db.Set<TEntity>().Where(predicate);
+
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+
+            return query.ToList();
+
+        }
     }
 }

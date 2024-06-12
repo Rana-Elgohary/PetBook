@@ -49,7 +49,7 @@ namespace PetBooK.PL.Controllers
         }
         //------------------------------------------------------------------------------------------------------------------
 
-        [HttpGet("id")]
+        [HttpGet("getByComposet/{PetID}/{BreedID}")]
 
         public IActionResult GetById(int PetID , int BreedID)
         {
@@ -64,7 +64,7 @@ namespace PetBooK.PL.Controllers
         }
         //--------------------------------------------------------------------------------------------------------------
 
-        [HttpGet("BreedID")]
+        [HttpGet("getByBreedId/{BreedID}")]
 
         public IActionResult GetByBreedId(int BreedID)
         {
@@ -80,7 +80,7 @@ namespace PetBooK.PL.Controllers
         }
         //-----------------------------------------------------------------------------------------------------
 
-        [HttpGet("PetID")]
+        [HttpGet("getByPetId/{PetID}")]
 
         public IActionResult GetByPetID(int PetID)
         {

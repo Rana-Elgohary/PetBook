@@ -1,0 +1,192 @@
+<div class="main m-auto mt-3 w-1/2 bg-orange-100 rounded-md flex flex-col items-center justify-center shadow-2xl">
+    <div class="m-24">
+        <h1 class="tracking-wide font-medium text-2xl mb-3 text-slate-600">update Your Pet Information</h1>
+        <section class="my-9">
+            <div class="relative">
+                <input class="p-2 w-[100%] border-b-2 border-gray-800 focus:outline-none transition duration-200 ease-in" type="text" required
+                    onfocus="this.nextElementSibling.style.transform = 'translateY(-35px)'; 
+                    this.nextElementSibling.style.fontSize = '20px'; 
+                    this.nextElementSibling.style.color = '#fb923c';
+                    this.style.borderColor = '#fb923c';"  
+                    onblur="if(this.value==='') 
+                    { 
+                        this.nextElementSibling.style.transform = ''; 
+                        this.nextElementSibling.style.fontSize = ''; 
+                        this.nextElementSibling.style.color = ''; 
+                        this.style.borderColor = ''
+                    }"
+                    [(ngModel)]="editedUserPetInfo.name">
+            <label class="absolute left-2 bottom-2 text-slate-400 transition duration-200 ease-in capitalize">Pet Name</label>
+            </div>   
+            
+            <div class="relative mt-8">
+                <div class="relative">
+                    <input class="p-2 w-[100%] border-b-2 border-gray-800 focus:outline-none transition duration-200 ease-in" type="text" required
+                        onfocus="this.nextElementSibling.style.transform = 'translateY(-35px)'; 
+                        this.nextElementSibling.style.fontSize = '20px'; 
+                        this.nextElementSibling.style.color = '#fb923c';
+                        this.style.borderColor = '#fb923c';"  
+                        onblur="if(this.value==='') 
+                        { 
+                            this.nextElementSibling.style.transform = ''; 
+                            this.nextElementSibling.style.fontSize = ''; 
+                            this.nextElementSibling.style.color = ''; 
+                            this.style.borderColor = ''
+                        }"
+                        [(ngModel)]="editedUserPetInfo.ageInMonth">
+                        <label class="absolute left-2 bottom-2 text-slate-400 transition duration-200 ease-in capitalize">Pet Age</label>
+                </div>
+            </div>   
+            
+            <div class="relative mt-8">
+                <select class="p-2 w-[100%] border-b-2 border-gray-800 focus:outline-none transition duration-200 ease-in"
+                        required
+                        [(ngModel)]="editedUserPetInfo.sex"
+                        onfocus="this.nextElementSibling.style.transform = 'translateY(-35px)'; 
+                                this.nextElementSibling.style.fontSize = '20px'; 
+                                this.nextElementSibling.style.color = '#fb923c';
+                                this.style.borderColor = '#fb923c';"
+                        onblur="if(this.value==='') 
+                                { 
+                                    this.nextElementSibling.style.transform = ''; 
+                                    this.nextElementSibling.style.fontSize = ''; 
+                                    this.nextElementSibling.style.color = ''; 
+                                    this.style.borderColor = ''
+                                }">
+                    <option value="" disabled selected hidden></option>
+                    <option value="F">Female</option>
+                    <option value="M">Male</option>
+                </select>
+                <label class="absolute left-2 bottom-2 text-slate-400 transition duration-200 ease-in capitalize">Gender</label>
+            </div>
+
+            <div class="relative mt-8">
+                <select class="p-2 w-[100%] border-b-2 border-gray-800 focus:outline-none transition duration-200 ease-in"
+                        required
+                        [(ngModel)]="editedUserPetInfo.type"
+                        onfocus="this.nextElementSibling.style.transform = 'translateY(-35px)'; 
+                                this.nextElementSibling.style.fontSize = '20px'; 
+                                this.nextElementSibling.style.color = '#fb923c';
+                                this.style.borderColor = '#fb923c';"
+                        onblur="if(this.value==='') 
+                                { 
+                                    this.nextElementSibling.style.transform = ''; 
+                                    this.nextElementSibling.style.fontSize = ''; 
+                                    this.nextElementSibling.style.color = ''; 
+                                    this.style.borderColor = ''
+                                }">
+                    <option value="" disabled selected hidden></option>
+                    <option value="Cat">Cat</option>
+                    <option value="Dog">Dog</option>
+                </select>
+                <label class="absolute left-2 bottom-2 text-slate-400 transition duration-200 ease-in capitalize">Type</label>
+            </div>
+
+            <div class="relative mt-8">
+                <select class="p-2 w-[100%] border-b-2 border-gray-800 focus:outline-none transition duration-200 ease-in"
+                        required
+                        [value]="petBreedID?.BreedID"
+                        onfocus="this.nextElementSibling.style.transform = 'translateY(-35px)'; 
+                                this.nextElementSibling.style.fontSize = '20px'; 
+                                this.nextElementSibling.style.color = '#fb923c';
+                                this.style.borderColor = '#fb923c';"
+                        onblur="if(this.value==='') 
+                                { 
+                                    this.nextElementSibling.style.transform = ''; 
+                                    this.nextElementSibling.style.fontSize = ''; 
+                                    this.nextElementSibling.style.color = ''; 
+                                    this.style.borderColor = ''
+                                }">
+                    <option value="" disabled selected hidden></option>
+                    <option *ngFor="let breed of breedList" [value]="breed.breedID">{{ breed.breed1 }}</option>
+                </select>
+                <label class="absolute left-2 bottom-2 text-slate-400 transition duration-200 ease-in capitalize">Breed</label>
+            </div>
+
+            <div class="relative mt-8">
+                <select class="p-2 w-[100%] border-b-2 border-gray-800 focus:outline-none transition duration-200 ease-in"
+                        required
+                        [(ngModel)]="editedUserPetInfo.readyForBreeding"
+                        onfocus="this.nextElementSibling.style.transform = 'translateY(-35px)'; 
+                                this.nextElementSibling.style.fontSize = '20px'; 
+                                this.nextElementSibling.style.color = '#fb923c';
+                                this.style.borderColor = '#fb923c';"
+                        onblur="if(this.value==='') 
+                                { 
+                                    this.nextElementSibling.style.transform = ''; 
+                                    this.nextElementSibling.style.fontSize = ''; 
+                                    this.nextElementSibling.style.color = ''; 
+                                    this.style.borderColor = ''
+                                }">
+                    <option value="" disabled selected hidden></option>
+                    <option value="false">False</option>
+                    <option value="true">True</option>
+                </select>
+                <label class="absolute left-2 bottom-2 text-slate-400 transition duration-200 ease-in capitalize">Ready For Breeding?</label>
+            </div>
+
+            <div class="relative mt-8">
+                <div class="relative">
+                    <input class="p-2 w-[100%] border-b-2 border-gray-800 focus:outline-none transition duration-200 ease-in" type="text" required
+                        onfocus="this.nextElementSibling.style.transform = 'translateY(-35px)'; 
+                        this.nextElementSibling.style.fontSize = '20px'; 
+                        this.nextElementSibling.style.color = '#fb923c';
+                        this.style.borderColor = '#fb923c';"  
+                        onblur="if(this.value==='') 
+                        { 
+                            this.nextElementSibling.style.transform = ''; 
+                            this.nextElementSibling.style.fontSize = ''; 
+                            this.nextElementSibling.style.color = ''; 
+                            this.style.borderColor = ''
+                        }"
+                        [(ngModel)]="editedUserPetInfo.other">
+    <label class="absolute left-2 bottom-2 text-slate-400 transition duration-200 ease-in capitalize">Other Information</label>
+                </div>
+            </div>  
+            <div class="flex justify-around">
+            <label class="block text-orange-400 font-medium mb-2 mt-2">
+                Update your pet's Photo
+                <div class="flex justify-center">
+               <img [src]="photoPreview" class="w-40" *ngIf="photoPreview">
+            <img [src]="editedUserPetInfo.photo" class="w-40" *ngIf="!photoPreview">
+                
+                <svg id="upload-icon" class="h-8 w-8 text-orange-400" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" style="cursor: pointer;">
+                    <path stroke="none" d="M0 0h24v24H0z"/>
+                    <path d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />
+                    <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />
+                    <line x1="16" y1="5" x2="19" y2="8" />
+                  </svg>
+                </div>
+                  <input type="file" id="file-input" class="hidden" (change)="onFileSelected($event)">
+                </label>
+
+            <label class="block text-orange-400 font-medium mb-2 mt-2">
+                Enter your pet's Book ID
+                <div class="flex justify-center">
+                    <img [src]="bookImagePreview" class="w-40" *ngIf="bookImagePreview">
+                    <img [src]="editedUserPetInfo.idNoteBookImage" class="w-40" *ngIf="!bookImagePreview">
+                    
+                    <svg id="upload-icon" class="h-8 w-8 text-orange-400" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" style="cursor: pointer;">
+                        <path stroke="none" d="M0 0h24v24H0z"/>
+                        <path d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />
+                        <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />
+                        <line x1="16" y1="5" x2="19" y2="8" />
+                      </svg>
+                    </div>
+                      <input type="file" id="file-input" class="hidden" (change)="onFileSelectedBookImage($event)">
+            </label>
+        </div>
+        </section>
+        <button class="text-white bg-orange-400 w-[100%] py-2 rounded-md hover:bg-orange-500 hover:text-gray-200 transition duration-200 ease-in hover:-translate-x-1 hover:scale-105" (click)="SaveEdit()">Done</button>
+    </div>
+</div>
+
+<script>
+    document.getElementById('upload-icon').addEventListener('click', function() {
+      document.getElementById('file-input').click();
+    });
+  
+    document.getElementById('file-input').addEventListener('change', function(event) {
+      onFileSelectedBookImage(event);
+    });
+  </script>

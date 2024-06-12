@@ -72,7 +72,11 @@ export class MyRequestService {
     return this.http.put<any>(this.updateUrl, body, { headers: headers });
   }
 
-
+  makeThisPetBeReadyForBreeding(id: number): Observable<any> {
+    return this.http.get<any>(`${this.url}Turnthispettobeavailable/${id}`).pipe(
+      catchError(this.handleError)
+    );
+  }
 
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
@@ -85,4 +89,5 @@ export class MyRequestService {
     // Return an observable with a user-facing error message.
     return throwError('Something bad happened; please try again later.');
   }
+
 }

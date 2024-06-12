@@ -169,14 +169,10 @@ namespace PetBooK.PL.Controllers
 
             [HttpPut]
 
-            public async Task<IActionResult> Edit(int id, [FromForm] PetUpdateDTO NewPet)
+            public async Task<IActionResult> Edit([FromForm] PetUpdateDTO NewPet)
             {
-                if (id != NewPet.PetID)
-                {
-                    return BadRequest();
-                }
-
-                var existingPet = unitOfWork.petRepository.selectbyid(id);
+ 
+                var existingPet = unitOfWork.petRepository.selectbyid(NewPet.PetID);
                 if (existingPet == null)
                 {
                     return NotFound();

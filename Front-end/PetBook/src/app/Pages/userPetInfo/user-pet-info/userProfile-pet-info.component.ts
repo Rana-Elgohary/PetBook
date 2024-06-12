@@ -7,7 +7,8 @@ import { UserLoginComponent } from '../../user-login/user-login.component';
 import { AccountServiceService } from '../../../Services/account-service.service';
 import { CommonModule } from '@angular/common';
 import { MyRequestService } from '../../../Services/my-request.service';
-
+import Swal from 'sweetalert2';
+import { UserPetsSharingEditService } from '../../../Services/user-pets-sharing-edit.service';
 @Component({
   selector: 'app-userProfile-pet-info',
   standalone: true,
@@ -15,32 +16,69 @@ import { MyRequestService } from '../../../Services/my-request.service';
   templateUrl: './userProfile-pet-info.component.html',
   styleUrl: './userProfile-pet-info.component.css'
 })
-export class UserProfilePetInfoComponent implements OnInit {
-constructor(public userpetInfoService: UserPetInfoServiceService, public account: AccountServiceService, public router: Router, public requestForBreedService: MyRequestService){}
+export class UserProfilePetInfoComponent 
+{
+  constructor(public userpetInfoService: UserPetInfoServiceService,
+              public account: AccountServiceService, 
+              public router: Router, 
+              public requestForBreedService: MyRequestService,
+              private petUpdateService: UserPetsSharingEditService){
+              this.Upload();
+              }
 
- userPetList : UserPetInfo[]=[];
+  userPetList : UserPetInfo[]=[];
   userPetInfoSub: Subscription|null= null;
   userID: number= Number(this.account.r.id);
   petInfo: UserPetInfo|null= null;
-  ngOnInit(): void{
-          this.userpetInfoService.getPetByUserId(5).subscribe(
-          {
-            next:(UserPetInfoData)=>
+  url:string='https://localhost:7066/Resources/'
+
+  Upload(): void{
+            this.userpetInfoService.getPetByUserId(4).subscribe(
             {
-              this.userPetList=UserPetInfoData;
-              console.log(this.userPetList)
-              this.userPetList.forEach(element => {
-                this.requestForBreedService.CheckIfThisPetOndate(element.petID).subscribe({
-                 next:(d)=>{
-                  element.pairWith=d;
-                  console.log(d);
-                 }
-                 })
-               })
-          }});
-           
-        }
-          // navigateToAdd(){
-          //   this.router.navigateByUrl();
-          // }
-        }
+              next:(UserPetInfoData)=>
+              {
+                this.userPetList=UserPetInfoData;
+                console.log(this.userPetList)
+
+                UserPetInfoData.forEach(element => {
+                  element.photo=this.url+element.photo
+                  element.idNoteBookImage=this.url+element.idNoteBookImage
+                  this.userpetInfoService.isPaired(element.petID).subscribe({
+                  next:(d)=>{
+                      console.log(d);
+                      if(d.petIDSender==element.petID){
+                        element.pairWith=d.receiverPetName;
+                        }
+                      else{
+                        element.pairWith=d.senderPetName;
+                    }
+                   
+                  }, 
+                      error
+                      : (error)=>{element.pairWith= "i'm not paired"}
+                  })
+                });
+            }});        
+}
+
+ngAfterViewInit() {this.Upload()}
+        
+  navigateToAdd(){
+      this.router.navigateByUrl("PetRegister");
+      }
+
+  MakePetReadyForBreed(petId: number){
+    this.requestForBreedService.makeThisPetBeReadyForBreeding(petId).subscribe(
+      {
+        next:(d)=>{console.log(d)}
+      }
+    );
+    Swal.fire("Your Pet Is Ready For Breeding")
+    console.log("ready");
+  }
+
+  navigateToEdit(id: number){
+    this.router.navigateByUrl(`userPetEdit/${id}`);
+  }
+}
+
