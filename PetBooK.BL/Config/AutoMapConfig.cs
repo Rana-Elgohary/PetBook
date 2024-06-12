@@ -135,6 +135,12 @@ namespace PetBooK.BL.Config
             //Mapping Reservation For Vaccine:
             CreateMap<Reservation_For_Vaccine, ReservationForVaccineDTO>();
             CreateMap<ReservationForVaccineAddDTO, Reservation_For_Vaccine>();
-;        }
+            CreateMap<Doctor, DoctorDTO>()
+              .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.DoctorNavigation.Name));
+
+
+
+
+        }
     }
 }
