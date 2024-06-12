@@ -47,7 +47,6 @@ export class UpdateUserDetailsComponent {
     const file = event.target.files[0];
     if (file) {
       this.user.photo = file;
-      this.save(); // Save immediately after updating the photo
     }
   }
 }

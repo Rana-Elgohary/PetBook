@@ -4,89 +4,58 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pet Owner Profile</title>
-  <style>
-    .hidden-input {
-      display: none;
-    }
-    .custom-file-upload {
-      display: inline-block;
-      padding: 8px 16px;
-      cursor: pointer;
-      background-color: #fdbc6878;
-      color: #000000;
-      border: none;
-      border-radius: 4px;
-      transition: background-color 0.3s ease;
-    }
-    .custom-file-upload:hover {
-      background-color: #FDBD68;
-    }
-    .update-button {
-      display: inline-block;
-      padding: 10px 20px;
-      background-color: #fdbc6878;
-      color: rgb(0, 0, 0);
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    .update-button:hover {
-      background-color: #fdbc6891;
-    }
-    .center {
-      text-align: center;
-      margin-top: 20px;
-    }
-  </style>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100">
-  <div class="max-w-4xl mx-auto py-16">
-    <div class="bg-white shadow-lg rounded-lg p-8">
-      <div class="flex flex-col items-center space-y-4">
-        <div class="flex items-center space-x-4">
+  <div class="bg-white shadow-lg rounded-lg p-8">
+    <div class="flex justify-between items-start space-x-8">
+      <div class="w-1/3 bg-yellow-50 p-4 rounded-lg shadow-sm">
+        <h3 class="text-xl font-semibold mb-4">Profile Picture</h3>
+        <div class="flex flex-col items-center space-y-4">
           <img class="w-24 h-24 rounded-full" [src]="user.photo" alt="{{user.name}}">
-        </div>
-        <input type="file" id="fileInput" (change)="updateUserPhoto($event)" class="hidden-input">
-        <label for="fileInput" class="custom-file-upload">Choose File</label>
-      </div>
-    </div>
-    <!-- Profile Section -->
-    <div class="mt-8">
-      <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
-          <h4 class="font-semibold">Name</h4>
-          <input type="text" class="mt-1 p-2 w-full border border-gray-300 rounded-md" [(ngModel)]="user.name">
-        </div>
-        <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
-          <h4 class="font-semibold">UserName</h4>
-          <input type="text" class="mt-1 p-2 w-full border border-gray-300 rounded-md" [(ngModel)]="user.userName">
-        </div>
-        <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
-          <h4 class="font-semibold">Email</h4>
-          <input type="email" class="mt-1 p-2 w-full border border-gray-300 rounded-md" [(ngModel)]="user.email">
-        </div>
-        <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
-          <h4 class="font-semibold">Phone</h4>
-          <input type="text" class="mt-1 p-2 w-full border border-gray-300 rounded-md" [(ngModel)]="user.phone">
-        </div>
-        <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
-          <h4 class="font-semibold">Location</h4>
-          <input type="text" class="mt-1 p-2 w-full border border-gray-300 rounded-md" [(ngModel)]="user.location">
-        </div>
-        <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
-          <h4 class="font-semibold">Age</h4>
-          <input type="number" class="mt-1 p-2 w-full border border-gray-300 rounded-md" [(ngModel)]="user.age">
-        </div>
-        <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
-          <h4 class="font-semibold">Gender</h4>
-          <input type="text" class="mt-1 p-2 w-full border border-gray-300 rounded-md" [(ngModel)]="user.sex">
+          <input type="file" id="fileInput" (change)="updateUserPhoto($event)" class="hidden-input">
+          <label for="fileInput" class="custom-file-upload" id="fileLabel">Choose File</label>
         </div>
       </div>
-    </div>
-    <!-- Save Button -->
-    <div class="center">
-      <button class="update-button" (click)="save()">Save Changes</button>
+      <div class="w-2/3 bg-yellow-50 p-4 rounded-lg shadow-sm">
+        <h3 class="text-xl font-semibold mb-4">Account Details</h3>
+        <form class="space-y-4" (submit)="save()">
+          <div>
+            <label for="Name" class="block text-orange-600 font-semibold">Name</label>
+            <input type="text" id="Name" name="name" class="mt-1 p-2 w-full border border-gray-300 rounded-md" [(ngModel)]="user.name">
+          </div>
+          <div>
+            <label for="userName" class="block text-orange-600 font-semibold">User Name</label>
+            <input type="text" id="userName" name="userName" class="mt-1 p-2 w-full border border-gray-300 rounded-md"  [(ngModel)]="user.userName">
+          </div>
+          <div>
+            <label for="password" class="block text-orange-600 font-semibold">Password</label>
+            <input type="password" id="password" name="password" class="mt-1 p-2 w-full border border-gray-300 rounded-md" [(ngModel)]="user.password">
+          </div>
+          <div>
+            <label for="email" class="block text-orange-600 font-semibold">Email</label>
+            <input type="email" id="email" name="email" class="mt-1 p-2 w-full border border-gray-300 rounded-md" [(ngModel)]="user.email">
+          </div>
+          <div>
+            <label for="phone" class="block text-orange-600 font-semibold">Phone</label>
+            <input type="text" id="phone" name="phone" class="mt-1 p-2 w-full border border-gray-300 rounded-md" [(ngModel)]="user.phone">
+          </div>
+          <div>
+            <label for="age" class="block text-orange-600 font-semibold">Age</label>
+            <input type="number" id="age" name="age" class="mt-1 p-2 w-full border border-gray-300 rounded-md"[(ngModel)]="user.age">
+          </div>
+          <div>
+            <label for="sex" class="block text-orange-600 font-semibold">Gender</label>
+            <select id="sex" name="sex" class="mt-1 p-2 w-full border border-gray-300 rounded-md" [(ngModel)]="user.sex">
+              <option [ngValue]="'m'" [selected]="user.sex.toLowerCase() === 'm'">Male</option>
+              <option [ngValue]="'f'" [selected]="user.sex.toLowerCase() === 'f'">Female</option>
+            </select>
+          </div>
+          <div class="text-center">
+            <button type="submit" class="update-button">Save Changes</button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </body>

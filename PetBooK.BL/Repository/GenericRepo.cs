@@ -229,9 +229,18 @@ namespace PetBooK.BL.Reo
             return false;
         }
 
+
         public IQueryable<TEntity> Where(Expression<Func<TEntity, bool>> predicate)
         {
             return db.Set<TEntity>().Where(predicate);
+        }
+
+
+        public List<TEntity> FindByForeignKey(Expression<Func<TEntity, bool>> predicate)
+        {
+
+            return db.Set<TEntity>().Where(predicate).ToList();
+
         }
 
     }

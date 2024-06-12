@@ -5,13 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pet Owner Profile</title>
 </head>
-<body class="bg-gray-100">
-  <div class="max-w-4xl mx-auto py-16">
-    <div class="bg-white shadow-lg rounded-lg p-8">
+<body >
+  <div class="bg-white shadow-lg rounded-lg p-8 max-w-4xl mx-auto py-2">
+    <div class="bg-yellow-50 shadow-lg rounded-lg p-8">
       <div class="flex items-center space-x-4">
-        <img class="w-24 h-24 rounded-full" [src]="User.photo" alt="{{ User.name }}" width="100">
+        <img class="w-24 h-24 rounded-full " [src]="User.photo" alt="{{ User.name }}" width="100">
         <div>
-          <h2 class="text-2xl font-bold">{{User.name}}</h2>
+          <h2 class="text-2xl font-bold text-gray-600">{{User.name}}</h2>
         </div>
       </div>
     </div>
@@ -33,8 +33,8 @@
           <div class="relative group">
             <button class="nav-link text-gray-500 hover:text-gray-700 px-3 py-2 font-medium text-sm rounded-md focus:outline-none">Requests</button>
             <div class="absolute hidden group-hover:block mt-0.5 w-40 bg-white shadow-md rounded-md">
-              <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">My Requests</a>
-              <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Pending Requests</a>
+              <a routerLink="/MyRequest" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">My Requests</a>
+              <a routerLink="/pendingRequest" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Pending Requests</a>
             </div>
           </div>
         </nav>
@@ -44,37 +44,37 @@
     <!-- Profile Section -->
     <div class="mt-8">
       <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
-          <h4 class="font-semibold">UserName</h4>
-          <p class="mt-1 text-gray-700">{{User.userName}}</p>
+        <div class="bg-yellow-50 p-4 rounded-lg shadow-sm">
+          <h4 class="font-semibold text-orange-600">UserName</h4>
+          <p class="mt-1 text-gray-700 ">{{User.userName}}</p>
         </div>
-        <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
-          <h4 class="font-semibold">Email</h4>
+        <div class="bg-yellow-50 p-4 rounded-lg shadow-sm">
+          <h4 class="font-semibold text-orange-600">Email</h4>
           <p class="mt-1 text-gray-700">{{User.email}}</p>
         </div>
-        <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
-          <h4 class="font-semibold">Phone</h4>
+        <div class="bg-yellow-50 p-4 rounded-lg shadow-sm">
+          <h4 class="font-semibold text-orange-600">Phone</h4>
           <p class="mt-1 text-gray-700">{{User.phone}}</p>
         </div>
-        <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
-          <h4 class="font-semibold">Location</h4>
+        <div class="bg-yellow-50 p-4 rounded-lg shadow-sm">
+          <h4 class="font-semibold text-orange-600">Location</h4>
           <p class="mt-1 text-gray-700">{{User.location}}</p>
         </div>
-        <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
-          <h4 class="font-semibold">Age</h4>
+        <div class="bg-yellow-50 p-4 rounded-lg shadow-sm">
+          <h4 class="font-semibold text-orange-600">Age</h4>
           <p class="mt-1 text-gray-700">{{User.age}}</p>
         </div>
-        <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
-          <h4 class="font-semibold">Gender</h4>
-          <p class="mt-1 text-gray-700">{{User.sex}}</p>
+        <div class="bg-yellow-50 p-4 rounded-lg shadow-sm">
+          <h4 class="font-semibold text-orange-600">Gender</h4>
+          <p class="mt-1 text-gray-700">{{ User.sex.toLowerCase() === 'f' ? 'Female' : 'Male' }}</p>
         </div>
+
       </div>
     </div>
-    <!-- Update Button -->
- <div class="center">
-    <a routerLink="/UpdateUser" class="update-button">Update Profile</a>
-  </div>
-
+       <!-- Update Button -->
+       <div class="center">
+        <a routerLink="/UpdateUser" class="update-button">Update Profile</a>
+      </div>
   </div>
 </body>
 </html>
