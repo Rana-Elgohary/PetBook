@@ -32,7 +32,7 @@ export class UserProfilePetInfoComponent
   url:string='https://localhost:7066/Resources/'
 
   Upload(): void{
-            this.userpetInfoService.getPetByUserId(4).subscribe(
+            this.userpetInfoService.getPetByUserId(this.userID).subscribe(
             {
               next:(UserPetInfoData)=>
               {
