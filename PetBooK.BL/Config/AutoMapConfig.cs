@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Routing.Constraints;
 using PetBooK.BL.DTO;
 using PetBooK.DAL.Models;
 using System;
@@ -36,6 +37,11 @@ namespace PetBooK.BL.Config
             CreateMap<Clinic, ClinicccDTO>();
             CreateMap<Clinic, ClinicAddDTO>();
             CreateMap<ClinicAddDTO, Clinic>();
+            CreateMap<VaccineClinicInclude, Vaccine_Clinic>();
+            CreateMap<Vaccine_Clinic, VaccineClinicInclude>()
+                       .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Clinic.Name))
+                      .ForMember(dest => dest.Rate, opt => opt.MapFrom(src => src.Clinic.Rate));
+
 
 
 
@@ -138,6 +144,12 @@ namespace PetBooK.BL.Config
             CreateMap<Doctor, DoctorDTO>()
               .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.DoctorNavigation.Name));
 
+
+
+            CreateMap<Clinic_Location, ClinicLocationInclude>()
+           .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Clinic.Name))
+          .ForMember(dest => dest.Rate, opt => opt.MapFrom(src => src.Clinic.Rate))
+          .ForMember(dest => dest.BankAccount, opt => opt.MapFrom(src => src.Clinic.BankAccount));
 
 
 

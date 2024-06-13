@@ -92,6 +92,32 @@ namespace PetBooK.PL.Controllers
 
 
         }
+
+
+        [HttpGet("locationinclude/{ClinicId}")]
+        public ActionResult GetClinicLocationsByClinicincludeId(int ClinicId)
+        {
+            try
+            {
+                List<Clinic_Location> clinicLocations = unit.clinic_LocationRepository.FindByInclude(cl => cl.ClinicID == ClinicId,cl=>cl.Clinic);
+
+                if (clinicLocations == null || !clinicLocations.Any())
+                    return NotFound($"Locations for Clinic ID {ClinicId} not found.");
+
+                List< ClinicLocationInclude> clinicLocationDTOs = mapper.Map<List<ClinicLocationInclude>>(clinicLocations);
+
+                return Ok(clinicLocationDTOs);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while retrieving the clinic locations.");
+            }
+
+
+        }
+
+
+
         [HttpGet("{ClinicID:int}/{Location}")]
         public ActionResult GetClinicLocationByClinicIdAndLocation(int ClinicID, string Location)
         {

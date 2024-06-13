@@ -76,6 +76,30 @@ namespace PetBooK.PL.Controllers
             }
         }
 
+        [HttpGet("vaccineClinicInclude/{VaccineId}")]
+        public ActionResult GetVaccineClinicByVaccineIdImclude(int VaccineId)
+        {
+            try
+            {
+                List<Vaccine_Clinic> vaccineClinics = unit.vaccine_ClinicRepository.FindByInclude(p => p.VaccineID == VaccineId ,p=>p.Clinic);
+
+                if (vaccineClinics == null || !vaccineClinics.Any())
+                    return NotFound($"Vaccine Clinic with Vaccine ID {VaccineId} not found.");
+
+                List<VaccineClinicInclude> vaccineClinicDTOs = mapper.Map<List<VaccineClinicInclude>>(vaccineClinics);
+                return Ok(vaccineClinicDTOs);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while retrieving the reservation.");
+            }
+        }
+
+
+
+
+
+
         [HttpGet("{VaccineId:int}/{ClinicID:int}")]
         public ActionResult GetVaccineClinicByVaccineIdAndClinicId(int VaccineId, int ClinicID)
         {

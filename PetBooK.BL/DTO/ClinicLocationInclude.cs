@@ -6,10 +6,14 @@ using System.Threading.Tasks;
 
 namespace PetBooK.BL.DTO
 {
-    public class ClinicLocationDTO
+    public class ClinicLocationInclude
     {
         public int ClinicID { get; set; }
         public string Location { get; set; }
+
+        public string Name { get; set; }
+        public int? Rate { get; set; }
+        public string BankAccount { get; set; }
 
     }
 }

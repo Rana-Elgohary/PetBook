@@ -16,6 +16,9 @@ import { ClinicComponent } from './Pages/clinic/clinic.component';
 
 import { UserProfilePetInfoComponent } from './Pages/userPetInfo/user-pet-info/userProfile-pet-info.component';
 import { noNavigateWithoutLoginGuard } from './Guard/no-navigate-without-login.guard';
+import { SearchVaccineComponent } from './Pages/search-vaccine/search-vaccine.component';
+import { VaccineClinic } from './Models/vaccine-clinic';
+import { SearchVaccineClicnicComponent } from './Pages/search-vaccine-clicnic/search-vaccine-clicnic.component';
 
 
 
@@ -34,6 +37,8 @@ export const routes: Routes = [
     {path: 'Pet/details/:id', component: PetDetailsComponent,title:"Pet Details" },
     {path: 'Pet/information/:id', component: UserPetInfoComponent,title:"User Pet Information" },
     {path:"",component:LandingPageComponent,title:"PetBook"},
+    {path:"Vaccine",component:SearchVaccineComponent,title:"Vaccine"},
+    { path: 'search-vaccine-clinic/:VaccineId', component: SearchVaccineClicnicComponent },
 
     { path: 'Pet/details/:id', component: PetDetailsComponent,title:"Pet Details" },
     { path: 'Pet/information/:id', component: UserPetInfoComponent,title:"User Pet Information" }

@@ -117,6 +117,8 @@ namespace PetBooK.PL.Controllers
             }
         }
 
+
+
         //--------------------------------Delete----------------------
         [HttpDelete]
         public IActionResult DeleteClinic(int id)
