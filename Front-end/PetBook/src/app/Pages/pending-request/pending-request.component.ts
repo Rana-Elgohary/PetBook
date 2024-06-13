@@ -66,7 +66,7 @@ export class PendingRequestComponent implements OnInit { // Implementing OnInit
   }
 
   ngOnInit(): void {
-    this.userId=6;
+    this.userId= parseInt(this.AccountService.r.id);
     this.myrequest.getallPendingReq(this.userId).subscribe(data => {
       this.request = data;
       console.log(this.request);

@@ -16,7 +16,7 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./search-vaccine-clicnic.component.css']
 })
 export class SearchVaccineClicnicComponent implements OnInit {
-
+  location:string="abu qier";
   vaccineClinic: VaccineClinic[] = [];
   vaccineClinicLocation: VaccineClinicLocation[] = [];
 
