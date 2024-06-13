@@ -56,9 +56,23 @@ export class AccountServiceService {
             duration: 5000, // Duration in milliseconds
             verticalPosition: 'top' // Position of the snackbar
           });
-        } else {
-          // Handle other errors
-          console.error('An error occurred:', error.error);
+        } else if(email == "" && password != ""){
+            this.snackBar.open('Email can not be empty', 'Close', {
+              duration: 5000, // Duration in milliseconds
+              verticalPosition: 'top' // Position of the snackbar
+            });
+        }
+        else if(password == "" && email != ""){
+          this.snackBar.open('Password can not be empty', 'Close', {
+            duration: 5000, // Duration in milliseconds
+            verticalPosition: 'top' // Position of the snackbar
+          });
+        }
+        else{
+          this.snackBar.open('Please enter the data', 'Close', {
+            duration: 5000, // Duration in milliseconds
+            verticalPosition: 'top' // Position of the snackbar
+          });
         }
       }
     );
@@ -86,8 +100,7 @@ export class AccountServiceService {
     }
 
     return this.http.post(`${this.baseUrl}/Register`, formData);
-      // return this.http.post(`${this.baseUrl}/Register`, user);
-    }
+  }
 }
  
  

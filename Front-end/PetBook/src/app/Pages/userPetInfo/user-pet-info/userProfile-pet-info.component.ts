@@ -8,7 +8,6 @@ import { AccountServiceService } from '../../../Services/account-service.service
 import { CommonModule } from '@angular/common';
 import { MyRequestService } from '../../../Services/my-request.service';
 import Swal from 'sweetalert2';
-import { UserPetsSharingEditService } from '../../../Services/user-pets-sharing-edit.service';
 @Component({
   selector: 'app-userProfile-pet-info',
   standalone: true,
@@ -21,8 +20,8 @@ export class UserProfilePetInfoComponent
   constructor(public userpetInfoService: UserPetInfoServiceService,
               public account: AccountServiceService, 
               public router: Router, 
-              public requestForBreedService: MyRequestService,
-              private petUpdateService: UserPetsSharingEditService){
+              public requestForBreedService: MyRequestService
+             ){
               this.Upload();
               }
 

@@ -105,7 +105,17 @@ namespace PetBooK.PL.Controllers
 
             switch (useraddDTO.RoleID)
             {
-                case 1: // Client
+
+
+                case 1: // Doctor
+                    Doctor doctor = new Doctor
+                    {
+                        DoctorID = user.UserID,
+                    };
+                    unitOfWork.doctorRepository.add(doctor);
+                    break;
+              
+                case 2: //Client
                     Client client = new Client
                     {
                         ClientID = user.UserID,
@@ -113,20 +123,13 @@ namespace PetBooK.PL.Controllers
                     unitOfWork.clientRepository.add(client);
                     break;
 
-                case 2: //Secretary
+                case 3: // Secretary
+
                     Secretary secretary = new Secretary
                     {
-                        SecretaryID = user.UserID, 
+                        SecretaryID = user.UserID,
                     };
                     unitOfWork.secretaryRepository.add(secretary);
-                    break;
-
-                case 3: // Doctor
-                    Doctor doctor = new Doctor
-                    {
-                        DoctorID = user.UserID, 
-                    };
-                    unitOfWork.doctorRepository.add(doctor);
                     break;
 
                 default:
@@ -137,7 +140,6 @@ namespace PetBooK.PL.Controllers
 
             return Ok(useraddDTO);
         }
-
 
         //-------------------------Update------------------------------//Edit By Amira
         [HttpPut("id")]

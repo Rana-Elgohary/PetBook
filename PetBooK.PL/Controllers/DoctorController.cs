@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PetBooK.BL.DTO;
 using PetBooK.BL.UOW;
 using PetBooK.DAL.Models;
@@ -33,21 +34,24 @@ namespace PetBooK.PL.Controllers
 
                 return Ok(DoctorDTO);
             }
-            //--------------------------GetById-------------------------
-            [HttpGet("id")]
-            public IActionResult GetById(int id)
+        //--------------------------GetById-------------------------
+        [HttpGet("id")]
+        public IActionResult GetById(int id)
+        {
+            Doctor doctor = unitOfWork.doctorRepository.SelectByIDInclude(id, "DoctorID", s => s.DoctorNavigation, s => s.Clinic_Doctors);
+
+            if (doctor == null)
             {
-                Doctor doctor = unitOfWork.doctorRepository.selectbyid(id);
-                if (doctor == null)
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    DoctorDTO DoctorDTO = mapper.Map<DoctorDTO>(doctor);
-                    return Ok(DoctorDTO);
-                }
+                return NotFound();
             }
+            else
+            {
+                DoctorDTO DoctorDTO = mapper.Map<DoctorDTO>(doctor);
+                return Ok(DoctorDTO);
+            }
+
+
+        }
 
             //-----------------------------GetByLoc-----------------------
             [HttpGet("Degree")]
@@ -119,7 +123,45 @@ namespace PetBooK.PL.Controllers
             return Ok("Doctor Has been deleted Successfully deleted");
 
         }
+
+
+        
+        [HttpGet("{clinicId}/doctors")]
+        public IActionResult GetDoctorsByClinicId(int clinicId)
+        {
+            try
+            {
+                // Fetch doctors along with the related User entity to get the Name
+                var clinicDoctors = unitOfWork.clinic_DoctorRepository
+                    .Where(cd => cd.ClinicID == clinicId)
+                    .Include(cd => cd.doctor.DoctorNavigation) // Ensure related User entity is included
+                    .Select(cd => cd.doctor)
+                    .ToList();
+
+                if (clinicDoctors.Count == 0)
+                {
+                    return NotFound("No doctors found for the given clinic ID.");
+                }
+
+                // Map to DTOs, including the Name from the related User entity
+                var doctorDTOs = clinicDoctors.Select(doctor => new DoctorDTO
+                {
+                    DoctorID = doctor.DoctorID,
+                    Degree = doctor.Degree,
+                    Name = doctor.DoctorNavigation?.Name,
+                    HiringDate = doctor.HiringDate
+                }).ToList();
+
+                return Ok(doctorDTOs);
+            }
+            catch
+            {
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
         }
 
+
     }
+
+}
 

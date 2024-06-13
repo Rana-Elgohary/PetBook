@@ -1,68 +1,80 @@
 <div class="main m-auto mt-3 w-1/2 bg-orange-100 rounded-md flex flex-col items-center justify-center shadow-2xl">
-    <div class="m-24">
-        <h1 class="tracking-wide font-medium text-2xl mb-3 text-slate-600">SignUp To PetBook</h1>
-        <p class="text-slate-400 mb-3">Welcome to our website where you can find rare breeds and will be easy for you to find clinics.</p>
+  <div class="m-24">
+    <h1 class="tracking-wide font-medium text-2xl mb-3 text-slate-600">SignUp To PetBook</h1>
+    <p class="text-slate-400 mb-3">Welcome to our website where you can find rare breeds and will be easy for you to find clinics.</p>
        
-        <section class="my-9">
-            <div class="relative">
-                <app-input-section typeOfInput="text" LabelType="Name" (inputValueChange)="user.name=$event"></app-input-section>
-            </div>
+    <section class="my-9">
+      <div class="relative">
+          <app-input-section typeOfInput="text" LabelType="name" (inputValueChange)="onInputValueChange({ field: 'name', value: $event })"></app-input-section>
+          <div *ngIf="validationErrors['name']" class="bg-red-500 text-white p-2 absolute top-0 right-0 w-1/2">Name is required.</div>
+      </div>
            
-            <div class="relative mt-8">
-                <app-input-section typeOfInput="text" LabelType="username" (inputValueChange)="user.userName=$event"></app-input-section>
-            </div>
+      <div class="relative mt-8">
+        <app-input-section typeOfInput="text" LabelType="userName" (inputValueChange)="onInputValueChange({ field: 'userName', value: $event })"></app-input-section>
+        <div *ngIf="validationErrors['userName']" class="bg-red-500 text-white p-2 absolute top-0 right-0 w-1/2">Username is required.</div>
+      </div>
 
-            <div class="relative mt-8">
-                <app-input-section typeOfInput="email" LabelType="email" (inputValueChange)="user.email=$event"></app-input-section>
-            </div>
+      <div class="relative mt-8">
+        <app-input-section typeOfInput="email" LabelType="email" (inputValueChange)="onInputValueChange({ field: 'email', value: $event })"></app-input-section>
+        <div *ngIf="validationErrors['email']" class="bg-red-500 text-white p-2 absolute top-0 right-0 w-1/2">Email is required.</div>
+      </div>
 
-            <div class="relative mt-8">
-                <app-input-section typeOfInput="password" LabelType="password" (inputValueChange)="user.password=$event"></app-input-section>
-            </div>
+      <div class="relative mt-8">
+        <app-input-section typeOfInput="password" LabelType="password" (inputValueChange)="onInputValueChange({ field: 'password', value: $event })"></app-input-section>
+        <div *ngIf="validationErrors['password']" class="bg-red-500 text-white p-2 absolute top-0 right-0 w-1/2">Password is required.</div>
+      </div>
 
-            <div class="relative mt-8">
-                <app-input-section typeOfInput="text" LabelType="phone" (inputValueChange)="user.phone=$event"></app-input-section>
-            </div>
+      <div class="relative mt-8">
+        <app-input-section typeOfInput="text" LabelType="phone" (inputValueChange)="onInputValueChange({ field: 'phone', value: $event })"></app-input-section>
+        <div *ngIf="validationErrors['phone']" class="bg-red-500 text-white p-2 absolute top-0 right-0 w-1/2">Phone number is required.</div>
+      </div>
 
-            <div class="relative mt-8">
-                <app-input-section typeOfInput="text" LabelType="location" (inputValueChange)="user.location=$event"></app-input-section>
-            </div>     
+      <div class="relative mt-8">
+        <app-input-section typeOfInput="text" LabelType="location" (inputValueChange)="onInputValueChange({ field: 'location', value: $event })"></app-input-section>
+        <div *ngIf="validationErrors['location']" class="bg-red-500 text-white p-2 absolute top-0 right-0 w-1/2">Location is required.</div>
+      </div>     
             
-            <div class="relative mt-8">
-                <app-input-section typeOfInput="number" LabelType="Age" (inputValueChange)="user.age= + $event"></app-input-section>
-            </div>   
+      <div class="relative mt-8">
+        <app-input-section typeOfInput="number" LabelType="age" (inputValueChange)="onInputValueChange({ field: 'age', value: $event })"></app-input-section>
+        <div *ngIf="validationErrors['age']" class="bg-red-500 text-white p-2 absolute top-0 right-0 w-1/2">Age is required.</div>
+      </div>   
             
-            <div class="relative mt-8">
-                <select class="p-2 w-[100%] border-b-2 border-gray-800 focus:outline-none transition duration-200 ease-in"
-                        required
-                        [(ngModel)]="user.sex"
-                        onfocus="this.nextElementSibling.style.transform = 'translateY(-35px)'; 
-                                this.nextElementSibling.style.fontSize = '20px'; 
-                                this.nextElementSibling.style.color = '#fb923c';
-                                this.style.borderColor = '#fb923c';"
-                        onblur="if(this.value==='') 
-                                { 
-                                    this.nextElementSibling.style.transform = ''; 
-                                    this.nextElementSibling.style.fontSize = ''; 
-                                    this.nextElementSibling.style.color = ''; 
-                                    this.style.borderColor = ''
-                                }">
-                    <option value="" disabled selected hidden></option>
-                    <option value="F">Female</option>
-                    <option value="M">Male</option>
-                </select>
-                <label class="absolute left-2 bottom-2 text-slate-400 transition duration-200 ease-in capitalize">Gender</label>
-            </div>
+      <div class="relative mt-8">
+        <select class="p-2 w-[100%] border-b-2 border-gray-800 focus:outline-none transition duration-200 ease-in"
+                required
+                [(ngModel)]="user.sex"
+                (change)="onSexChange($event)"
+                onfocus="this.nextElementSibling.style.transform = 'translateY(-35px)'; 
+                        this.nextElementSibling.style.fontSize = '20px'; 
+                        this.nextElementSibling.style.color = '#fb923c';
+                        this.style.borderColor = '#fb923c';"
+                onblur="if(this.value==='') 
+                        { 
+                            this.nextElementSibling.style.transform = ''; 
+                            this.nextElementSibling.style.fontSize = ''; 
+                            this.nextElementSibling.style.color = ''; 
+                            this.style.borderColor = ''
+                        }">
+          <option value="" disabled selected hidden></option>
+          <option value="F">Female</option>
+          <option value="M">Male</option>
+        </select>
+        <label class="absolute left-2 bottom-2 text-slate-400 transition duration-200 ease-in capitalize">Gender</label>
+        <div *ngIf="validationErrors['sex']" class="bg-red-500 text-white p-2 absolute top-0 right-0 w-1/2">Gender is required.</div>
+      </div>
             
-            <div class="mt-8">
-                <label class="block text-orange-400 font-medium mb-2">
-                    Enter your Photo
-                    <input type="file" class="mt-1 block w-full bg-slate-200 px-4 py-2 focus:outline-none focus:bg-white focus:shadow-outline" (change)="onFileSelected($event)">
-                </label>
-            </div>
-        </section>
-
-        <button class="text-white bg-orange-400 w-[100%] py-2 rounded-md hover:bg-orange-500 hover:text-gray-200 transition duration-200 ease-in hover:-translate-x-1 hover:scale-105" (click)="SignUp()">Sign-Up</button>
-
-    </div>
+      <div class="mt-8">
+        <label class="block text-orange-400 font-medium mb-2">
+          Enter your Photo
+        </label>
+        <div class="relative">
+            <input type="file" class="mt-1 block w-full bg-slate-200 px-4 py-2 focus:outline-none focus:bg-white focus:shadow-outline" (change)="onFileSelected($event)">
+            <div *ngIf="validationErrors['photo']" class="bg-red-500 h-[100%] text-white p-2 absolute top-0 right-0 w-1/2">Photo is required.</div>
+        </div>
+      </div>
+      
+    </section>
+    
+    <button class="text-white bg-orange-400 w-[100%] py-2 rounded-md hover:bg-orange-500 hover:text-gray-200 transition duration-200 ease-in hover:-translate-x-1 hover:scale-105" (click)="SignUp()">Sign-Up</button>
+  </div>
 </div>

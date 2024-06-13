@@ -7,14 +7,15 @@
     .table-container {
       max-width: 60%; /* Set the maximum width of the table */
       margin: 0 auto; /* Center the table */
+      padding: 100px;
     }
   </style>
 </head>
-<body>
-  <div class="px-8 mt-8 table-container"> <!-- Added padding to the container div and margin-top -->
+<body class="bg-gray-100 ">
+  <div class="px-8 table-container"> <!-- Added padding to the container div -->
     <ng-container *ngIf="request.length > 0; else noRequestMessage">
-      <table class="min-w-full divide-y divide-gray-200 mx-auto"> <!-- Added margin auto and max-width classes here -->
-        <thead class="bg-white">
+      <table class="min-w-full divide-y divide-gray-200 mx-auto bg-gray-100"> <!-- Added margin auto and max-width classes here -->
+        <thead class="bg-gray-100">
           <tr>
             <th scope="col" class="px-6 py-7 text-left font-aclonica text-2xl text-gray-800 tracking-wider">My Pet</th>
             <th scope="col" class="px-6 py-7 text-left font-aclonica text-2xl text-gray-800 tracking-wider">Pair Pet</th>
@@ -22,7 +23,7 @@
             <th scope="col" class="px-6 py-7 text-left font-aclonica text-2xl text-gray-800 tracking-wider">Remove</th>
           </tr>
         </thead>
-        <tbody class="bg-gray-50">
+        <tbody class="bg-gray-100 ">
           <tr *ngFor="let item of request; let i = index">
             <td class="px-6 py-4 whitespace-nowrap font-aclonica text-2xl text-gray-800">{{ item.senderPetName }}</td> <!-- Increased font size here -->
             <td class="px-6 py-4 whitespace-nowrap text-orange-500 font-aclonica text-2xl">{{ item.receiverPetName }}</td> <!-- Increased font size here -->

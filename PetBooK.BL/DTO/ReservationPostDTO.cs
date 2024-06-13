@@ -12,6 +12,6 @@ namespace PetBooK.BL.DTO
 
         public int ClinicID { get; set; }
 
-        public DateOnly? Date { get; set; }
+        public DateTime? Date { get; set; }
     }
 }

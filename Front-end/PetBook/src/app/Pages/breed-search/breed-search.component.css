@@ -1,5 +1,5 @@
 /* Global styles */
-* {
+.all{
   background-image: url('../../../assets/Images/PetInfoBG.png') !important;
   background-size: cover;
   background-repeat: no-repeat;

@@ -20,7 +20,7 @@ namespace PetBooK.PL.Controllers
             this.unit = unit;
             this.mapper = mapper;
         }
-        [HttpGet("search")]
+        [HttpGet("search/{query}")]
         public IActionResult SearchClinicByNameOrLocation(string query)
         {
             var clinics = unit.clinicRepository
