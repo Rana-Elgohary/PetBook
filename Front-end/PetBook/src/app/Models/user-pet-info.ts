@@ -10,6 +10,7 @@ export class UserPetInfo {
         public readyForBreeding: boolean,
         public sex: string,
         public type:string ,
-        public userID: number
+        public userID: number,
+        public pairWith: any
     ){};
 }

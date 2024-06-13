@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { AddPet } from '../Models/add-pet';
 import { AddBreedToPet } from '../Models/add-breed-to-pet';
 import { Breed } from '../Models/breed';
+import { PetBreed } from '../Models/pet-breed';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -40,5 +42,10 @@ export class AddPetService {
 
   getBreed(){
     return this.http.get<Breed[]>(`${this.baseurl}/Breed`)
+  }
+
+  getPetBreed(id:number):Observable<PetBreed>{
+    const url= `${this.baseurl}/PetBreed/getByPetId/${id}`
+    return this.http.get<PetBreed>(url);
   }
 }

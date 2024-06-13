@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using PetBooK.BL.DTO;
 using PetBooK.BL.UOW;
 using PetBooK.DAL.Models;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Security.Cryptography;
 
@@ -306,7 +307,22 @@ namespace PetBooK.PL.Controllers
             return Ok();
         }
 
+       
         //------------------------------------------------------//
+        [HttpGet("retunIfItPaired/{id}")]
+        public IActionResult IsSenderPaired(int id)
+        {
+           List<Request_For_Breed> requestBreed = unit.request_For_BreedRepository.FindByForeignKeyInclude(rb => rb.PetIDSender == id || rb.PetIDReceiver== id, rb=>rb.PetIDSenderNavigation,rb=>rb.PetIDReceiverNavigation).Where(rb => rb.Pair == true).ToList();
+            if (requestBreed.Count==0)
+            {
+                return Ok("this pet is not paired");
+            }
+            else
+            {
+                List<RequestBreedDTO> requestBreedDTOs = mapper.Map<List<RequestBreedDTO>>(requestBreed);
+                return Ok(requestBreedDTOs[0]);
+            }
 
+        }
     }
 }
