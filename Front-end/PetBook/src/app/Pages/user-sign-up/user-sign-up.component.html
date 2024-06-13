@@ -35,7 +35,7 @@
       </div>     
             
       <div class="relative mt-8">
-        <app-input-section typeOfInput="number" LabelType="age" (inputValueChange)="onInputValueChange({ field: 'age', value: $event })"></app-input-section>
+        <app-input-section typeOfInput="number" LabelType="age" (inputValueChange)="onInputValueChange({ field: 'age', value: +$event })"></app-input-section>
         <div *ngIf="validationErrors['age']" class="bg-red-500 text-white p-2 absolute top-0 right-0 w-1/2">Age is required.</div>
       </div>   
             

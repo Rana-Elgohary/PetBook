@@ -9,6 +9,7 @@ import { AccountServiceService } from '../../Services/account-service.service';
 import { CommonModule } from '@angular/common';
 import { UserPetInfoServiceService } from '../../Services/user-pet-info-service.service';
 import { lastValueFrom, switchMap, tap } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-pet-register',
@@ -18,7 +19,7 @@ import { lastValueFrom, switchMap, tap } from 'rxjs';
   styleUrl: './pet-register.component.css'
 })
 export class PetRegisterComponent implements OnInit {
-  constructor(public addPet:AddPetService, public account:AccountServiceService, public userPetInfo:UserPetInfoServiceService){}
+  constructor(public addPet:AddPetService, public account:AccountServiceService, public userPetInfo:UserPetInfoServiceService, private router:Router){}
 
   ngOnInit(): void {
     this.addPet.getBreed().subscribe({
@@ -83,7 +84,7 @@ export class PetRegisterComponent implements OnInit {
     for (const key in this.breedPet) {
       if (this.breedPet.hasOwnProperty(key)) {
         const fieldBreedPet = key as keyof AddBreedToPet;
-        if (!this.breedPet[fieldBreedPet]) {
+        if (!this.breedPet[fieldBreedPet] && fieldBreedPet != "petID") {
           this.validationErrorsForBreedPet[fieldBreedPet] = true;
           isValid = false;
         } else {
@@ -96,6 +97,7 @@ export class PetRegisterComponent implements OnInit {
   }
 
   async SignUp() {
+    this.breedPet.breedID = +this.breedPet.breedID
     if(this.isFormValid()){
       try {
         // Step 1: Add the pet
@@ -115,6 +117,7 @@ export class PetRegisterComponent implements OnInit {
         // Step 3: Add pet breed
         const addPetBreedResponse = await lastValueFrom(this.addPet.AddPetBreed(this.breedPet));
         console.log('Pet breed added successfully:', addPetBreedResponse);
+        this.router.navigateByUrl("/userPetInfo")
     
         // Success message or any further actions after successful signup
       } catch (err: any) {
