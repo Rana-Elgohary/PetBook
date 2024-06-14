@@ -94,7 +94,7 @@ namespace PetBooK.PL.Controllers
         }
 
 
-        [HttpGet("locationinclude/{ClinicId}")]
+        [HttpGet("locationinclude/{ClinicId:int}")]
         public ActionResult GetClinicLocationsByClinicincludeId(int ClinicId)
         {
             try
@@ -112,9 +112,9 @@ namespace PetBooK.PL.Controllers
             {
                 return StatusCode(500, "An error occurred while retrieving the clinic locations.");
             }
-
-
         }
+
+
 
 
 
