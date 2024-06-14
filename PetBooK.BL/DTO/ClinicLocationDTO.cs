@@ -10,5 +10,6 @@ namespace PetBooK.BL.DTO
     {
         public int ClinicID { get; set; }
         public string Location { get; set; }
+
     }
 }

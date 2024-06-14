@@ -63,6 +63,25 @@ namespace PetBooK.PL.Controllers
             }
         }
 
+        [HttpGet("vaccineName/{name}")]
+        public IActionResult GetVaccineByName(String name)
+        {
+            try
+            {
+                Vaccine vaccine = unit.vaccineRepository.FirstOrDefault(x => x.Name == name);
+                if (vaccine == null)
+                {
+                    return NotFound("This Vaccine is not found");
+                }
+                VaccineDTO vaccineDTO = mapper.Map<VaccineDTO>(vaccine);
+                return Ok(vaccineDTO);
+            }
+            catch
+            {
+                return StatusCode(500, "An error occurred while processing your request");
+            }
+        }
+
 
 
         [HttpPost]

@@ -16,7 +16,12 @@ export class MyRequestService {
   url = 'https://localhost:7066/api/RequestBreed/';
   pendingUrl='https://localhost:7066/api/RequestBreed/UserReceiverID/';
   updateUrl='https://localhost:7066/api/RequestBreed';
-  petUrl='https://localhost:7066/api/Pet/';
+
+  // petUrl='https://localhost:7066/api/Pet/id?id=';
+  petUrl='https://localhost:7066/api/Pet';
+  
+  
+
 
 
   getallSendingReq(id: number) {
@@ -50,6 +55,9 @@ export class MyRequestService {
     return this.http.get<PetDetails>(`${this.petUrl}+${id}`).pipe(
       catchError(this.handleError)
     );
+    // return this.http.get<PetDetails>(this.petUrl+id).pipe(
+    //   catchError(this.handleError)
+    // );
   }
 
     updateRequestBreed(petIDSender: number, petIDReceiver: number, pair: boolean): Observable<any> {
@@ -67,7 +75,11 @@ export class MyRequestService {
     return this.http.put<any>(this.updateUrl, body, { headers: headers });
   }
 
-
+  makeThisPetBeReadyForBreeding(id: number): Observable<any> {
+    return this.http.get<any>(`${this.url}Turnthispettobeavailable/${id}`).pipe(
+      catchError(this.handleError)
+    );
+  }
 
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
@@ -80,4 +92,5 @@ export class MyRequestService {
     // Return an observable with a user-facing error message.
     return throwError('Something bad happened; please try again later.');
   }
+
 }

@@ -43,6 +43,7 @@ export class UserSignUpComponent {
     if (this.isFormValid()) {
       this.accountService.SignUp(this.user).subscribe({
         next: (response) => {
+          console.log(this.user)
           this.router.navigate(['/Login']);
         },
         error: (err) => {

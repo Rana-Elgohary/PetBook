@@ -1,10 +1,10 @@
 export class RequestForBreed {
     constructor(
 
-        senderPetName: string,
-    receiverPetName: string,
-    petIDSender: number,
-    petIDReceiver: number,
-    pair: boolean
+    public senderPetName: string,
+    public receiverPetName: string,
+    public petIDSender: number,
+    public petIDReceiver: number,
+    public pair: boolean
     ){}
 }
