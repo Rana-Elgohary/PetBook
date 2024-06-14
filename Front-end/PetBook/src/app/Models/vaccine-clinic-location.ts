@@ -1,6 +1,6 @@
 export class VaccineClinicLocation {
     constructor(
-        public ClinicID :number,
+        public clinicID :number,
         public  name :string,
         public location :string,
         public rate :number,
