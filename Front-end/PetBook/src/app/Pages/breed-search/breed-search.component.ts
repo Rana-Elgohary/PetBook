@@ -5,6 +5,7 @@ import { BreedDetails } from '../../Models/breed-details';
 import { PetDetails } from '../../Models/pet-details';
 import { HttpClient } from '@angular/common/http';
 import { AutoCorrectService } from '../../Services/auto-correct.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-breed-search',
@@ -26,7 +27,7 @@ export class BreedSearchComponent implements OnInit {
   noResults: boolean = false;
 
   url: string = 'https://localhost:7066/Resources/';
-  constructor(private http: HttpClient, public autoCorrectService: AutoCorrectService) { }
+  constructor(private http: HttpClient, public autoCorrectService: AutoCorrectService , public router:Router ) { }
 
   ngOnInit() {
     this.fetchPets();
@@ -47,7 +48,9 @@ export class BreedSearchComponent implements OnInit {
         }
       );
   }
-
+  chooseme(id:number){
+    this.router.navigateByUrl(`Pet/details/${id}`)
+  }
   SearchBar() {
     this.showSearchBar = !this.showSearchBar;
   }
