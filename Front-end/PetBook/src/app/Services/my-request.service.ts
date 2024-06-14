@@ -94,6 +94,10 @@ export class MyRequestService {
     );
   }
 
+  deletePair(id: number){
+    return this.http.delete<any>(`${this.url}deletePiar/${id}`)
+  }
+
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred.
