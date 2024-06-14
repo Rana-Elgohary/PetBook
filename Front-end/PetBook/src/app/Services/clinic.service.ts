@@ -10,7 +10,7 @@ import { Reservation } from '../Models/reservation';
 })
 export class ClinicService {
   
-  private apiUrl = 'https://localhost:7066/'; // Update with your backend API URL
+  private apiUrl = 'https://localhost:7066/'; 
 
   constructor(private http: HttpClient) { }
 

@@ -198,21 +198,20 @@ namespace PetBooK.BL.Reo
 
             return breedType;
         }
-        public bool PairPets(int petId, int userId)
+        public bool PairPets(int petId, int selectedPetId, int userId)
         {
             var currentPet = db.Pets.Include(p => p.Pet_Breeds).ThenInclude(pb => pb.Breed)
-                                      .FirstOrDefault(p => p.PetID == petId);
+                                    .FirstOrDefault(p => p.PetID == petId);
             if (currentPet == null || !currentPet.ReadyForBreeding)
             {
                 return false;
             }
 
             var userPets = db.Pets.Include(p => p.Pet_Breeds).ThenInclude(pb => pb.Breed)
-                                    .Where(p => p.UserID == userId).ToList();
+                                  .Where(p => p.UserID == userId).ToList();
 
-            var matchingPet = userPets.FirstOrDefault(p => p.Pet_Breeds.Any(pb => currentPet.Pet_Breeds.Any(cpb => cpb.BreedID == pb.BreedID)));
-
-            if (matchingPet != null)
+            var matchingPet = userPets.FirstOrDefault(p => p.PetID == selectedPetId);
+            if (matchingPet != null && matchingPet.Pet_Breeds.Any(pb => currentPet.Pet_Breeds.Any(cpb => cpb.BreedID == pb.BreedID)))
             {
                 var requestForBreed = new Request_For_Breed
                 {
@@ -230,6 +229,7 @@ namespace PetBooK.BL.Reo
         }
 
 
+
         public IQueryable<TEntity> Where(Expression<Func<TEntity, bool>> predicate)
         {
             return db.Set<TEntity>().Where(predicate);
@@ -242,6 +242,11 @@ namespace PetBooK.BL.Reo
             return db.Set<TEntity>().Where(predicate).ToList();
 
         }
-
+        public List<Pet> GetPetsByUser(int userId)
+        {
+            return  db.Pets
+                .Where(p => p.UserID == userId)
+                .ToList();
+        }
     }
 }
