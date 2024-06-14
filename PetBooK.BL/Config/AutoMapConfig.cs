@@ -43,6 +43,8 @@ namespace PetBooK.BL.Config
                       .ForMember(dest => dest.Rate, opt => opt.MapFrom(src => src.Clinic.Rate));
 
 
+            CreateMap<Vaccine, VaccineNames>();
+            CreateMap<VaccineNames, Vaccine>();
 
 
             ///Mapping Reservations
