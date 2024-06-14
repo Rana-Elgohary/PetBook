@@ -2,14 +2,14 @@
 <style>
 
 .background-image {
-            background-image: url('../assets/Images/PetInfoBG.png'); 
+            background-image: url('../assets/Images/PetInfoBG.png');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            height: 109vh; 
+            height: 109vh;
             width: 100%;
         }
-        
+
 </style>
 
 <body class="bg-gray-100 background-image">
@@ -18,8 +18,12 @@
           <div class="flex-container">
             <div class="content">
               <div class="clinic-info mr-4">
-                <p class=" "><strong  class="text-orange-500">Name:</strong> {{clinicInfo?.name}}</p>
-                <p><strong class="text-orange-500">Rate:</strong></p>  
+                <p class=" "><strong  class="text-orange-500">Name:</strong> {{clinicInfo.name}}</p>
+
+                 
+
+                <p><strong class="text-orange-500">Rate:</strong></p>
+
                 <div class="rate">
                   <ng-container *ngFor="let star of stars; let i = index">
                     <i class="fa" [ngClass]="{'fa-star': i < clinicInfo.rate, 'fa-star-o': i >= clinicInfo.rate}"></i>
@@ -46,7 +50,7 @@
                 <input type="text" placeholder="Your Name" class="border p-2 rounded mb-2 w-full">
                 <input type="date"  [(ngModel)]="appointment.date" class="border p-2 rounded mb-2 w-full">
                 <input type="text" placeholder="Your Phone"  class="border p-2 rounded mb-2 w-full">
-               <textarea placeholder="Additional Information" class="border p-2 rounded mb-2 w-full"></textarea> 
+               <textarea placeholder="Additional Information" class="border p-2 rounded mb-2 w-full"></textarea>
                 <button (click)="bookAppointment()" class="bg-orange-300 text-white px-11 py-2 rounded-full slanted-text" ><strong>Book</strong></button>
             </div>
           </div>

@@ -6,6 +6,8 @@ import { UserPetDetails } from '../../../Models/user-pet-details';
 import { RequestForBreed } from '../../../Models/request-for-breed';
 import { AccountServiceService } from '../../../Services/account-service.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { PairPetsDialogComponent } from '../pair-pets-dialog/pair-pets-dialog.component';
 
 @Component({
   selector: 'app-pet-details',
@@ -20,12 +22,14 @@ export class PetDetailsComponent {
     pet: PetDetails | undefined;
     owner: UserPetDetails | undefined;
     url:string='https://localhost:7066/Resources/'
-  
+    userPets: PetDetails[] = [];
+    selectedPetId: number | undefined;
     constructor(
       private route: ActivatedRoute,
       private petDetailsService: PetDetailsService,
       public Account:AccountServiceService   ,
-      private snackBar: MatSnackBar
+      private snackBar: MatSnackBar,
+      private dialog: MatDialog
      ) {}
   
     ngOnInit(): void {
@@ -33,6 +37,9 @@ export class PetDetailsComponent {
         const petId = +params['id'];
         console.log('ngOnInit: petId', petId);
         this.loadPetDetails(petId);
+        const userId = Number(this.Account.r.id)
+        this.loadUserPets(userId);
+       
 
       });
     }
@@ -65,28 +72,66 @@ export class PetDetailsComponent {
         }
       );
     }
-    pairPets() {
-      const userId = Number(this.Account.r.id);
-      const petId = this.pet?.petID || 0; 
-      this.petDetailsService.pairPets(petId, userId).subscribe(response => {
-        if (response) {
-          console.log('Pairing successful');
-          this.openSnackBar('Pet paired successfully', 'Close');
-        } else {
-          this.openSnackBar('The pet is not available for breeding', 'Close');
+
+    loadUserPets(userId: number): void {
+      this.petDetailsService.getUserPets(userId).subscribe(
+        pets => {
+          this.userPets = pets.map(pet => ({
+            ...pet,
+            photo: this.url + pet.photo 
+          }));
+        },
+        error => {
+          console.error('Error fetching user pets:', error);
+          this.snackBar.open('Failed to fetch user pets', 'Close', {
+            duration: 3000,
+          });
         }
-      }, error => {
-        console.error('Pairing failed', error);
-        this.openSnackBar('Pairing failed. Please try again later.', 'Close');
+      );
+    }
+
+
+    openPairPopup(): void {
+
+      const dialogRef = this.dialog.open(PairPetsDialogComponent, {
+        width: '400px',
+        data: { pets: this.userPets }
+      });
+  
+      dialogRef.afterClosed().subscribe(selectedPetId => {
+        if (selectedPetId) {
+          this.pairPets(selectedPetId);
+        }
       });
     }
-    openSnackBar(message: string, action: string) {
-      this.snackBar.open(message, action, {
-        duration: 9000, 
-        horizontalPosition: 'center', 
-        verticalPosition: 'top' 
-      });
-    }
+
+      
+      pairPets(selectedPetId: number): void {
+        const petId = this.pet?.petID || 0;
+        const userId = Number(this.Account.r.id);
+    
+        this.petDetailsService.pairPets(petId, selectedPetId, userId).subscribe(
+          response => {
+            if (response) {
+              this.openSnackBar('Pet paired successfully', 'Close');
+            } else {
+              this.openSnackBar('The pet is not available for breeding', 'Close');
+            }
+          },
+          error => {
+            console.error('Pairing failed', error);
+            this.openSnackBar('Pairing failed. Please try again later.', 'Close');
+          }
+        );
+      }
+    
+      openSnackBar(message: string, action: string): void {
+        this.snackBar.open(message, action, {
+          duration: 9000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        });
+      }
     
     
   }

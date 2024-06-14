@@ -43,10 +43,14 @@ export class UpdateUserDetailsComponent {
     });
   }
 
-  updateUserPhoto(event: any): void {
+  updateUserPhoto(event: any) {
     const file = event.target.files[0];
     if (file) {
-      this.user.photo = file;
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.user.photo = e.target.result;
+      };
+      reader.readAsDataURL(file);
     }
   }
 }
