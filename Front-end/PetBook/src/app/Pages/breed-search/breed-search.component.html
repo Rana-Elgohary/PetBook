@@ -1,4 +1,3 @@
-
 <body>
   <div class="min-h-screen bg-gray-100 p-8 all" (click)="hideSuggestions()">
     <section class="bg-gray-100 absolute top-0 left-0 w-full h-36 -z-10"></section>
@@ -62,7 +61,7 @@
             <img
               [src]="pet.photo"
               [alt]="pet.name"
-              class="rounded-full w-[144px] h-[141px] bg-white mb-4"
+              class="pet-photo rounded-full w-[200px] h-[200px]  mb-4"
             />
             <h2 class="text-2xl font-bold text-gray-800 mb-2">{{ pet.name }}</h2>
             <button (click)="chooseme(pet.petID)"
@@ -81,4 +80,3 @@
     </div>
   </div>
 </body>
-
