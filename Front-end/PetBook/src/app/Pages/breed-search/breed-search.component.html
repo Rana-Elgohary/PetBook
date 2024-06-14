@@ -71,7 +71,7 @@
             class="rounded-full w-[144px] h-[141px] bg-white mb-4"
           />
           <h2 class="text-2xl font-bold text-gray-800 mb-2">{{ pet.name }}</h2>
-          <button
+          <button (click)="chooseme(pet.petID)"
             class="bg-[#F9D5A7] text-black px-6 py-2 rounded-full hover:bg-[#e9c394] transition duration-300 ease-in-out"
           >
             Choose Me
