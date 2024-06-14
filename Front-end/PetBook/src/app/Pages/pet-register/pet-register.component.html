@@ -10,7 +10,7 @@
             </div>   
             
             <div class="relative mt-8">
-                <app-input-section typeOfInput="number" LabelType="Age In Month" (inputValueChange)="onInputValueChangeForPet({ field: 'ageInMonth', value: $event })"></app-input-section>
+                <app-input-section typeOfInput="number" LabelType="Age In Month" (inputValueChange)="onInputValueChangeForPet({ field: 'ageInMonth', value: +$event })"></app-input-section>
                 <div *ngIf="validationErrorsForPet['ageInMonth']" class="bg-red-500 text-white p-2 absolute top-0 right-0 w-1/2">Age in month is required.</div>
             </div>   
             

@@ -11,9 +11,7 @@ import { LandingPageComponent } from './Pages/LandingPage/landing-page/landing-p
 import { PetDetailsComponent } from './Pages/PetInfo/pet-detailss/pet-details.component';
 import { UserPetInfoComponent } from './Pages/PetInfo/Pet-Inf/user-pet-info/user-pet-info.component';
 import { BreedSearchComponent } from './Pages/breed-search/breed-search.component';
-
 import { ClinicComponent } from './Pages/clinic/clinic.component';
-
 import { UserProfilePetInfoComponent } from './Pages/userPetInfo/user-pet-info/userProfile-pet-info.component';
 import { noNavigateWithoutLoginGuard } from './Guard/no-navigate-without-login.guard';
 import { SearchVaccineComponent } from './Pages/search-vaccine/search-vaccine.component';
@@ -22,14 +20,9 @@ import { SearchVaccineClicnicComponent } from './Pages/search-vaccine-clicnic/se
 import { UserPetInfoEditComponent } from './Pages/user-pet-info-edit/user-pet-info-edit.component';
 import { ClinicSearchComponent } from './Pages/clinic-search/clinic-search.component';
 
-
-
 export const routes: Routes = [
     {path: "Login", component:UserLoginComponent, title:"Login", canActivate: [noNavigateToLoginPageIfTokenGuard]},
-
-    {path: "UserSignUp", component:UserSignUpComponent, title:"User Sign-Up"},
     {path: "PetRegister", component:PetRegisterComponent, title:"Pet Register", canActivate:[noNavigateWithoutLoginGuard]},
-
     {path: "MyRequest", component:MyRequestComponent, title:"MY Request"},
     {path: "UserSignUp", component:UserSignUpComponent, title:"User Sign-Up", canActivate: [noNavigateToLoginPageIfTokenGuard]},
     {path:"pendingRequest" , component:PendingRequestComponent , title:"pending Request"},
@@ -39,21 +32,14 @@ export const routes: Routes = [
     {path: "userPetInfo",component: UserProfilePetInfoComponent},
     {path: 'Pet/details/:id', component: PetDetailsComponent,title:"Pet Details" },
     {path: 'Pet/information/:id', component: UserPetInfoComponent,title:"User Pet Information" },
-    {path:"",component:LandingPageComponent,title:"PetBook"},
     {path:"Vaccine",component:SearchVaccineComponent,title:"Vaccine"},
     { path: 'search-vaccine-clinic/:VaccineId', component: SearchVaccineClicnicComponent },
-
     { path: 'Pet/details/:id', component: PetDetailsComponent,title:"Pet Details" },
     { path: 'Pet/information/:id', component: UserPetInfoComponent,title:"User Pet Information" },
-
-
-
     {path:"userPetEdit/:id",component:UserPetInfoEditComponent},
-    { path: 'Pet/information/:id', component: UserPetInfoComponent,title:"User Pet Information" },
     { path: 'Clinic/:clinicId', component: ClinicComponent,title:"Clinic Details" },
     {path:"clinics",component:ClinicSearchComponent,title:"Clinics"},
     {path:"vaccines",component:SearchVaccineClicnicComponent,title:"Vaccines"},
     {path:"",component:LandingPageComponent,title:"PetBook"}
-
 ];
 

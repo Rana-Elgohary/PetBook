@@ -133,6 +133,7 @@ namespace PetBooK.PL.Controllers
         }
 
 
+
         //////-------Get Request of breed by Receiver id--------
 
         [HttpGet("ReceiverID/{Rid}")]
@@ -271,6 +272,33 @@ namespace PetBooK.PL.Controllers
                 return Ok("deleted");
             }
         }
+
+
+        //----------------delete pet who just married from requests-------------------//
+
+        [HttpDelete("deletePetFromRequestsAndPendingR/{ID}")]
+        public IActionResult deletePetFromRequests(int ID)
+        {
+            List<Request_For_Breed> deletedRequestOfBreed = unit.request_For_BreedRepository.FindBy(s=>s.PetIDReceiver==ID ||s.PetIDSender==ID);
+            if (deletedRequestOfBreed == null)
+            {
+                return NotFound("the request you want to delete is not found");
+            }
+            else
+            {
+                foreach (var item in deletedRequestOfBreed)
+                {
+                    if (item.Pair == false)
+                    {
+                        unit.request_For_BreedRepository.deleteEntity(item);
+                        unit.SaveChanges();
+                    }
+                }
+                return Ok("deleted");
+            }
+        }
+
+
 
         //--------------check if this pet on date or not-------------//
         [HttpGet("Turnthispettobenotavailable/{id}")]

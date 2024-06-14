@@ -18,7 +18,7 @@ export class MyRequestService {
   updateUrl='https://localhost:7066/api/RequestBreed';
 
   // petUrl='https://localhost:7066/api/Pet/id?id=';
-  petUrl='https://localhost:7066/api/Pet';
+  petUrl='https://localhost:7066/api/Pet/';
   
   
 
@@ -32,6 +32,14 @@ export class MyRequestService {
 
   DeleteReq(SId: number, RId: number) {
     const deleteUrl = `${this.url}${SId}/${RId}`;
+    console.log('DELETE request URL:', deleteUrl);
+    return this.http.delete(deleteUrl, { responseType: 'text' }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  DeleteALLReq(Id: number) {
+    const deleteUrl = `${this.url}deletePetFromRequestsAndPendingR/${Id}`;
     console.log('DELETE request URL:', deleteUrl);
     return this.http.delete(deleteUrl, { responseType: 'text' }).pipe(
       catchError(this.handleError)
@@ -52,7 +60,7 @@ export class MyRequestService {
 
 
   CheckIfThisPetOndate(id: number) {
-    return this.http.get<PetDetails>(`${this.petUrl}+${id}`).pipe(
+    return this.http.get<PetDetails>(`${this.petUrl}${id}`).pipe(
       catchError(this.handleError)
     );
     // return this.http.get<PetDetails>(this.petUrl+id).pipe(
@@ -72,7 +80,12 @@ export class MyRequestService {
       pair: pair
     };
 
-    return this.http.put<any>(this.updateUrl, body, { headers: headers });
+    console.log('PUT request URL:', this.updateUrl);
+    console.log('Request Body:', body);
+
+    return this.http.put<any>(this.updateUrl, body, { headers: headers }).pipe(
+      catchError(this.handleError)
+    );
   }
 
   makeThisPetBeReadyForBreeding(id: number): Observable<any> {

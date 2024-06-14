@@ -5,5 +5,9 @@ export class VaccineClinicLocation {
         public location :string,
         public rate :number,
         public price : number,
-        public  Quantity :number   ){}
+        public  Quantity :number ,
+        public latitude: number, // Optional latitude property
+        public longitude: number, // Optional longitude property
+        public distance :number
+      ){}
 }

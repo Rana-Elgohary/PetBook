@@ -309,7 +309,20 @@ namespace PetBooK.PL.Controllers
 
         }
 
-
+        [HttpGet("{userId}/Pets")]
+        public IActionResult GetUserPets(int userId)
+        {
+            try
+            {
+                var pets = unitOfWork.petRepository.GetPetsByUser(userId);
+                List<PetGetDTO> petDTO = mapper.Map<List<PetGetDTO>>(pets);
+                return Ok(petDTO);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error fetching user pets: {ex.Message}");
+            }
+        }
 
     }
 

@@ -345,25 +345,30 @@ namespace PetBooK.PL.Controllers
                 return Ok(breedType);
             }
 
-            [HttpPost("{petId}/pair")]
-            public IActionResult PairPets(int petId, [FromBody] int userId)
+        [HttpPost("{petId}/pair")]
+        public IActionResult PairPets(int petId, [FromBody] PairRequestDTO pairRequest)
+        {
+            var success = unitOfWork.petRepository.PairPets(petId, pairRequest.SelectedPetId, pairRequest.UserId);
+            if (success)
             {
-                var success = unitOfWork.petRepository.PairPets(petId, userId);
-                if (success)
-                {
-                    return Ok(true);
-                }
-                var currentPet = unitOfWork.petRepository.selectbyid(petId);
-                if (currentPet != null && !currentPet.ReadyForBreeding)
-                {
-                    return Ok(false);
-                }
-
-                return BadRequest(false);
+                return Ok(true);
+            }
+            var currentPet = unitOfWork.petRepository.selectbyid(petId);
+            if (currentPet != null && !currentPet.ReadyForBreeding)
+            {
+                return Ok(false);
             }
 
-
-
-
+            return BadRequest(false);
         }
+
+
+        
+
+        
+
+
+
+
+    }
 }
