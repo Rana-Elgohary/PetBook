@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using PetBooK.DAL.Services;
 using Microsoft.Extensions.FileProviders;
+using PetBooK.PL.Hubs;
 
 namespace PetBooK.PL
 {
@@ -63,23 +64,27 @@ namespace PetBooK.PL
             //--------------------- Define CORS policy name ---------------------//
             string corsPolicyName = "AllowAll";
 
-            //--------------------- Add CORS policy ---------------------//
+           
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy(corsPolicyName, builder =>
                 {
-                    builder.AllowAnyOrigin()
+                    builder.SetIsOriginAllowed(origin => true) // Allow any origin
                            .AllowAnyMethod()
-                           .AllowAnyHeader();
+                           .AllowAnyHeader()
+                           .AllowCredentials();
                 });
             });
 
             /// For Auto Mapper:
             builder.Services.AddAutoMapper(typeof(AutoMapConfig).Assembly);
 
+            ///////////////////// Register SignalR: /////////////////////
+            builder.Services.AddSignalR();
 
             var app = builder.Build();
 
+            app.UseRouting();
 
             app.UseStaticFiles(new StaticFileOptions
             {
@@ -103,13 +108,16 @@ namespace PetBooK.PL
             }
 
 
-
             app.UseHttpsRedirection();
+
 
             app.UseAuthorization();
 
             //--------------------- Use CORS policy ---------------------//
             app.UseCors(corsPolicyName);
+
+            ///////////////////// To create an End point for each Hub class (server configuration): /////////////////////
+            app.MapHub<PetHub>("/PetHub");
 
             app.MapControllers();
 

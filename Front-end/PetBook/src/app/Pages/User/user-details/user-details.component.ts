@@ -14,12 +14,15 @@ import { UserDetails } from '../../../Models/UserDetails';
 export class UserDetailsComponent {
 
 User:UserDetails=new UserDetails(0,"","","","","","",0,"","",0);
-userid :number= parseInt(this.AccountService.r.id);
+userid :number=0;
 private imageUrlBase: string = 'https://localhost:7066/Resources/';
   constructor(public userService:UserService,public AccountService:AccountServiceService ,public  router:Router){}
 
   ngOnInit(): void {
+    this.userid = parseInt(this.AccountService.r.id)
     this.loadUserData(this.userid);
+    console.log(this.userid)
+    console.log(parseInt(this.AccountService.r.id))
   }
 
   loadUserData(userId: number): void {

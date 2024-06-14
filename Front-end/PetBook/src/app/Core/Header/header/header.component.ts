@@ -16,6 +16,6 @@ Logout(){
   this.account.logout
 }
 ngOnInit(): void {
-  this.account.r.id = this.id
+ this.id = this.account.r.id 
 }
 }

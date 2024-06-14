@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 import { UserPetInfoServiceService } from '../../Services/user-pet-info-service.service';
 import { lastValueFrom, switchMap, tap } from 'rxjs';
 import { Router } from '@angular/router';
+import { SignalRServiceService } from '../../Services/signal-rservice.service';
 
 @Component({
   selector: 'app-pet-register',
@@ -19,7 +20,8 @@ import { Router } from '@angular/router';
   styleUrl: './pet-register.component.css'
 })
 export class PetRegisterComponent implements OnInit {
-  constructor(public addPet:AddPetService, public account:AccountServiceService, public userPetInfo:UserPetInfoServiceService, private router:Router){}
+  constructor(public addPet:AddPetService, public account:AccountServiceService, 
+    public userPetInfo:UserPetInfoServiceService, private router:Router){}
 
   ngOnInit(): void {
     this.addPet.getBreed().subscribe({
@@ -117,6 +119,9 @@ export class PetRegisterComponent implements OnInit {
         // Step 3: Add pet breed
         const addPetBreedResponse = await lastValueFrom(this.addPet.AddPetBreed(this.breedPet));
         console.log('Pet breed added successfully:', addPetBreedResponse);
+
+        console.log('Pet readyForBreeding value:', this.Pet.readyForBreeding); 
+
         this.router.navigateByUrl("/userPetInfo")
     
         // Success message or any further actions after successful signup
