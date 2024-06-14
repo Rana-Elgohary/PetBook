@@ -63,4 +63,5 @@ export class SearchVaccineClicnicComponent implements OnInit {
   getStars(rate: number): number[] {
     return Array(rate).fill(0).map((x, i) => i);
   }
+  
 }
