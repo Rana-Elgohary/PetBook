@@ -53,7 +53,7 @@ choosePet() {
 
   ngOnInit(): void {
     // Subscribe to route params and fetch clinic details
-    this.userId= 4;
+    this.userId= parseInt(this.Account.r.id);
     this.loadUserPets();
     this.route.params.pipe(
       switchMap(params => {
