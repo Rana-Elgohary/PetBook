@@ -44,6 +44,31 @@ namespace PetBooK.PL.Controllers
         }
 
 
+        [HttpGet("VaccineNames")]
+        public IActionResult GetAllVaccinesName()
+        {
+            try
+            {
+                List<Vaccine> Vaccines = unit.vaccineRepository.selectall();
+                List<VaccineNames> VaccinesDTO = mapper.Map<List<VaccineNames>>(Vaccines);
+                if (VaccinesDTO.Count > 0)
+                {
+                    return Ok(VaccinesDTO);
+                }
+                else
+                {
+                    return NotFound("There's no vaccines");
+                }
+
+            }
+            catch
+            {
+                return StatusCode(500, "An error occurred while processing your request");
+
+            }
+        }
+
+
         [HttpGet("{id}")]
         public IActionResult GetVaccineByID(int id)
         {

@@ -1,86 +1,82 @@
-<div class="min-h-screen bg-gray-100 p-8 all" (click)="hideSuggestions()">
-  <section class="bg-gray-100 absolute top-0 left-0 w-full h-36 -z-10 ">
-  </section>
-  <div class="container mx-auto">
-    <div class="flex justify-between items-center mb-8">
-      <div class="relative flex items-center" (click)="$event.stopPropagation()">
-        <!-- breed-search.component.html -->
-
-        <div class="relative flex items-center">
-          <input
-            type="text"
-            placeholder="Search..."
-            class="w-full pl-4 pr-10 py-2 border rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
-            [(ngModel)]="searchQuery"
-            (ngModelChange)="onInputChange()"
-          />
-          <button
-            class="absolute right-2 top-2 text-yellow-500"
-            (click)="searchBar()"
-          >
-            <!-- Magnifying glass icon -->
-            <svg
-              class="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
+<body>
+  <div class="min-h-screen bg-gray-100 p-8 all" (click)="hideSuggestions()">
+    <section class="bg-gray-100 absolute top-0 left-0 w-full h-36 -z-10"></section>
+    <div class="container mx-auto">
+      <div class="flex justify-between items-center mb-8">
+        <div class="relative flex items-center" (click)="$event.stopPropagation()">
+          <div class="relative flex items-center">
+            <input
+              type="text"
+              placeholder="Search..."
+              class="w-full pl-4 pr-10 py-2 border rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              [(ngModel)]="searchQuery"
+              (ngModelChange)="onInputChange()"
+            />
+            <button class="absolute right-2 top-2 text-yellow-500" (click)="searchBar()">
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 15l5-5m0 0l-5-5m5 5H4"
+                ></path>
+              </svg>
+            </button>
+            <ul
+              class="absolute z-10 top-full left-0 right-0 bg-white border border-gray-300 rounded-b-md shadow-md"
+              *ngIf="breedSuggestions.length > 0"
             >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M15 15l5-5m0 0l-5-5m5 5H4"
-              ></path>
-            </svg>
-          </button>
-          <ul
-            class="absolute z-10 top-full left-0 right-0 bg-white border border-gray-300 rounded-b-md shadow-md"
-            *ngIf="breedSuggestions.length > 0"
+              <li
+                *ngFor="let suggestion of breedSuggestions"
+                class="py-2 px-4 cursor-pointer hover:bg-gray-100"
+                (click)="selectBreed(suggestion)"
+              >
+                {{ suggestion }}
+              </li>
+            </ul>
+          </div>
+          <select
+            class="ml-4 py-2 px-4 border rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
+            [(ngModel)]="filterType"
+            (change)="applyFilter()"
           >
-            <li
-              *ngFor="let suggestion of breedSuggestions"
-              class="py-2 px-4 cursor-pointer hover:bg-gray-100"
-              (click)="selectBreed(suggestion)"
-            >
-              {{ suggestion }}
-            </li>
-          </ul>
-        </div>
-        <select
-          class="ml-4 py-2 px-4 border rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
-          [(ngModel)]="filterType"
-          (change)="applyFilter()"
-        >
-          <option value="">All</option>
-          <option value="Dog">Dog</option>
-          <option value="Cat">Cat</option>
-        </select>
-      </div>
-    </div>
-    <!-- Rest of your content -->
-    <div *ngIf="!noResults; else NoBreed">
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-        <div
-          *ngFor="let pet of pets"
-          class="bg-[#FFF4E0] rounded-lg shadow-md p-6 flex flex-col items-center w-full h-auto"
-        >
-          <img
-            [src]="pet.photo"
-            [alt]="pet.name"
-            class="rounded-full w-[144px] h-[141px] bg-white mb-4"
-          />
-          <h2 class="text-2xl font-bold text-gray-800 mb-2">{{ pet.name }}</h2>
-          <button
-            class="bg-[#F9D5A7] text-black px-6 py-2 rounded-full hover:bg-[#e9c394] transition duration-300 ease-in-out"
-          >
-            Choose Me
-          </button>
+            <option value="">All</option>
+            <option value="Dog">Dog</option>
+            <option value="Cat">Cat</option>
+          </select>
         </div>
       </div>
-    </div>
-    <ng-template #NoBreed>
-      <div class="bg-[#FFF4E0] rounded-lg shadow-md p-6 flex flex-col items-center w-full h-auto">
-        <h2 class="text-2xl font-bold text-gray-800 mb-2">This breed does not exist </h2>
+      <div *ngIf="!noResults; else NoBreed">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          <div
+            *ngFor="let pet of pets"
+            class="hover-card bg-[#FFF4E0] rounded-lg shadow-md p-6 flex flex-col items-center w-full h-auto"
+          >
+            <img
+              [src]="pet.photo"
+              [alt]="pet.name"
+              class="pet-photo rounded-full w-[200px] h-[200px]  mb-4"
+            />
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">{{ pet.name }}</h2>
+            <button (click)="chooseme(pet.petID)"
+              class="bg-[#F9D5A7] text-black px-6 py-2 rounded-full hover:bg-[#e9c394] transition duration-300 ease-in-out"
+            >
+              Choose Me
+            </button>
+          </div>
+        </div>
       </div>
-  
+      <ng-template #NoBreed>
+        <div class="bg-[#FFF4E0] rounded-lg shadow-md p-6 flex flex-col items-center w-full h-auto">
+          <h2 class="text-2xl font-bold text-gray-800 mb-2">This breed does not exist</h2>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</body>

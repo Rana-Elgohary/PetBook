@@ -18,6 +18,7 @@ import { SearchVaccineComponent } from './Pages/search-vaccine/search-vaccine.co
 import { VaccineClinic } from './Models/vaccine-clinic';
 import { SearchVaccineClicnicComponent } from './Pages/search-vaccine-clicnic/search-vaccine-clicnic.component';
 import { UserPetInfoEditComponent } from './Pages/user-pet-info-edit/user-pet-info-edit.component';
+import { ReservationForVaccineComponent } from './Pages/reservation-for-vaccine/reservation-for-vaccine.component';
 import { ClinicSearchComponent } from './Pages/clinic-search/clinic-search.component';
 
 export const routes: Routes = [
@@ -38,6 +39,8 @@ export const routes: Routes = [
     { path: 'Pet/information/:id', component: UserPetInfoComponent,title:"User Pet Information" },
     {path:"userPetEdit/:id",component:UserPetInfoEditComponent, title: "Edit Pet Information"},
     { path: 'Clinic/:clinicId', component: ClinicComponent,title:"Clinic Details" },
+    {path:"",component:LandingPageComponent,title:"PetBook"},
+    {path:"ReservationVaccine/:clinicId/:VaccineId",component:ReservationForVaccineComponent,title:"Reservation Vaccine"},
     {path:"clinics",component:ClinicSearchComponent,title:"Clinics"},
     {path:"vaccines",component:SearchVaccineClicnicComponent,title:"Vaccines"},
     {path:"",component:LandingPageComponent,title:"PetBook"}
