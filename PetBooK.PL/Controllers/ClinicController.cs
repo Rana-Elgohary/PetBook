@@ -56,9 +56,9 @@ namespace PetBooK.PL.Controllers
         public IActionResult GetByName(string name)
         {
             List<Clinic> clinics = unitOfWork.clinicRepository.FindBy(l => l.Name == name);
-            if (clinics == null)
+            if (clinics == null || clinics.Count == 0 )
             {
-                return NotFound();
+                return NotFound(new { message = "Not Found" });
             }
             else
             {
@@ -190,8 +190,49 @@ namespace PetBooK.PL.Controllers
                 unitOfWork.clinicRepository.delete(id);
                 unitOfWork.SaveChanges();
                 return Ok("clinic has Successfully been deleted");
-            }
-
         }
+
+        //--------------------------------GetClinicByIt'sLocations----------------------
+        [HttpGet("Clinics")]
+        public IActionResult GetAllClinicsWithLocation(int pageNumber = 1, int pageSize = 4)
+        {
+            try
+            {
+                List<Clinic> clinics = unitOfWork.clinicRepository.SelectAllIncludePagination(pageNumber, pageSize, s => s.Clinic_Locations);
+                List<ClinicByLocationsDTO> clinicByLocation = new List<ClinicByLocationsDTO>();
+                foreach (var clinic in clinics)
+                {
+                    foreach (var location in clinic.Clinic_Locations)
+                    {
+                        var Loc = new ClinicByLocationsDTO
+                        {
+                            ClinicID = clinic.ClinicID,
+                            Name = clinic.Name,
+                            Location = location.Location,
+                            Rate = clinic.Rate,
+                            BankAccount = clinic.BankAccount
+                        };
+                        clinicByLocation.Add(Loc);
+                    }
+                }
+                int Total = clinicByLocation.Count();
+                List<ClinicByLocationsDTO> clinicByLocation2 = clinicByLocation.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+
+                var response = new
+                {
+                    Data = clinicByLocation2,
+                    AllData = clinicByLocation,
+                    TotalItems = Total
+                };
+                return Ok(response);
+            }
+            catch
+            {
+                return StatusCode(500, "error while retrievong data");
+            }
+        }
+
     }
+
+}
 

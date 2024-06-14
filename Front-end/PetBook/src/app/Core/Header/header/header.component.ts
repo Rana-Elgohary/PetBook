@@ -11,11 +11,11 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 })
 export class HeaderComponent implements OnInit{
 constructor(private account : AccountServiceService){}
-userName : string= "";
+id : string= "2";
 Logout(){
   this.account.logout
 }
 ngOnInit(): void {
-  this.account.r.UserName = this.userName
+  this.account.r.id = this.id
 }
 }

@@ -1,16 +1,19 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Clinic } from '../Models/clinic';
 import { Doctor } from '../Models/doctor';
 import { Reservation } from '../Models/reservation';
+import { ClinicPhones } from '../Models/clinic-phones';
+import { ClinicLocation } from '../Models/clinic_location';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ClinicService {
   
-  private apiUrl = 'https://localhost:7066/'; // Update with your backend API URL
+  private apiUrl = 'http://localhost:5226/api/Clinic'; 
+  private apiUrlPhoneNumber = 'http://localhost:5226/api/ClinicPhone/clinic'; 
 
   constructor(private http: HttpClient) { }
 
@@ -29,5 +32,21 @@ export class ClinicService {
 
   bookAppointment(reservation: Reservation): Observable<any> {
     return this.http.post(`${this.apiUrl}api/Reservation`, reservation);
+  }
+/////////////////////////////////////////////////////////////////
+
+  getAllClinics(pageNumber: number, pageSize: number): Observable<{ data: ClinicLocation[],allData:ClinicLocation[] ,totalItems: number }>{
+    let params = new HttpParams()
+    .set('pageNumber', pageNumber.toString())
+    .set('pageSize', pageSize.toString());
+    return this.http.get<{ data: ClinicLocation[],allData:ClinicLocation[], totalItems: number }>(`${this.apiUrl}/Clinics`, { params });
+  }
+
+  getClinicByName(name: string){
+    return this.http.get<any>(`${this.apiUrl}/Name?name=${name}`);
+  }
+  
+  getClinicsPhoneNumbers(id:number){
+    return this.http.get<ClinicPhones[]>(`${this.apiUrlPhoneNumber}/${id}`)
   }
 }

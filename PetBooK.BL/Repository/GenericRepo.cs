@@ -256,6 +256,18 @@ namespace PetBooK.BL.Reo
             return query.ToList();
 
         }
+        public List<TEntity> SelectAllIncludePagination(int pageNumber, int pageSize, params Expression<Func<TEntity, object>>[] includes)
+        {
+            IQueryable<TEntity> query = db.Set<TEntity>();
+
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+
+
+            return query.ToList();
+        }
 
     }
 }
