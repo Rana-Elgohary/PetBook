@@ -1,0 +1,60 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+
+.background-image {
+            background-image: url('../assets/Images/PetInfoBG.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 109vh;
+            width: 100%;
+        }
+
+</style>
+
+<body class="bg-gray-100 background-image">
+    <div class="container mx-auto p-1">
+        <div class="clinic-card" *ngIf="clinicInfo">
+          <div class="flex-container">
+            <div class="content">
+              <div class="clinic-info mr-4">
+                <p class=" "><strong  class="text-orange-500">Name:</strong> {{clinicInfo.name}}</p>
+
+                 
+
+                <p><strong class="text-orange-500">Rate:</strong></p>
+
+                <div class="rate">
+                  <ng-container *ngFor="let star of stars; let i = index">
+                    <i class="fa" [ngClass]="{'fa-star': i < clinicInfo.rate, 'fa-star-o': i >= clinicInfo.rate}"></i>
+                  </ng-container>
+                </div>
+                <p><strong class="text-orange-500">Locations:</strong></p>
+                <ul>
+                  <li *ngFor="let location of clinicInfo?.locations">{{location}}</li>
+                </ul>
+                <p><strong class="text-orange-500">Phones:</strong></p>
+                <ul>
+                  <li *ngFor="let phone of clinicInfo?.phoneNumbers">{{phone}}</li>
+                </ul>
+              </div>
+              <div class="doctor-info mr-4">
+                <h4 class="text-md font-semibold text-center"><strong class="text-orange-500">Doctors</strong></h4>
+                <ul>
+                  <li *ngFor="let doctor of doctors">Dr: {{doctor.name}}</li>
+                </ul>
+              </div>
+            </div>
+            <div class="book-appointment">
+                <h4 class="text-md font-semibold mb-2"><strong class="text-orange-500">Book an Appointment</strong></h4>
+                <input type="text" placeholder="Your Name" class="border p-2 rounded mb-2 w-full">
+                <input type="date"  [(ngModel)]="appointment.date" class="border p-2 rounded mb-2 w-full">
+                <input type="text" placeholder="Your Phone"  class="border p-2 rounded mb-2 w-full">
+               <textarea placeholder="Additional Information" class="border p-2 rounded mb-2 w-full"></textarea>
+               <button (click)="choosePet()" class="bg-orange-300 text-white px-11 py-2 rounded-full slanted-text" ><strong>Choose Pet</strong></button>
+                <button (click)="bookAppointment()" class="bg-orange-300 text-white px-11 py-2 rounded-full slanted-text" ><strong>Book</strong></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </body>

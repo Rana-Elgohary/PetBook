@@ -25,7 +25,7 @@ namespace PetBooK.PL.Controllers
         {
             try
             {
-                List<Vaccine_Clinic> vaccineClinics = unit.vaccine_ClinicRepository.SelectAll();
+                List<Vaccine_Clinic> vaccineClinics = unit.vaccine_ClinicRepository.FindBy(s=>s.Quantity>=1);
                 if (vaccineClinics == null || !vaccineClinics.Any())
                     return NotFound("No Data");
 
@@ -169,6 +169,32 @@ namespace PetBooK.PL.Controllers
                 return StatusCode(500, "An unexpected error occurred.");
             }
         }
+
+        [HttpPut("decreasetheNumberOfVaccine")]
+        public ActionResult UpdateVaccineClinicQuantity(int VaccineId, int ClinicID)
+        {
+            try
+            {
+                var existingVaccineClinic = unit.vaccine_ClinicRepository
+                .FirstOrDefault(c => c.VaccineID == VaccineId && c.ClinicID == ClinicID);
+
+                if (existingVaccineClinic == null)
+                    return NotFound("Vaccine Clinic not found");
+
+                existingVaccineClinic.Quantity--;
+
+                unit.vaccine_ClinicRepository.update(existingVaccineClinic);
+                unit.SaveChanges();
+                return Ok("Successfully updated");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An unexpected error occurred.");
+            }
+        }
+
+
+
 
         [HttpDelete]
         public ActionResult DeleteVaccineClinic(int VaccineId, int ClinicID)
