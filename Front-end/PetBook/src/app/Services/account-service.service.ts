@@ -17,7 +17,7 @@ export class AccountServiceService {
   }
 
   isAuthenticated=false;
-  baseUrl="https://localhost:7066/api/Account";
+  baseUrl="https://localhost:5226/api/Account";
   
   private CheckToken(): void {
     const token = localStorage.getItem("token");
