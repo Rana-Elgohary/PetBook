@@ -5,17 +5,18 @@ import { UserService } from '../../../Services/user.service';
 import { AccountServiceService } from '../../../Services/account-service.service';
 import { UserDetails } from '../../../Models/UserDetails';
 import { UserUpdateDetails } from '../../../Models/user-update-details';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-update-user-details',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './update-user-details.component.html',
   styleUrl: './update-user-details.component.css'
 })
 export class UpdateUserDetailsComponent {
 
-  user:UserUpdateDetails=new UserUpdateDetails(0,"","","","","","",0,"",null,0);
+  user:UserUpdateDetails=new UserUpdateDetails(0,"","","","","","",0,"",null,null,0);
   userid:number=parseInt(this.account.r.id);
   private imageUrlBase: string = 'https://localhost:7066/Resources/';
   constructor(public userService:UserService
@@ -43,14 +44,15 @@ export class UpdateUserDetailsComponent {
     });
   }
 
-  updateUserPhoto(event: any) {
+  updateUserPhoto(event: any): void {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = (e: any) => {
-        this.user.photo = e.target.result;
+        this.user.previewPhoto = e.target.result;
       };
       reader.readAsDataURL(file);
+      this.user.photo = file;
     }
   }
 }

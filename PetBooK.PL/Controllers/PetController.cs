@@ -2,10 +2,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using PetBooK.BL.DTO;
 using PetBooK.BL.UOW;
 using PetBooK.DAL.Models;
 using PetBooK.DAL.Services;
+using PetBooK.PL.Hubs;
 
 namespace PetBooK.PL.Controllers
 {
@@ -17,11 +19,15 @@ namespace PetBooK.PL.Controllers
         IMapper mapper;
         IFileService fileService;
 
-        public PetController(UnitOfWork unitOfWork, IMapper mapper, IFileService fileService)
+        // For SignalR to broadcast for frontend
+        IHubContext<PetHub> hubContext;
+
+        public PetController(UnitOfWork unitOfWork, IMapper mapper, IFileService fileService, IHubContext<PetHub> hubContext)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
             this.fileService = fileService;
+            this.hubContext = hubContext;
         }
 
         //------------------------------------------------------------------------------------------------------
@@ -137,6 +143,12 @@ namespace PetBooK.PL.Controllers
 
                 unitOfWork.petRepository.add(pet);
                 unitOfWork.SaveChanges();
+
+                if (pet.ReadyForBreeding == true)
+                {
+                    hubContext.Clients.All.SendAsync("PetWithReadyForBreedingTrue", pet);
+                }
+
                 return Ok(pet);
             }
         }
@@ -235,7 +247,16 @@ namespace PetBooK.PL.Controllers
                     unitOfWork.petRepository.update(existingPet);
                     unitOfWork.SaveChanges();
 
-                    return Ok(NewPet);
+                    if (existingPet.ReadyForBreeding == true)
+                    {
+                        hubContext.Clients.All.SendAsync("PetWithReadyForBreedingTrue", existingPet);
+                    }
+                    else if (existingPet.ReadyForBreeding == false)
+                    {
+                        hubContext.Clients.All.SendAsync("PetWithReadyForBreedingFalse", existingPet);
+                    }
+
+                return Ok(NewPet);
                 }
                 catch (Exception ex)
                 {
