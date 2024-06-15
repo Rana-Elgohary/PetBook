@@ -279,7 +279,7 @@ namespace PetBooK.PL.Controllers
         [HttpDelete("deletePetFromRequestsAndPendingR/{ID}")]
         public IActionResult deletePetFromRequests(int ID)
         {
-            List<Request_For_Breed> deletedRequestOfBreed = unit.request_For_BreedRepository.FindBy(s=>s.PetIDReceiver==ID ||s.PetIDSender==ID);
+            List<Request_For_Breed> deletedRequestOfBreed = unit.request_For_BreedRepository.FindBy(s=>s.PetIDReceiver==ID && s.Pair == false || s.PetIDSender==ID && s.Pair==false);
             if (deletedRequestOfBreed == null)
             {
                 return NotFound("the request you want to delete is not found");
