@@ -6,7 +6,9 @@ import { PetDetails } from '../../Models/pet-details';
 import { HttpClient } from '@angular/common/http';
 import { AutoCorrectService } from '../../Services/auto-correct.service';
 import { SignalRServiceService } from '../../Services/signal-rservice.service';
-import { Router } from '@angular/router';
+import { Router,ActivatedRoute } from '@angular/router';
+import { AccountServiceService } from '../../Services/account-service.service';
+
 @Component({
   selector: 'app-breed-search',
   standalone: true,
@@ -25,9 +27,16 @@ export class BreedSearchComponent implements OnInit {
   filterType: string = ''; // For filtering by dog or cat
   showSearchBar: boolean = false; // Variable to toggle search bar visibility
   noResults: boolean = false;
+  OwnderId:number= parseInt(this.AccountService.r.id);
 
   url: string = 'https://localhost:7066/Resources/';
-  constructor(private http: HttpClient, public autoCorrectService: AutoCorrectService, public signalRService:SignalRServiceService, public router:Router ) { }
+
+  constructor(private http: HttpClient, 
+    public autoCorrectService: AutoCorrectService, 
+    public signalRService:SignalRServiceService,
+     public router:Router,
+     public AccountService:AccountServiceService
+     ) { }
 
   ngOnInit() {
     this.signalRService.startConnection()
@@ -50,10 +59,8 @@ export class BreedSearchComponent implements OnInit {
     this.http.get<PetDetails[]>('https://localhost:7066/api/Pet/SearchPetsReadyForBreeding')
       .subscribe(
         pets => {
-          for (let index = 0; index < pets.length; index++) {
-            pets[index].photo = this.url + pets[index].photo;
-          }
-          this.pets = pets;
+          this.pets = pets.filter(pet => pet.userID !== this.OwnderId);
+          this.pets.forEach(pet => pet.photo = this.url + pet.photo);
           this.noResults = this.pets.length === 0;
         },
         error => {
@@ -82,7 +89,7 @@ export class BreedSearchComponent implements OnInit {
             for (let index = 0; index < pets.length; index++) {
               pets[index].photo = this.url + pets[index].photo;
             }
-            this.pets = pets;
+            this.pets = pets.filter(pet => pet.userID !== this.OwnderId);
             this.noResults = this.pets.length === 0;
           },
           error => {
@@ -96,7 +103,7 @@ export class BreedSearchComponent implements OnInit {
             for (let index = 0; index < pets.length; index++) {
               pets[index].photo = this.url + pets[index].photo;
             }
-            this.pets = pets;
+            this.pets = pets.filter(pet => pet.userID !== this.OwnderId);
             this.noResults = this.pets.length === 0;
           },
           error => {
@@ -119,7 +126,7 @@ export class BreedSearchComponent implements OnInit {
   hideSuggestions() {
     this.breedSuggestions = [];
   }
-
+  
   searchBar() {
     if (this.searchQuery.trim() !== '') {
       const encodedSearchQuery = encodeURIComponent(this.searchQuery);
@@ -132,6 +139,7 @@ export class BreedSearchComponent implements OnInit {
             for (let index = 0; index < this.pets.length; index++) {
               this.pets[index].photo = this.url + this.pets[index].photo;
             }
+            this.pets = breeds.filter(pet => pet.userID !== this.OwnderId);
             this.noResults = this.pets.length === 0;
           },
           error => {
