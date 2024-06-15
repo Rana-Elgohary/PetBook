@@ -27,7 +27,7 @@ export class MyRequestComponent implements OnInit {
 
   ngOnInit(): void {
    this.UserId= parseInt(this.AccountService.r.id);
-    this.myrequest.getallSendingReq(4).subscribe(data => {
+    this.myrequest.getallSendingReq(this.UserId).subscribe(data => {
       this.request = data;
       console.log(this.request);
     });
