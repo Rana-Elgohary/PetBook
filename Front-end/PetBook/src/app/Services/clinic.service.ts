@@ -12,8 +12,8 @@ import { ClinicLocation } from '../Models/clinic_location';
 })
 export class ClinicService {
   
-  private apiUrl = 'http://localhost:5226/api/Clinic'; 
-  private apiUrlPhoneNumber = 'http://localhost:5226/api/ClinicPhone/clinic'; 
+  private apiUrl = 'https://localhost:7066/api/Clinic'; 
+  private apiUrlPhoneNumber = 'https://localhost:7066/api/ClinicPhone/clinic'; 
   private apiUrl2 = 'https://localhost:7066/'; 
 
   constructor(private http: HttpClient) { }

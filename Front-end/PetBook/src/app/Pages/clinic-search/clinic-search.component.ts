@@ -51,13 +51,16 @@ export class ClinicSearchComponent implements OnInit{
       this.pageNumber=1;
       this.AllClinicsWithoutPagination.forEach(cl => 
         {
-          if(cl.name == this.clinicSearch.trim()){
+          if(cl.name.toLowerCase() == this.clinicSearch.trim().toLocaleLowerCase()){
             this.ClinicsByName.push(cl)
           }
         }
       )
       this.Clinics=this.ClinicsByName;
       this.ClinicsByName=[];
+      if(this.Clinics.length==0){
+        document.getElementById("HiddenParag")?.classList.remove("hidden")
+      }
       this.Flag=true;
       this.totalPages=this.Clinics.length;
     } else {
@@ -67,7 +70,9 @@ export class ClinicSearchComponent implements OnInit{
 
   BackToClinics(){
     this.ClinicsByName=[];
+    document.getElementById("HiddenParag")?.classList.add("hidden")
     this.getAllClinics() 
+    
   }
 
 

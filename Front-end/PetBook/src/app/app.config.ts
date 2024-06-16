@@ -7,6 +7,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule } from '@angular/material/dialog';
 import { AlreadyLoggedInDialogComponent } from './Components/already-logged-in-dialog/already-logged-in-dialog.component';
+import { HeaderComponent } from './Core/Header/header/header.component';
 
 
 export const appConfig: ApplicationConfig = {

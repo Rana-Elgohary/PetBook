@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { VaccineClinicsService } from '../../Services/vaccine-clinics.service';
 import { VaccineClinic } from '../../Models/vaccine-clinic';
 import { switchMap } from 'rxjs/operators';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ClinlicLocationService } from '../../Services/clinlic-location.service';
 import { VaccineClinicLocation } from '../../Models/vaccine-clinic-location';
 import { CommonModule, NgFor, NgForOf, NgIf } from '@angular/common';
@@ -17,19 +17,22 @@ import { FormsModule } from '@angular/forms';
 })
 export class SearchVaccineClicnicComponent implements OnInit {
   location:string="abu qier";
+  VaccineId :number |null=null;
   vaccineClinic: VaccineClinic[] = [];
   vaccineClinicLocation: VaccineClinicLocation[] = [];
 
   constructor(
     private route: ActivatedRoute,
     private vaccineClinicService: VaccineClinicsService,
-    private clinicLocation: ClinlicLocationService
+    private clinicLocation: ClinlicLocationService,
+    private routerr: Router
   ) {}
 
   ngOnInit(): void {
     this.route.paramMap.pipe(
       switchMap(params => {
         const id = +params.get('VaccineId')!; // Non-null assertion
+        this.VaccineId=id;
         return this.vaccineClinicService.GatAllClincsHasThisVaccine(id);
       })
     ).subscribe(
@@ -64,4 +67,8 @@ export class SearchVaccineClicnicComponent implements OnInit {
     return Array(rate).fill(0).map((x, i) => i);
   }
   
+  GoToClinic(clinicId: number): void {
+    this.routerr.navigate([`/ReservationVaccine/${clinicId}/${this.VaccineId}`]);
+
+  }
 }

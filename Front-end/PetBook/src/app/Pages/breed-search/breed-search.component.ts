@@ -5,7 +5,8 @@ import { BreedDetails } from '../../Models/breed-details';
 import { PetDetails } from '../../Models/pet-details';
 import { HttpClient } from '@angular/common/http';
 import { AutoCorrectService } from '../../Services/auto-correct.service';
-
+import { SignalRServiceService } from '../../Services/signal-rservice.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-breed-search',
   standalone: true,
@@ -26,9 +27,22 @@ export class BreedSearchComponent implements OnInit {
   noResults: boolean = false;
 
   url: string = 'https://localhost:7066/Resources/';
-  constructor(private http: HttpClient, public autoCorrectService: AutoCorrectService) { }
+  constructor(private http: HttpClient, public autoCorrectService: AutoCorrectService, public signalRService:SignalRServiceService, public router:Router ) { }
 
   ngOnInit() {
+    this.signalRService.startConnection()
+    this.signalRService.PetWithReadyForBreedTrueListener((pet) => {
+      pet.photo = this.url+pet.photo
+      this.pets.push(pet)
+    })
+    this.signalRService.PetWithReadyForBreedFalseListener((pet) => {
+      this.pets.forEach(element => {
+        if(element.petID == pet.petID){
+          this.pets = this.pets.filter(item => item !== element)
+        }
+      });
+    })
+
     this.fetchPets();
   }
 
@@ -47,7 +61,9 @@ export class BreedSearchComponent implements OnInit {
         }
       );
   }
-
+  chooseme(id:number){
+    this.router.navigateByUrl(`Pet/details/${id}`)
+  }
   SearchBar() {
     this.showSearchBar = !this.showSearchBar;
   }

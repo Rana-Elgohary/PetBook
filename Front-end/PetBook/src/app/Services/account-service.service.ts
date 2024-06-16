@@ -4,32 +4,41 @@ import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserClient } from '../Models/user-client';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AccountServiceService {
+  //////////////////////////////added by salma
+  private rSubject = new BehaviorSubject<{ UserName: string, Name: string, id: string, RoleId: string } | null>(null);
+  r$ = this.rSubject.asObservable();
+  isAuthenticated = !!localStorage.getItem("token"); // Check if token exists
+  ///////////////////////////////////////////////////
   // r ==> to get the claim results in this variable
   r: { UserName:string, Name:string, id:string, RoleId:string } = { UserName:"", Name:"", id:"", RoleId:"" };
   constructor(public http:HttpClient, private router: Router, private snackBar: MatSnackBar) 
   { 
     this.CheckToken()
   }
-
-  isAuthenticated=false;
-  baseUrl="https://localhost:5226/api/Account";
+////commented by salma
+  // isAuthenticated=false;
+  baseUrl="https://localhost:7066/api/Account";
   
   private CheckToken(): void {
     const token = localStorage.getItem("token");
     if (token) {
       this.isAuthenticated = true;
       this.r = jwtDecode(token);
-      console.log(this.r.UserName);
-      console.log(this.r.Name);
-      console.log(this.r.id);
-      console.log(this.r.RoleId);
+      // console.log(this.r.UserName);
+      // console.log(this.r.Name);
+      // console.log(this.r.id);
+      // console.log(this.r.RoleId);
+      //added by salma//////////////
+      this.rSubject.next(jwtDecode(token)); // Update rSubject with user data
     } else {
       this.isAuthenticated = false;
+      this.rSubject.next(null);
     }
   }
 
@@ -43,7 +52,9 @@ export class AccountServiceService {
       try {
         this.r = jwtDecode(d);
         console.log(this.r);
-
+        /////added by salma///////////
+        this.rSubject.next(this.r);
+        ////////////////////////////////
         this.router.navigateByUrl("");
       } catch (error) {
         console.error('Failed to decode token:', error);
@@ -81,6 +92,8 @@ export class AccountServiceService {
   logout(){
     this.isAuthenticated=false;
     localStorage.removeItem("token");
+    //added by salma////////////////
+    this.rSubject.next(null);
   }
 
   SignUp(user:UserClient){

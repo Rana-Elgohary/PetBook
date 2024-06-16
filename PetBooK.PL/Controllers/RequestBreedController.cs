@@ -352,5 +352,27 @@ namespace PetBooK.PL.Controllers
             }
 
         }
+        //--------------Delete pairs when user click unPair---------------//
+        [HttpDelete("deletePiar/{ID}")]
+        public IActionResult deletePair(int ID)
+        {
+            List<Request_For_Breed> deletedRequestOfBreed = unit.request_For_BreedRepository.FindBy(s => s.PetIDReceiver == ID || s.PetIDSender == ID);
+            if (deletedRequestOfBreed == null)
+            {
+                return NotFound("the request you want to delete is not found");
+            }
+            else
+            {
+                foreach (var item in deletedRequestOfBreed)
+                {
+                    if (item.Pair == true)
+                    {
+                        unit.request_For_BreedRepository.deleteEntity(item);
+                        unit.SaveChanges();
+                    }
+                }
+                return Ok("deleted");
+            }
+        }
     }
 }

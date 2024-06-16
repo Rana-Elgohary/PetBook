@@ -1,4 +1,4 @@
-<nav class="m-3 h-[100px] bg-white rounded-3xl">
+<!-- <nav class="m-3 h-[100px] bg-white rounded-3xl">
     <div class="flex justify-between align-middle pt-5">
         <div class="mt-3.5 px-7">
             <p class="font-glutin text-3xl">PetBook</p>
@@ -11,7 +11,7 @@
                 }
                 <li><a class="" routerLink="/BreedSearch">Breed</a></li>
                 <li><a class="" routerLink="/clinics">Clinic</a></li>
-                <li><a class="" routerLink="/Vaccine">Vaccine</a></li>
+                <li><a class="" routerLink="/vaccines">Vaccine</a></li>
                 @if(id != ""){
                     <button routerLink="pendingRequest">
                         <svg class="w-6 h-6 text-gray-800 dark:text-white m-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 21">
@@ -26,4 +26,63 @@
             </ul>
         </div>
     </div>
+</nav> -->
+<nav class="m-3 bg-white rounded-3xl">
+    <div class="flex justify-between items-center px-4 md:px-6 lg:px-8 py-4">
+        <div class="flex-shrink-0">
+            <p class="font-glutin text-3xl">PetBook</p>
+        </div>
+        <div class="flex md:hidden">
+            <button id="mobile-menu-toggle" class="mobile-menu-button">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
+            </button>
+        </div>
+        <div class="hidden md:flex items-center space-x-4">
+            <ul class="flex justify-between space-x-4 text-xl">
+                <li><a class="" routerLink="">Home</a></li>
+                <ng-container *ngIf="user">
+                    <li><a class="" routerLink="/Account">Account</a></li>
+                    <li><a class="" routerLink="/BreedSearch">Breed</a></li>
+                    <li><a class="" routerLink="/clinics">Clinic</a></li>
+                    <li><a class="" routerLink="/vaccines">Vaccine</a></li>
+                    <li><button class="flex items-center" routerLink="/pendingRequest">
+                        <svg class="w-6 h-6 text-gray-800 dark:text-white m-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 21">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 3.464V1.1m0 2.365a5.338 5.338 0 0 1 5.133 5.368v1.8c0 2.386 1.867 2.982 1.867 4.175C15 15.4 15 16 14.462 16H1.538C1 16 1 15.4 1 14.807c0-1.193 1.867-1.789 1.867-4.175v-1.8A5.338 5.338 0 0 1 8 3.464ZM4.54 16a3.48 3.48 0 0 0 6.92 0H4.54Z"/>
+                        </svg>
+                    </button></li>
+                    <li><a class="rounded-lg py-1 px-2 text-xl cursor-pointer tracking-wider bg-[#FDBD68] hover:bg-[#ce7604]" (click)="Logout()" routerLink="">Logout</a></li>
+                </ng-container>
+                <ng-container *ngIf="!user">
+                    <li><a class="" routerLink="/BreedSearch">Breed</a></li>
+                    <li><a class="" routerLink="/clinics">Clinic</a></li>
+                    <li><a class="" routerLink="/vaccines">Vaccine</a></li>
+                    <li><a class="" routerLink="/UserSignUp">Register</a></li>
+                    <li><a class="rounded-lg py-1 px-2 text-xl cursor-pointer tracking-wider bg-[#FDBD68] hover:bg-[#ce7604]" routerLink="/Login">Login</a></li>
+                </ng-container>
+            </ul>
+        </div>
+    </div>
+    <div id="mobile-menu" class="hidden md:hidden">
+        <ul class="flex flex-col space-y-4 text-xl">
+            <li><a class="block py-2 ml-2" routerLink="">Home</a></li>
+            <ng-container *ngIf="user">
+                <li><a class="block py-2 ml-2" routerLink="/Account">Account</a></li>
+                <li><a class="block py-2 ml-2" routerLink="/BreedSearch">Breed</a></li>
+                <li><a class="block py-2 ml-2" routerLink="/clinics">Clinic</a></li>
+                <li><a class="block py-2 ml-2" routerLink="/vaccines">Vaccine</a></li>
+                <li><button class="block py-2 ml-2" routerLink="/pendingRequest">Pending Requests</button></li>
+                <li><a class="block py-2 rounded-lg text-center cursor-pointer tracking-wider bg-[#FDBD68] hover:bg-[#ce7604]" (click)="Logout()">Logout</a></li>
+            </ng-container>
+            <ng-container *ngIf="!user">
+                <li><a class="block py-2 ml-2" routerLink="/BreedSearch">Breed</a></li>
+                <li><a class="block py-2 ml-2" routerLink="/clinics">Clinic</a></li>
+                <li><a class="block py-2 ml-2" routerLink="/vaccines">Vaccine</a></li>
+                <li><a class="block py-2 ml-2" routerLink="/UserSignUp">Register</a></li>
+                <li><a class="block py-2 rounded-lg text-center cursor-pointer tracking-wider bg-[#FDBD68] hover:bg-[#ce7604]" routerLink="/Login">Login</a></li>
+            </ng-container>
+        </ul>
+    </div>
 </nav>
+

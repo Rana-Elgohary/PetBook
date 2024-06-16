@@ -11,6 +11,7 @@ export class UserPetInfo {
         public sex: string,
         public type:string ,
         public userID: number,
-        public pairWith: any
+        public pairWith: any,
+        public isReadyForBreeding?: boolean
     ){};
 }

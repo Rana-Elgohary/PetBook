@@ -10,6 +10,7 @@ export class UserUpdateDetails {
     public age: number,
     public sex: string,
     public photo?: File|string|null,
+    public previewPhoto?: string | ArrayBuffer | null,
     public roleID?: number
       ){}
 }
