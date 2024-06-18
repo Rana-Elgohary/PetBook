@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { InputSectionComponent } from '../../Components/input-section/input-section.component';
 import { AccountServiceService } from '../../Services/account-service.service';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-user-login',
@@ -14,7 +14,14 @@ export class UserLoginComponent {
   email:string = ""
   password:string = ""
 
-  constructor(public accountService:AccountServiceService){  }
+  constructor(public accountService:AccountServiceService, private route: ActivatedRoute){  }
+
+  ngOnInit(){
+    this.route.queryParams.subscribe(params => {
+      this.email = params['email'] || '';
+      this.password = params['password'] || '';
+    });
+  }
 
   Login(){
     this.accountService.Login(this.email, this.password)

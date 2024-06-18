@@ -42,9 +42,9 @@ export class PetRegisterComponent implements OnInit {
     ageInMonth: 0,
     sex: "",
     userID:1,
-    readyForBreeding: false,
+    readyForBreeding: null,
     type: "",
-    other: "",
+    other: null,
   }
 
   breedPet:AddBreedToPet={
@@ -143,7 +143,7 @@ export class PetRegisterComponent implements OnInit {
     const { field, value } = event;
     if (field in this.Pet) {
       (this.Pet as any)[field] = value;
-      if (value) {
+      if (field === 'other' && value) {
         this.validationErrorsForPet[field] = false;
       }
     }

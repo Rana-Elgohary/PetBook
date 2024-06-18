@@ -91,9 +91,11 @@ export class AccountServiceService {
     formData.append('phone', user.phone);
     formData.append('userName', user.userName);
     formData.append('location', user.location);
-    formData.append('age', user.age.toString()); // Convert age to string before appending
+    if(user.age !== null){
+      formData.append('age', user.age.toString());
+    }
     formData.append('sex', user.sex);
-    formData.append('roleID', user.roleID.toString()); // Convert roleID to string before appending
+    formData.append('roleID', user.roleID.toString());
 
     if (user.photo) {
       formData.append('photo', user.photo);
