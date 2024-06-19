@@ -128,7 +128,7 @@ choosePet() {
         );
         this.clicnicVaccineSer.decreaseNumberOfVaccine(this.VaccineID,this.clinicID)
     } else {
-      alert('Please ensure all necessary information is provided');
+      alert('Please ensure all necessary information is provided and choose pet');
     }
   }
 
