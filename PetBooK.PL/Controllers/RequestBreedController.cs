@@ -282,17 +282,14 @@ namespace PetBooK.PL.Controllers
             List<Request_For_Breed> deletedRequestOfBreed = unit.request_For_BreedRepository.FindBy(s=>s.PetIDReceiver==ID && s.Pair == false || s.PetIDSender==ID && s.Pair==false);
             if (deletedRequestOfBreed == null)
             {
-                return NotFound("the request you want to delete is not found");
+                return Ok("the request you want to delete is not found");
             }
             else
             {
                 foreach (var item in deletedRequestOfBreed)
                 {
-                    if (item.Pair == false)
-                    {
                         unit.request_For_BreedRepository.deleteEntity(item);
                         unit.SaveChanges();
-                    }
                 }
                 return Ok("deleted");
             }
