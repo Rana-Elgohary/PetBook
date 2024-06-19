@@ -337,6 +337,11 @@ namespace PetBooK.PL.Controllers
                 //delete pet 
 
                 Pet pet = unitOfWork.petRepository.selectbyid(id);
+                if (pet.ReadyForBreeding == true)
+                {
+                    pet.ReadyForBreeding = false;
+                    hubContext.Clients.All.SendAsync("PetWithReadyForBreedingFalse", pet);
+                }
                 unitOfWork.petRepository.deleteEntity(pet);
                 fileService.DeleteFile(pet.Photo); //Edit By Amira
                 unitOfWork.SaveChanges();
