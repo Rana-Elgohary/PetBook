@@ -5,6 +5,8 @@ import { AccountServiceService } from '../../Services/account-service.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-user-sign-up',
@@ -14,12 +16,12 @@ import { Router } from '@angular/router';
   styleUrl: './user-sign-up.component.css'
 })
 export class UserSignUpComponent {
-  user: UserClient = new UserClient('', '', '', '', '', '', NaN, '', null, 2);
+  user: UserClient = new UserClient('', '', '', '', '', '', null, '', null, 2);
 
   // Validation flags
   validationErrors: { [key in keyof UserClient]?: boolean | string | null } = {};
 
-  constructor(public accountService:AccountServiceService, public router:Router){  }
+  constructor(public accountService:AccountServiceService, public router:Router, private snackBar: MatSnackBar){  }
 
   isFormValid(): boolean {
     let isValid = true;
@@ -27,7 +29,7 @@ export class UserSignUpComponent {
     for (const key in this.user) {
       if (this.user.hasOwnProperty(key)) {
         const field = key as keyof UserClient;
-        if (!this.user[field]) {
+        if (!this.user[field] && field !== 'age' && field !== "photo") {
           this.validationErrors[field] = true;
           isValid = false;
         } else {
@@ -43,11 +45,25 @@ export class UserSignUpComponent {
     if (this.isFormValid()) {
       this.accountService.SignUp(this.user).subscribe({
         next: (response) => {
-          console.log(this.user)
-          this.router.navigate(['/Login']);
+          this.router.navigate(['/Login'], { queryParams: { email: this.user.email, password: this.user.password } });
         },
-        error: (err) => {
-          console.log(err);
+        error: (err: HttpErrorResponse) => {
+          if (err.status === 409) {
+            // Show a snackbar for email already exists
+            this.snackBar.open('Email already exists, please use a different email.', 'Close', {
+              duration: 5000, // Duration in milliseconds
+              verticalPosition: 'top' // Position of the snackbar
+            });
+          } else if (err.status === 400) {
+            // Log the validation errors from the server
+            console.error('Validation errors:', err.error.errors);
+            this.snackBar.open('Validation errors occurred. Please check your input.', 'Close', {
+              duration: 5000, // Duration in milliseconds
+              verticalPosition: 'top' // Position of the snackbar
+            });
+          } else {
+            console.log(err);
+          }
         }
       });
     }

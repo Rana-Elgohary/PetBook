@@ -6,7 +6,7 @@ export class UserClient {
   public phone: string,
   public userName: string,
   public location: string,
-  public age: number,
+  public age: number|null,
   public sex: string,
   public photo: File|null,
   public roleID: number
