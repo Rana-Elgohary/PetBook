@@ -311,6 +311,19 @@ namespace PetBooK.BL.Reo
 
             return query.ToList();
         }
+        public List<TEntity> FindByIdInclude(int Id, string str,params Expression<Func<TEntity, object>>[] includes)
+        {
+            IQueryable<TEntity> query = db.Set<TEntity>();
+
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+
+            return query.Where(e => EF.Property<int>(e, str) == Id).ToList();
+        }
+
+
 
     }
 }
