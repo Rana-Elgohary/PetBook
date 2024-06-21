@@ -50,4 +50,8 @@ export class UserPetInfoServiceService {
       }
       return this.http.put<AddPet>(this.baseURL,formData);
     }
+
+    deletePet(id:number): Observable<any>{
+      return this.http.delete<any>(`${this.baseURL}/${id}`);
+    }
 }

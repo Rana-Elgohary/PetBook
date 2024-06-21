@@ -65,9 +65,6 @@ export class UserProfilePetInfoComponent implements OnInit {
     });
   }
 
-  ngAfterViewInit() {
-    this.Upload();
-  }
 
   navigateToAdd() {
     this.router.navigateByUrl("PetRegister");
@@ -111,16 +108,37 @@ UnPair(id: number) {
     if (result.isConfirmed) {
       this.requestForBreedService.deletePair(id).subscribe({
         next: (d) => {
-          console.log(d); 
+          console.log(d);
         }
-
-      });
+      }); 
       Swal.fire('Unpaired!', 'The pet has been unpaired.', 'success');
       this.Upload();
-    }
+      }
   });
 }
 
+deletePet(id:number){
+  Swal.fire({
+    title: 'Are you sure?',
+    text: 'Do you want to delete this pet?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, delete it!',
+    cancelButtonText: 'No, keep it'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      this.userpetInfoService.deletePet(id).subscribe({
+        next: (d) => {
+          console.log(d); 
+          this.Upload();
+        }
+      });
+      Swal.fire('Delete!', 'The pet has been deleted.', 'success');
+      
+    }
+   
+  });
+}
 
   navigateToEdit(id: number) {
     this.router.navigateByUrl(`userPetEdit/${id}`);
