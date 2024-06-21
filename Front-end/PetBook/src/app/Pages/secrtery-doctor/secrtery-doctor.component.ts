@@ -30,7 +30,6 @@ export class SecrteryDoctorComponent {
     if (this.id) {
       this.clinicService.getDoctors(this.id).subscribe(data => {
         this.doctor = data;
-        console.log(this.doctor);
       });
     }
   }
@@ -64,13 +63,11 @@ export class SecrteryDoctorComponent {
 
     dialogRef.afterClosed().subscribe((newDoctor: DoctorUser) => {
       if(newDoctor&&this.id){
-        console.log(newDoctor);
         this.doctorService.addUserAndDoctor(newDoctor,this.id).subscribe(data => {
           if(this.id)
           this.clinicService.getDoctors(this.id).subscribe(data => {
             this.doctor = [];
             this.doctor = data;
-            console.log(this.doctor);
           });
 
         }, error => {

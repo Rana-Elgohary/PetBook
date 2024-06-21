@@ -21,11 +21,9 @@ export class SecrteryLocationComponent {
   constructor(private clinicLcServ: ClinlicLocationService, private dialog: MatDialog) { }
 
   ngOnInit(): void {
-    console.log(this.id);
     if (this.id) {
       this.clinicLcServ.getallLocationByClinicId(this.id).subscribe(data => {
         this.Locations = data;
-        console.log(this.Locations);
       });
     }
   }
@@ -41,12 +39,10 @@ export class SecrteryLocationComponent {
 
   saveLocation() {
     if (this.id&&this.newLocation) {
-      console.log(this.id,this.newLocation);
       this.clinicLcServ.addLocation(this.id, this.newLocation).subscribe((data) => {
         if (this.id) {
           this.clinicLcServ.getallLocationByClinicId(this.id).subscribe(data => {
             this.Locations = data;
-            console.log(this.Locations);
           });
         }       
         this.showAddLocation = false;
@@ -61,9 +57,7 @@ export class SecrteryLocationComponent {
   delete(loc: string) {
     if (this.id) {
       this.clinicLcServ.deleteClinicLocation(this.id, loc).subscribe(data => {
-        console.log(data);
         this.Locations = this.Locations.filter(l => l.location !== loc);
-        console.log(this.Locations);
       });
     }
   }

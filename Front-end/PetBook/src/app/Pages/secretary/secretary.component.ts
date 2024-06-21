@@ -10,11 +10,12 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SecrteryDoctorComponent } from '../secrtery-doctor/secrtery-doctor.component';
 import { SecrteryLocationComponent } from '../secrtery-location/secrtery-location.component';
+import { SecrteryPhonesComponent } from '../secrtery-phones/secrtery-phones.component';
 
 @Component({
   selector: 'app-secretary',
   standalone: true,
-  imports: [RouterOutlet, RouterLink ,SecrteryclinicComponent,FormsModule,CommonModule,SecrteryDoctorComponent,SecrteryLocationComponent] ,
+  imports: [RouterOutlet, RouterLink ,SecrteryclinicComponent,FormsModule,CommonModule,SecrteryDoctorComponent,SecrteryLocationComponent,SecrteryPhonesComponent] ,
   templateUrl: './secretary.component.html',
   styleUrl: './secretary.component.css'
 })
@@ -40,9 +41,7 @@ export class SecretaryComponent implements OnInit {
       this.SecrteryclinicInfo = data;
       this.Secretary=data.secretaryID;
       this.clinicId=data.clinicID;
-      console.log(this.clinicId);
       this.loadUserData(data.secretaryID);
-      console.log(this.SecrteryclinicInfo);
     });
   }
 
@@ -50,7 +49,6 @@ export class SecretaryComponent implements OnInit {
     this.userService.getUserById(userId).subscribe(user => {
       user.photo = this.imageUrlBase + user.photo;
       this.User = user;
-      console.log(user);
     });
   }
 

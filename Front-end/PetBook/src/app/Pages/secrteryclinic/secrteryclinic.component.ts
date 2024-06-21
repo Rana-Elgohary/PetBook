@@ -21,7 +21,6 @@ export class SecrteryclinicComponent {
   constructor(private clinicService: ClinicService,private dialog: MatDialog) { }
 
   ngOnInit(): void {
-    console.log(this.id);
     if (this.id) {
       this.clinicService.getClinicbyId(this.id).subscribe(data => {
         this.clinic = data;
