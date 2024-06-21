@@ -43,8 +43,11 @@ export class AccountServiceService {
       try {
         this.r = jwtDecode(d);
         console.log(this.r);
-
+        if(this.r.RoleId=="2")
         this.router.navigateByUrl("");
+      else 
+      if(this.r.RoleId=="3")
+        this.router.navigateByUrl("Secretary");
       } catch (error) {
         console.error('Failed to decode token:', error);
       }

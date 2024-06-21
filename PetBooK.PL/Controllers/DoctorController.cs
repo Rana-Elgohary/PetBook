@@ -88,9 +88,37 @@ namespace PetBooK.PL.Controllers
         }
 
 
+        [HttpPost("adduserfirstthenadddoctor")]
+        public ActionResult AddUserThenDoctor(int ClinicId,DoctorUser doctoraddDTO )
+        {
+            if (doctoraddDTO == null)
+                return BadRequest();
+            else
+            {
+                User us =mapper.Map<User>(doctoraddDTO);
+                us.RoleID = 1;
+                unitOfWork.userRepository.add(us);
+                unitOfWork.SaveChanges();
+                User user=  unitOfWork.userRepository.FirstOrDefault(u => u.UserName == doctoraddDTO.UserName);
+
+                Doctor doctor = mapper.Map<Doctor>(doctoraddDTO);
+                doctor.DoctorID = user.UserID;
+                unitOfWork.doctorRepository.add(doctor);
+                unitOfWork.SaveChanges();
+
+                Clinic_Doctor cD=new Clinic_Doctor();
+                cD.ClinicID = ClinicId;
+                cD.DoctorID=doctor.DoctorID;
+                unitOfWork.clinic_DoctorRepository.add(cD);
+                unitOfWork.SaveChanges();
+                return Ok(doctoraddDTO);
+            }
+        }
+
+
         //-------------------------Update------------------------------
         [HttpPut]
-            public ActionResult UpdateDoctor(DoctorAddDTO doctorDTO)
+            public ActionResult UpdateDoctor(DoctorDTO doctorDTO)
             {
                 if (doctorDTO == null)
                     return BadRequest();
@@ -98,6 +126,9 @@ namespace PetBooK.PL.Controllers
                 {
 
                     Doctor doctor = mapper.Map<Doctor>(doctorDTO);
+                    User us=unitOfWork.userRepository.selectbyid(doctor.DoctorID);
+                    us.Name = doctorDTO.Name;
+                    unitOfWork.userRepository.update(us);
                     unitOfWork.doctorRepository.update(doctor);
                     unitOfWork.SaveChanges();
                     return Ok(doctorDTO);

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import * as signalR from '@microsoft/signalr'
+import * as signalR from '@microsoft/signalr';
 import { AddPet } from '../Models/add-pet';
 @Injectable({
   providedIn: 'root'
