@@ -62,6 +62,30 @@ namespace PetBooK.PL.Controllers
             }
         }
 
+
+        [HttpGet("getallinfoaboutThisClinicBySID/{id}")]
+        public ActionResult GetAllInfoById(int id)
+        {
+            try
+            {
+                var secretary = unit.secretaryRepository.SelectByIDInclude(id, "SecretaryID", s => s.SecretaryNavigation, s => s.Clinic );
+
+                if (secretary == null)
+                {
+                    return NotFound();
+                }
+                var sc = mapper.Map<SecretaryDTO>(secretary);
+
+                return Ok(sc);
+            }
+            catch (Exception ex)
+            {
+
+
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
+        }
+
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {

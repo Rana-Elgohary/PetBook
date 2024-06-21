@@ -12,7 +12,7 @@ import { ClinicLocation } from '../Models/clinic_location';
 })
 export class ClinicService {
   
-  private apiUrl = 'http://localhost:5226/api/Clinic'; 
+  private apiUrl = 'https://localhost:7066/api/Clinic'; 
   private apiUrlPhoneNumber = 'http://localhost:5226/api/ClinicPhone/clinic'; 
   private apiUrl2 = 'https://localhost:7066/'; 
 
@@ -49,5 +49,10 @@ export class ClinicService {
   
   getClinicsPhoneNumbers(id:number){
     return this.http.get<ClinicPhones[]>(`${this.apiUrlPhoneNumber}/${id}`)
+  }
+
+  updateClinic(clinicData: Clinic): Observable<Clinic> {
+    console.log(clinicData);
+    return this.http.put<Clinic>(this.apiUrl, clinicData);
   }
 }

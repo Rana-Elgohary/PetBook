@@ -97,7 +97,9 @@ namespace PetBooK.BL.Config
              .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.SecretaryNavigation.Phone))
              .ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.SecretaryNavigation.Location))
              .ForMember(dest => dest.ClinicID, opt => opt.MapFrom(src => src.Clinic.ClinicID))
-             .ForMember(dest => dest.ClinicName, opt => opt.MapFrom(src => src.Clinic.Name));
+             .ForMember(dest => dest.ClinicName, opt => opt.MapFrom(src => src.Clinic.Name))
+             .ForMember(dest => dest.BankAccount, opt => opt.MapFrom(src => src.Clinic.BankAccount));
+            
 
             CreateMap<Clinic_Phone, ClinicPhoneDTO>();
             CreateMap<Clinic_Phone, ClinicPhoneUpdateDTO>();
@@ -142,7 +144,8 @@ namespace PetBooK.BL.Config
 
             //Mapping Reservation For Vaccine:
             CreateMap<Reservation_For_Vaccine, ReservationForVaccineDTO>();
-            CreateMap<ReservationForVaccineAddDTO, Reservation_For_Vaccine>();
+            CreateMap<ReservationForVaccineAddDTO, Reservation_For_Vaccine
+                >();
             CreateMap<Doctor, DoctorDTO>()
               .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.DoctorNavigation.Name));
 
@@ -154,9 +157,15 @@ namespace PetBooK.BL.Config
           .ForMember(dest => dest.BankAccount, opt => opt.MapFrom(src => src.Clinic.BankAccount));
 
 
+
+            CreateMap<User, DoctorUser>();
+            CreateMap<DoctorUser,User>();
+            CreateMap<Doctor, DoctorUser>();
+            CreateMap<DoctorUser, Doctor>();
+
             ///map to get clinic by it's location and numbers
-           // CreateMap<Clinic, ClinicByLocationsDTO>()
-           //.ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.Clinic_Locations.Select(cl => cl.Location).FirstOrDefault()));
+            // CreateMap<Clinic, ClinicByLocationsDTO>()
+            //.ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.Clinic_Locations.Select(cl => cl.Location).FirstOrDefault()));
         }
     }
 }
