@@ -31,22 +31,25 @@
             <label class="block text-gray-700 mr-5">Pair With:</label>
             <div class="mb-4 flex">
             <input type="text" class="mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" [value]="item.pairWith" readonly>
-            <button class="bg-[#FDBD68] hover:bg-[#ce7604] text-white font-bold w-20 ml-2 px-2 rounded-lg"
+            <button  class="bg-[#FDBD68] hover:bg-[#ce7604] text-white font-bold w-20 ml-2 px-2 rounded-lg"
                         [disabled]="item.pairWith === 'I\'m not paired'" (click)="UnPair(item.petID)">Unpair</button>
             <!-- <button class="bg-[#FDBD68] hover:bg-[#ce7604] text-white font-bold w-20 ml-2  px-2 rounded-lg" (click)="UnPair(item.petID)">Unpair</button>   -->
             </div>
           <div class="mb-4">
-            <label class="block text-gray-700">Other Info:</label>
+            <label class="block text-gray-700">Other Information:</label>
             <input type="text" class="mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" [value]="item.other" readonly>
           </div>
           <div class="flex justify-between">
             <div class="flex justify-center">
-              <button class="bg-[#FDBD68] hover:bg-[#ce7604] text-white font-bold py-2 px-4 rounded-lg" (click)="toggleBreedingStatus(item)">
+              <button class="bg-[#FDBD68] hover:bg-[#ce7604] text-white font-bold py-2 px-4 rounded-lg"  [disabled]="item.pairWith !== 'I\'m not paired'" (click)="toggleBreedingStatus(item)">
                 {{ item.isReadyForBreeding ? 'Not Ready For Breeding' : 'Ready For Breeding' }}
               </button>
             </div>
             <div class="flex justify-center">
               <button class="bg-[#FDBD68] hover:bg-[#ce7604] text-white font-bold py-2 px-4 rounded-lg" (click)="navigateToEdit(item.petID)">Edit</button>
+            </div>
+            <div class="flex justify-center">
+              <button class="bg-red-700 hover:bg-red-950 text-white font-bold py-2 px-4 rounded-lg" (click)="deletePet(item.petID)">Delete</button>
             </div>
           </div>
         </div>

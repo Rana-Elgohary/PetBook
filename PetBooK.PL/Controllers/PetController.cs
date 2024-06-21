@@ -285,7 +285,7 @@ namespace PetBooK.PL.Controllers
 
             //----------------------------------------------------------------------------------------------------
 
-            [HttpDelete]
+            [HttpDelete("{id}")]
 
             public IActionResult DeleteById(int id)
             {
