@@ -11,11 +11,12 @@ import { CommonModule } from '@angular/common';
 import { SecrteryDoctorComponent } from '../secrtery-doctor/secrtery-doctor.component';
 import { SecrteryLocationComponent } from '../secrtery-location/secrtery-location.component';
 import { SecrteryPhonesComponent } from '../secrtery-phones/secrtery-phones.component';
+import { SecretaryVaccineComponent } from '../vaccine_Secretary/secretary-vaccine/secretary-vaccine.component';
 
 @Component({
   selector: 'app-secretary',
   standalone: true,
-  imports: [RouterOutlet, RouterLink ,SecrteryclinicComponent,FormsModule,CommonModule,SecrteryDoctorComponent,SecrteryLocationComponent,SecrteryPhonesComponent] ,
+  imports: [RouterOutlet, RouterLink , SecrteryclinicComponent,FormsModule,CommonModule,SecrteryDoctorComponent,SecrteryLocationComponent,SecrteryPhonesComponent,SecretaryVaccineComponent] ,
   templateUrl: './secretary.component.html',
   styleUrl: './secretary.component.css'
 })

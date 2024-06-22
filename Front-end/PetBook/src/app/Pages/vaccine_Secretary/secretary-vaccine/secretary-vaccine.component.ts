@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { NgFor } from '@angular/common';
@@ -18,7 +18,7 @@ import { VaccineCliniccAdd } from '../../../Models/vaccine-clinicc-add';
   styleUrl: './secretary-vaccine.component.css'
 })
 export class SecretaryVaccineComponent {
-  ClinicId: number =0 ;
+  @Input() ClinicId: number | undefined;
   vaccines: any[] = [];
 
   constructor(private route: ActivatedRoute, private vaccineClinicsService: VaccineClinicsService,private dialog: MatDialog) { }
@@ -26,11 +26,9 @@ export class SecretaryVaccineComponent {
   
 
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      const clinicId = +params['ClinicId']; 
-      this.ClinicId=clinicId 
-      this.fetchVaccines(clinicId);
-    });
+     if(this.ClinicId)
+      this.fetchVaccines(this.ClinicId);
+  
 
     }
   
@@ -80,7 +78,7 @@ export class SecretaryVaccineComponent {
     });
   
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
+      if (result&&this.ClinicId) {
         this.vaccineClinicsService.deleteVaccine(vaccineId,this.ClinicId).subscribe(
           (response: any) => {
             console.log('Vaccine deleted successfully:', response);
