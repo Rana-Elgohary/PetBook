@@ -1,5 +1,11 @@
 @media screen and (max-width:1000px) {
     .cards{
-        width:50%;
+        width:40%;
     }
 }
+/*
+@media screen and (max-width:1000px) and (min-wdth:650px){
+    .Section{
+        margin: auto;
+    }
+} */
