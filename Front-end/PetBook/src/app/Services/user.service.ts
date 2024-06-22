@@ -18,6 +18,13 @@ export class UserService {
     return this.http.get<UserDetails>(`${this.baseurl}/id`, {params});
   }
 
+  
+  getuserinfo(id: number) {
+    return this.http.get<UserDetails>(this.baseurl + "/"+id).pipe(
+    );
+  }
+
+
   updateUser(id: number, user: UserUpdateDetails) {
     const formData = new FormData();
 

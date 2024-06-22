@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using PetBooK.BL.DTO;
 using PetBooK.BL.UOW;
 using PetBooK.DAL.Models;
+using PetBooK.PL.Hubs;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Security.Cryptography;
@@ -17,10 +19,14 @@ namespace PetBooK.PL.Controllers
         UnitOfWork unit;
         IMapper mapper;
 
-        public RequestBreedController(UnitOfWork unit, IMapper mapper)
+        // For SignalR to broadcast for frontend
+        IHubContext<PetHub> hubContext;
+
+        public RequestBreedController(UnitOfWork unit, IMapper mapper, IHubContext<PetHub> hubContext)
         {
             this.unit = unit;
             this.mapper = mapper;
+            this.hubContext = hubContext;
         }
 
         //-------Get All Requests of breed--------
@@ -282,17 +288,14 @@ namespace PetBooK.PL.Controllers
             List<Request_For_Breed> deletedRequestOfBreed = unit.request_For_BreedRepository.FindBy(s=>s.PetIDReceiver==ID && s.Pair == false || s.PetIDSender==ID && s.Pair==false);
             if (deletedRequestOfBreed == null)
             {
-                return NotFound("the request you want to delete is not found");
+                return Ok("the request you want to delete is not found");
             }
             else
             {
                 foreach (var item in deletedRequestOfBreed)
                 {
-                    if (item.Pair == false)
-                    {
                         unit.request_For_BreedRepository.deleteEntity(item);
                         unit.SaveChanges();
-                    }
                 }
                 return Ok("deleted");
             }
@@ -314,6 +317,7 @@ namespace PetBooK.PL.Controllers
             pet.ReadyForBreeding = false;
             unit.petRepository.update(pet);
             unit.SaveChanges();
+            hubContext.Clients.All.SendAsync("PetWithReadyForBreedingFalse", pet);
             Console.WriteLine($"Pet with ID {id} marked as not ready for breeding");
             return Ok();
         }
@@ -331,6 +335,7 @@ namespace PetBooK.PL.Controllers
             pet.ReadyForBreeding = true;
             unit.petRepository.update(pet);
             unit.SaveChanges();
+            hubContext.Clients.All.SendAsync("PetWithReadyForBreedingTrue", pet);
             Console.WriteLine($"Pet with ID {id} marked as ready for breeding");
             return Ok();
         }

@@ -101,7 +101,7 @@ namespace PetBooK.PL.Controllers
 
         }
 
-        //-----------------------------------
+        //-------------------------------------------------------------------------------------
 
         [HttpGet("SearchCatsReadyForBreeding")]
         public IActionResult GetAllCatsReadyForBreeding()
@@ -112,7 +112,7 @@ namespace PetBooK.PL.Controllers
             var petDTOs = mapper.Map<List<PetGetDTO>>(pets);
             return Ok(petDTOs);
         }
-        //-----------------------------------
+        //--------------------------------------------------------------------------------------
         [HttpPost] //Edit By Amira
         public async Task<IActionResult> PostPet([FromForm] PetAddDTO NewPet)
         {
@@ -255,7 +255,7 @@ namespace PetBooK.PL.Controllers
                     {
                         hubContext.Clients.All.SendAsync("PetWithReadyForBreedingFalse", existingPet);
                     }
-
+                     
                 return Ok(NewPet);
                 }
                 catch (Exception ex)
@@ -285,7 +285,7 @@ namespace PetBooK.PL.Controllers
 
             //----------------------------------------------------------------------------------------------------
 
-            [HttpDelete]
+            [HttpDelete("{id}")]
 
             public IActionResult DeleteById(int id)
             {
@@ -337,6 +337,11 @@ namespace PetBooK.PL.Controllers
                 //delete pet 
 
                 Pet pet = unitOfWork.petRepository.selectbyid(id);
+                if (pet.ReadyForBreeding == true)
+                {
+                    pet.ReadyForBreeding = false;
+                    hubContext.Clients.All.SendAsync("PetWithReadyForBreedingFalse", pet);
+                }
                 unitOfWork.petRepository.deleteEntity(pet);
                 fileService.DeleteFile(pet.Photo); //Edit By Amira
                 unitOfWork.SaveChanges();

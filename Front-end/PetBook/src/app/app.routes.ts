@@ -21,6 +21,14 @@ import { UserPetInfoEditComponent } from './Pages/user-pet-info-edit/user-pet-in
 import { ReservationForVaccineComponent } from './Pages/reservation-for-vaccine/reservation-for-vaccine.component';
 import { ClinicSearchComponent } from './Pages/clinic-search/clinic-search.component';
 
+import { SecretaryVaccineComponent } from './Pages/vaccine_Secretary/secretary-vaccine/secretary-vaccine.component';
+import { SecretaryComponent } from './Pages/secretary/secretary.component';
+import { SecrteryclinicComponent } from './Pages/secrteryclinic/secrteryclinic.component';
+
+
+
+
+
 export const routes: Routes = [
     {path: "Login", component:UserLoginComponent, title:"Login", canActivate: [noNavigateToLoginPageIfTokenGuard]},
     {path: "PetRegister", component:PetRegisterComponent, title:"Pet Register", canActivate:[noNavigateWithoutLoginGuard]},
@@ -43,6 +51,14 @@ export const routes: Routes = [
     {path:"ReservationVaccine/:clinicId/:VaccineId",component:ReservationForVaccineComponent,title:"Reservation Vaccine"},
     {path:"clinics",component:ClinicSearchComponent,title:"Clinics"},
     {path:"vaccines",component:SearchVaccineClicnicComponent,title:"Vaccines"},
+    { path: 'secretary-vaccine/:ClinicId', component: SecretaryVaccineComponent ,title:"Secretary-vaccine"},
+    {path:"Secretary",component:SecretaryComponent,title:"Secretary"},
+    {path:"SecretaryClinic/:id",component:SecrteryclinicComponent,title:"Secretary"},
     {path:"",component:LandingPageComponent,title:"PetBook"}
+
+   
+    
+
+
 ];
 

@@ -77,68 +77,99 @@ namespace PetBooK.PL.Controllers
 
         public async Task<ActionResult> RegisterAsync([FromForm] RegisterDTO userDto)
         {
-            string[] allowedFileExtensions = new string[] { ".jpg", ".jpeg", ".png", ".webp" };
-
-            if (userDto == null)
+            if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
 
-            string createdImageName = await fileService.SaveFileAsync(userDto.Photo, allowedFileExtensions);
+            bool emailChecker = false;
 
-            User user = new User
+            List<User> existingUsers = unitofwork.userRepository.selectall();
+            for(int i = 0; i < existingUsers.Count(); i++)
             {
-                Name = userDto.Name,
-                Location = userDto.Location,
-                Email = userDto.Email,
-                Password = userDto.Password,
-                Photo = createdImageName,
-                UserName = userDto.Name,
-                Phone = userDto.Phone,
-                Age = userDto.Age,
-                Sex = userDto.Sex,
-                RoleID = userDto.RoleID,
-            };
-
-            unitofwork.userRepository.add(user);
-            unitofwork.SaveChanges();
-
-            switch (userDto.RoleID)
-            {
-
-
-                case 1: // Doctor
-                    Doctor doctor = new Doctor
-                    {
-                        DoctorID = user.UserID,
-                    };
-                    unitofwork.doctorRepository.add(doctor);
-                    break;
-
-                case 2: //Client
-                    Client client = new Client
-                    {
-                        ClientID = user.UserID,
-                    };
-                    unitofwork.clientRepository.add(client);
-                    break;
-
-                case 3: // Secretary
-
-                    Secretary secretary = new Secretary
-                    {
-                        SecretaryID = user.UserID,
-                    };
-                    unitofwork.secretaryRepository.add(secretary);
-                    break;
-
-                default:
-                    return BadRequest("Invalid RoleID");
+                if (existingUsers[i].Email == userDto.Email)
+                {
+                    emailChecker = true;
+                }
             }
+            
+            if(!emailChecker)
+            {
+                string[] allowedFileExtensions = new string[] { ".jpg", ".jpeg", ".png", ".webp" };
 
-            unitofwork.SaveChanges();
+                if (userDto == null)
+                {
+                    return BadRequest();
+                }
 
-            return Ok(userDto);
+                string createdImageName;
+                if (userDto.Photo != null)
+                {
+                    createdImageName = await fileService.SaveFileAsync(userDto.Photo, allowedFileExtensions);
+                }
+                else
+                {
+                    createdImageName = null;
+                }
+
+                User user = new User
+                {
+                    Name = userDto.Name,
+                    Location = userDto.Location,
+                    Email = userDto.Email,
+                    Password = userDto.Password,
+                    Photo = createdImageName,
+                    UserName = userDto.Name,
+                    Phone = userDto.Phone,
+                    Age = userDto.Age,
+                    Sex = userDto.Sex,
+                    RoleID = userDto.RoleID,
+                };
+
+                unitofwork.userRepository.add(user);
+                unitofwork.SaveChanges();
+
+                switch (userDto.RoleID)
+                {
+
+
+                    case 1: // Doctor
+                        Doctor doctor = new Doctor
+                        {
+                            DoctorID = user.UserID,
+                        };
+                        unitofwork.doctorRepository.add(doctor);
+                        break;
+
+                    case 2: //Client
+                        Client client = new Client
+                        {
+                            ClientID = user.UserID,
+                        };
+                        unitofwork.clientRepository.add(client);
+                        break;
+
+                    case 3: // Secretary
+
+                        Secretary secretary = new Secretary
+                        {
+                            SecretaryID = user.UserID,
+                        };
+                        unitofwork.secretaryRepository.add(secretary);
+                        break;
+
+                    default:
+                        return BadRequest("Invalid RoleID");
+                }
+
+                unitofwork.SaveChanges();
+
+                return Ok(userDto);
+            }
+            else
+            {
+                return Conflict();
+            }
         }
 
     }

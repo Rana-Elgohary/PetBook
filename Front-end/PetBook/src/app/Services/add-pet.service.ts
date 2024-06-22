@@ -21,9 +21,13 @@ export class AddPetService {
     formData.append('ageInMonth', pet.ageInMonth.toString());
     formData.append('sex', pet.sex);
     formData.append('userID', pet.userID.toString());
-    formData.append('readyForBreeding', pet.readyForBreeding.toString());
+    if(pet.readyForBreeding !== null){
+      formData.append('readyForBreeding', pet.readyForBreeding.toString());
+    }
     formData.append('type', pet.type);
-    formData.append('other', pet.other);
+    if(pet.other !== null){
+      formData.append('other', pet.other);
+    }
     
     if (pet.photo && pet.idNoteBookImage) {
       formData.append('photo', pet.photo);

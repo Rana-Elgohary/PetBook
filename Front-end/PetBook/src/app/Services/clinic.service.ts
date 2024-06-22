@@ -50,4 +50,9 @@ export class ClinicService {
   getClinicsPhoneNumbers(id:number){
     return this.http.get<ClinicPhones[]>(`${this.apiUrlPhoneNumber}/${id}`)
   }
+
+  updateClinic(clinicData: Clinic): Observable<Clinic> {
+    console.log(clinicData);
+    return this.http.put<Clinic>(this.apiUrl, clinicData);
+  }
 }

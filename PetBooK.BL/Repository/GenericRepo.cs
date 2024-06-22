@@ -211,7 +211,42 @@ namespace PetBooK.BL.Reo
                                   .Where(p => p.UserID == userId).ToList();
 
             var matchingPet = userPets.FirstOrDefault(p => p.PetID == selectedPetId);
-            if (matchingPet != null && matchingPet.Pet_Breeds.Any(pb => currentPet.Pet_Breeds.Any(cpb => cpb.BreedID == pb.BreedID)))
+            if (matchingPet == null)
+            {
+                return false;
+            }
+
+           
+            if (currentPet.Sex == matchingPet.Sex) //  one pet is female and the other is male
+            {
+                return false;
+            }
+
+            
+            if (currentPet.Type != matchingPet.Type)//both pets are of the same type 
+            {
+                return false;
+            }
+
+            // Check breed compatibility based on the type of pet
+            bool breedsMatch;
+            if (currentPet.Type == "Dog")
+            {
+               // ensure the breeds are the same
+                breedsMatch = matchingPet.Pet_Breeds.Any(pb => currentPet.Pet_Breeds.Any(cpb => cpb.BreedID == pb.BreedID));
+            }
+            else if (currentPet.Type == "Cat")
+            {
+                // For cats, allow any breed
+                breedsMatch = true;
+            }
+            else
+            {
+                // If pet type is neither Dog nor Cat, return false
+                return false;
+            }
+
+            if (breedsMatch)
             {
                 var requestForBreed = new Request_For_Breed
                 {
@@ -276,6 +311,19 @@ namespace PetBooK.BL.Reo
 
             return query.ToList();
         }
+        public List<TEntity> FindByIdInclude(int Id, string str,params Expression<Func<TEntity, object>>[] includes)
+        {
+            IQueryable<TEntity> query = db.Set<TEntity>();
+
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+
+            return query.Where(e => EF.Property<int>(e, str) == Id).ToList();
+        }
+
+
 
     }
 }

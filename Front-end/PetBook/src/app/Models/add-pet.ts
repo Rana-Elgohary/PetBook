@@ -6,7 +6,7 @@ export class AddPet {
     public  sex: string,
     public  idNoteBookImage: File|string|null,
     public  userID: number,
-    public  readyForBreeding: boolean,
+    public  readyForBreeding: boolean | null,
     public  type: string,
-    public other: string){}    
+    public other: string|null){}    
 }

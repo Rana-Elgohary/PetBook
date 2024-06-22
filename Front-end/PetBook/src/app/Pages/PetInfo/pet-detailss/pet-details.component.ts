@@ -120,7 +120,7 @@ export class PetDetailsComponent {
           },
           error => {
             console.error('Pairing failed', error);
-            this.openSnackBar('Pairing failed. Please try again later.', 'Close');
+            this.openSnackBar('Pairing failed.', 'Close');
           }
         );
       }

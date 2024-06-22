@@ -46,10 +46,7 @@ export class PendingRequestComponent implements OnInit { // Implementing OnInit
           this.myrequest.updateRequestBreed(petIDSender, petIDReceiver, true) // update pair to be true
             .subscribe(response => {
               console.log('Request updated successfully', response);
-              this.request = this.request.filter(item => !(item.petIDSender === petIDSender && item.petIDReceiver === petIDReceiver));
-            }, error => {
-              console.error('Error updating request', error);
-            });
+              this.request = this.request.filter(item => !(item.petIDReceiver === petIDReceiver));
 
             this.myrequest.makeThisPetBeNotReadyForBreeding(petIDSender).subscribe( //make  sender pet not ready for another breeding
               res => console.log(`Pet ${petIDSender} is now not ready for breeding`, res),
@@ -64,22 +61,28 @@ export class PendingRequestComponent implements OnInit { // Implementing OnInit
            this.myrequest.DeleteALLReq(petIDSender).subscribe(  
             response => {
               console.log('Delete successful:', response);
-            },
-            error => {
-              console.error('Error deleting request:', error);
-            }
-          );
+       
 
           this.myrequest.DeleteALLReq(petIDReceiver).subscribe(
             response => {
               console.log('Delete successful:', response);
-            },
-            error => {
-              console.error('Error deleting request:', error);
-            }
-          );
+        
              
-          this.request=[];
+          this.fetchdata();
+        },
+        error => {
+          console.error('Error deleting request:', error);
+        }
+      );
+        },
+        error => {
+          console.error('Error deleting request:', error);
+        }
+      );
+
+        }, error => {
+          console.error('Error updating request', error);
+        });
           }
           else{
             this.showPopup(' the pets is the same sex');
@@ -100,6 +103,14 @@ export class PendingRequestComponent implements OnInit { // Implementing OnInit
   ngOnInit(): void {
     this.userId= parseInt(this.AccountService.r.id);
     this.myrequest.getallPendingReq(this.userId).subscribe(data => {
+      this.request = data;
+      console.log(this.request);
+    });
+  }
+
+  fetchdata(){
+    this.userId= parseInt(this.AccountService.r.id);
+    this.myrequest.getallPendingReq(4).subscribe(data => {
       this.request = data;
       console.log(this.request);
     });

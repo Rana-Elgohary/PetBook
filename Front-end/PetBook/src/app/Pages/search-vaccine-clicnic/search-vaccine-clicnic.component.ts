@@ -38,10 +38,7 @@ export class SearchVaccineClicnicComponent implements OnInit {
     ).subscribe(
       data => {
         this.vaccineClinic = data;
-        console.log(this.vaccineClinic);
-
         this.vaccineClinic.forEach(element => {
-          console.log(element.clinicID)
           this.getClinckwithLocatiion(element.clinicID);
         });
       },
@@ -55,7 +52,6 @@ export class SearchVaccineClicnicComponent implements OnInit {
     this.clinicLocation.GatClincsWithLocations(id).subscribe(
       data2 => {
         this.vaccineClinicLocation.push(...data2); // Use spread operator to push array elements
-        console.log(data2);
       },
       error => {
         console.error('An error occurred while fetching clinic locations:', error);

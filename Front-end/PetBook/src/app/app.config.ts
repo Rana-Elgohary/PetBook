@@ -12,5 +12,5 @@ import { HeaderComponent } from './Core/Header/header/header.component';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideRouter(routes),provideHttpClient(), provideAnimationsAsync(), 
-    importProvidersFrom(BrowserAnimationsModule), importProvidersFrom(MatDialogModule)], //step 1 to connect to data base
+    importProvidersFrom(BrowserAnimationsModule), importProvidersFrom(MatDialogModule), provideAnimationsAsync()], //step 1 to connect to data base
 };

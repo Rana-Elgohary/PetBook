@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PetBooK.BL.DTO;
 using PetBooK.BL.UOW;
 using PetBooK.DAL.Models;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 namespace PetBooK.PL.Controllers
 {
@@ -25,7 +28,7 @@ namespace PetBooK.PL.Controllers
         {
             try
             {
-                List<Vaccine_Clinic> vaccineClinics = unit.vaccine_ClinicRepository.FindBy(s=>s.Quantity>=1);
+                List<Vaccine_Clinic> vaccineClinics = unit.vaccine_ClinicRepository.FindBy(s => s.Quantity >= 1);
                 if (vaccineClinics == null || !vaccineClinics.Any())
                     return NotFound("No Data");
 
@@ -81,7 +84,7 @@ namespace PetBooK.PL.Controllers
         {
             try
             {
-                List<Vaccine_Clinic> vaccineClinics = unit.vaccine_ClinicRepository.FindByInclude(p => p.VaccineID == VaccineId ,p=>p.Clinic);
+                List<Vaccine_Clinic> vaccineClinics = unit.vaccine_ClinicRepository.FindByInclude(p => p.VaccineID == VaccineId, p => p.Clinic);
 
                 if (vaccineClinics == null || !vaccineClinics.Any())
                     return NotFound($"Vaccine Clinic with Vaccine ID {VaccineId} not found.");
@@ -196,7 +199,7 @@ namespace PetBooK.PL.Controllers
 
 
 
-        [HttpDelete]
+        [HttpDelete("{VaccineId}/{ClinicID}")]
         public ActionResult DeleteVaccineClinic(int VaccineId, int ClinicID)
         {
             try
@@ -218,5 +221,92 @@ namespace PetBooK.PL.Controllers
                 return StatusCode(500, "An unexpected error occurred.");
             }
         }
+
+        [HttpGet("clinicc/{ClinicId}")]
+        public ActionResult GetVaccineClinictbyClinicId(int ClinicId)
+        {
+            try
+            {
+                var vaccineClinics = unit.vaccine_ClinicRepository.FindByIdInclude(ClinicId, "ClinicID", vc => vc.Vaccine);
+
+                if (vaccineClinics == null || !vaccineClinics.Any())
+                    return NotFound($"Vaccine Clinic with Clinic ID {ClinicId} not found.");
+
+                var vaccineCliniccDTOs = vaccineClinics.Select(vc => new VaccineCliniccDTO
+                {
+                    VaccineID = vc.VaccineID,
+                    ClinicID = vc.ClinicID,
+                    Name = vc.Vaccine.Name,
+                    Price = vc.Price,
+                    Quantity = vc.Quantity,
+                    Description = vc.Vaccine.Description
+                }).ToList();
+
+                return Ok(vaccineCliniccDTOs);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while retrieving the vaccine clinics.");
+            }
+        }
+
+
+        [HttpPut("updateVaccine")]
+        public IActionResult UpdateVaccine([FromBody] VaccineCliniccDTO dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var vaccine = unit.vaccineRepository.SelectByIDInclude(dto.VaccineID, "VaccineID", v => v.Vaccine_Clinics);
+
+
+
+            if (vaccine == null)
+            {
+                return NotFound($"Vaccine with ID {dto.VaccineID} not found.");
+            }
+            vaccine.Name = dto.Name; // Update Vaccine entity
+            vaccine.Description = dto.Description;
+
+
+            var vaccineClinic = vaccine.Vaccine_Clinics.FirstOrDefault(vc => vc.ClinicID == dto.ClinicID);   // Retrieve the existing Vaccine_Clinic entity
+
+            if (vaccineClinic == null)
+            {
+                return NotFound($"Vaccine_Clinic with VaccineID {dto.VaccineID} and ClinicID {dto.ClinicID} not found.");
+            }
+            vaccineClinic.Price = dto.Price;// Update Vaccine_Clinic entity
+            vaccineClinic.Quantity = dto.Quantity;
+            unit.SaveChanges();
+
+            return Ok();
+        }
+
+        [HttpPost("addVaccine")]
+        public IActionResult AddVaccine([FromBody] VaccineAddDTO dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var vaccine = new Vaccine
+            {
+                Name = dto.Name,
+                Description = dto.Description
+            };
+            var vaccineClinic = new Vaccine_Clinic
+            {
+                ClinicID = dto.ClinicID,
+                Price = dto.Price,
+                Quantity = dto.Quantity,
+                Vaccine = vaccine
+            };
+            unit.vaccineRepository.add(vaccine);
+            unit.vaccine_ClinicRepository.add(vaccineClinic);
+            unit.SaveChanges();
+            return Ok();
+        }
+
     }
 }
