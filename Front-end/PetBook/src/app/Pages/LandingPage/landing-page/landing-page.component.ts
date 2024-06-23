@@ -12,10 +12,10 @@ import { RouterLink } from '@angular/router';
 export class LandingPageComponent implements OnInit {
   images = [
     'url(../../../../assets/Images/Heroimage1.jpg)', 
-    'url(https://www.usatoday.com/money/blueprint/images/uploads/2023/06/27134316/best-pet-insurance-scaled-e1687873423254.jpg)',  
-    'url(https://www.census.gov/newsroom/stories/pet-day/_jcr_content/root/responsivegrid/responsivegrid_1749353263/imagecore.coreimg.jpeg/1680634248356/stories-pet3-1300x867.jpeg)',  
+    'url(../../../../assets/Images/Heroimage3.jpg)',  
+    'url(../../../../assets/Images/Heroimage4.avif)',  
     'url(../../../../assets/Images/Heroimage2.jpg)', 
-    'url(https://cottagelife.com/wp-content/uploads/2014/07/shutterstock_1676506852.jpg)',  
+    'url(../../../../assets/Images/Heroimage5.jpg)',  
 ];
   
 currentIndex = 0;
