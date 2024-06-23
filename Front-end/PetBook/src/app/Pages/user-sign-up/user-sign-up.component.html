@@ -28,7 +28,7 @@
         </div>
 
         <div class="my-10 flex flex-wrap justify-between">
-          <div class="mb-5">
+          <div class="mb-5 relative">
             <div class="flex flex-col">
               <label class="text-slate-800 text-lg">Name</label>
               <input class="p-2 border-2 focus:outline-none focus:border-[#FE7A36] rounded-md" type="text"
@@ -36,21 +36,21 @@
                      (ngModelChange)="onInputValueChange({ field: 'name', value: $event })"
                      placeholder="Tom Hiddleston">
             </div>
-            <div *ngIf="validationErrors['name']" class="text-red-500">*Name is required.</div>
+            <div *ngIf="validationErrors['name']" class="text-red-500 absolute">*Name is required.</div>
           </div>
 
-          <div class="mb-5">
+          <div class="mb-5 relative">
             <div class="flex flex-col">
-              <label class="text-slate-800 text-lg">userName</label>
+              <label class="text-slate-800 text-lg">UserName</label>
               <input class="p-2 border-2 focus:outline-none focus:border-[#FE7A36] rounded-md" type="text"
                      [(ngModel)]="user.userName"
                      (ngModelChange)="onInputValueChange({ field: 'userName', value: $event })"
                      placeholder="Tom">
             </div>
-            <div *ngIf="validationErrors['userName']" class="text-red-500">*Username is required.</div>
+            <div *ngIf="validationErrors['userName']" class="text-red-500 absolute">*Username is required.</div>
           </div>
         
-          <div class="w-[100%] mb-5">
+          <div class="w-[100%] mb-5 relative">
             <div class="flex flex-col">
               <label class="text-slate-800 text-lg">Email</label>
               <input class="p-2 border-2 focus:outline-none focus:border-[#FE7A36] rounded-md" type="text"
@@ -58,20 +58,20 @@
                      (ngModelChange)="onInputValueChange({ field: 'email', value: $event })"
                      placeholder="Tom@gmail.com">
             </div>
-            <div *ngIf="validationErrors['email']" class="text-red-500">*Email is required.</div>
+            <div *ngIf="validationErrors['email']" class="text-red-500 absolute">*Email is required.</div>
           </div>
         
-          <div class="mb-5">
+          <div class="mb-5 relative">
             <div class="flex flex-col">
               <label class="text-slate-800 text-lg">Password</label>
               <input class="p-2 border-2 focus:outline-none focus:border-[#FE7A36] rounded-md" type="password"
                      [(ngModel)]="user.password"
                      (ngModelChange)="onInputValueChange({ field: 'password', value: $event })">
             </div>
-            <div *ngIf="validationErrors['password']" class="text-red-500">*Password is required.</div>
+            <div *ngIf="validationErrors['password']" class="text-red-500 absolute">*Password is required.</div>
           </div>
         
-          <div class="mb-5">
+          <div class="mb-5 relative">
             <div class="flex flex-col">
               <label class="text-slate-800 text-lg">Phone</label>
               <input class="p-2 border-2 focus:outline-none focus:border-[#FE7A36] rounded-md" type="text"
@@ -79,33 +79,25 @@
                      (ngModelChange)="onInputValueChange({ field: 'phone', value: $event })"
                      placeholder="012345678910">
             </div>
-            <div *ngIf="validationErrors['phone']" class="text-red-500">*Phone number is required.</div>
+            <div *ngIf="validationErrors['phone']" class="text-red-500 absolute">*Phone number is required.</div>
           </div>
           
-          <div class="w-[100%] my-5">
+          <div class="w-[100%] my-5 relative">
             <div class="flex justify-between items-center">
               <label class="text-slate-800 text-lg w-[30%]">Gender</label>
-              <!-- <select class="p-2 border-2 focus:outline-none focus:border-[#FE7A36] w-[50%] rounded-md"
-              required
-              [(ngModel)]="user.sex"
-              (change)="onSexChange($event)">
-              <option value="" disabled selected hidden></option>
-              <option value="F">Female</option>
-              <option value="M">Male</option>
-            </select> -->
-            <div class="flex items-center p-2 border-2 hover:border-[#FE7A36] rounded-md w-[40%]">
-              <input type="radio" id="female" name="gender" value="F" [(ngModel)]="user.sex" (change)="onSexChange($event)" class="mr-2">
-              <label for="female" class="text-slate-800 text-base">Female</label>
+              <div class="flex items-center p-2 border-2 hover:border-[#FE7A36] rounded-md w-[40%]">
+                <input type="radio" id="female" name="gender" value="F" [(ngModel)]="user.sex" (change)="onSexChange($event)" class="mr-2">
+                <label for="female" class="text-slate-800 text-base">Female</label>
+              </div>
+              <div class="flex items-center ml-7 p-2 border-2 hover:border-[#FE7A36] rounded-md w-[40%]">
+                <input type="radio" id="male" name="gender" value="M" [(ngModel)]="user.sex" (change)="onSexChange($event)" class="mr-2">
+                <label for="male" class="text-slate-800 text-base">Male</label>
+              </div>
             </div>
-            <div class="flex items-center ml-7 p-2 border-2 hover:border-[#FE7A36] rounded-md w-[40%]">
-              <input type="radio" id="male" name="gender" value="M" [(ngModel)]="user.sex" (change)="onSexChange($event)" class="mr-2">
-              <label for="male" class="text-slate-800 text-base">Male</label>
-            </div>
-          </div>
-          <div *ngIf="validationErrors['sex']" class="text-red-500">*Gender is required.</div>
+          <div *ngIf="validationErrors['sex']" class="text-red-500 absolute">*Gender is required.</div>
         </div>
         
-          <div class="mb-5">
+          <div class="mb-5 relative">
             <div class="flex flex-col">
               <label class="text-slate-800 text-lg">Location</label>
               <input class="p-2 border-2 focus:outline-none focus:border-[#FE7A36] rounded-md" type="text"
@@ -113,7 +105,7 @@
                      (ngModelChange)="onInputValueChange({ field: 'location', value: $event })"
                      placeholder="Sidi Bishr">
             </div>
-            <div *ngIf="validationErrors['location']" class="text-red-500">*Location is required.</div>
+            <div *ngIf="validationErrors['location']" class="text-red-500 absolute">*Location is required.</div>
           </div>     
                 
           <div class="mb-5">
