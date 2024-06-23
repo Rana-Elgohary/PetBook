@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, SimpleChanges } from '@angular/core';
 import { InputSectionComponent } from '../../Components/input-section/input-section.component';
 import { UserClient } from '../../Models/user-client';
 import { AccountServiceService } from '../../Services/account-service.service';
@@ -80,13 +80,33 @@ export class UserSignUpComponent {
   }
 
   onFileSelected(event: any) {
-    this.user.photo = event.target.files[0];
-    this.validationErrors.photo = false;
+    const file = event.target.files[0];
+    if (file) {
+      this.user.photo = file;
+      this.validationErrors.photo = false;
+
+      // Update the image preview
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        const photoPreview = document.getElementById('photoPreview') as HTMLImageElement;
+        photoPreview.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  triggerFileInput() {
+    const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+    fileInput.click();
   }
 
   onSexChange(event: any) {
     const selectedValue = event.target.value;
     // Assuming you have validation logic, update validationErrors object accordingly
     this.validationErrors.sex = selectedValue ? null : 'Gender is required.';
+  }
+
+  Cancel(){
+    this.router.navigateByUrl("");
   }
 }
