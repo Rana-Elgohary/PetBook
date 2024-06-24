@@ -138,7 +138,7 @@ export class PetRegisterComponent implements OnInit {
 
         console.log('Pet readyForBreeding value:', this.Pet.readyForBreeding); 
 
-        this.router.navigateByUrl("/userPetInfo")
+        this.router.navigateByUrl("/Profile/userPetInfo")
     
         // Success message or any further actions after successful signup
       } catch (err: any) {

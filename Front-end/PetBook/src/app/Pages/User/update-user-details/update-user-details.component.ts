@@ -60,7 +60,7 @@ export class UpdateUserDetailsComponent {
   
       this.userService.updateUser(this.userid,this.user).subscribe({
         next: (response) => {
-          this.router.navigateByUrl("/Account");
+          this.router.navigateByUrl("/Profile/Account");
         },
         error: (err: HttpErrorResponse) => {
           if (err.status === 409) {

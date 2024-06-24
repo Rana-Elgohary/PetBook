@@ -139,7 +139,7 @@ export class UserPetInfoEditComponent implements OnInit {
         if(this.isFormValid()){
             this.userPetInfoService.editUserPet(this.editedUserPetInfo ,this.petID).subscribe({ 
                 next: (d) => { console.log(d);
-                this.route.navigateByUrl("userPetInfo");
+                this.route.navigateByUrl("/Profile/userPetInfo");
                 }
             });
         }
