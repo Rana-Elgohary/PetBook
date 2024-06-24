@@ -138,6 +138,6 @@ export class UpdateUserDetailsComponent {
   }
 
   Cancel(){
-    this.router.navigateByUrl("/Account");
+    this.router.navigateByUrl("/Profile/Account");
   }
 }

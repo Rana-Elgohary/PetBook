@@ -192,7 +192,7 @@ export class UserPetInfoEditComponent implements OnInit {
     }
 
     Cancel(){
-        this.route.navigateByUrl("/userPetInfo");
+        this.route.navigateByUrl("/Profile/userPetInfo");
     }
 }
 

@@ -200,6 +200,6 @@ export class PetRegisterComponent implements OnInit {
   }
 
   Cancel(){
-    this.router.navigateByUrl("/userPetInfo");
+    this.router.navigateByUrl("Profile/userPetInfo");
   }
 }
