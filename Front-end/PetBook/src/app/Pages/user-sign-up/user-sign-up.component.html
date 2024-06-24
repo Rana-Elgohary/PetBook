@@ -6,11 +6,14 @@
           <p class="highlighted-text">JOIN US TODAY</p>
         </div>
 
-        <div class="my-5 mt-16">
+        <div class="my-5 mt-16 image-container relative">
           <img src="../../../assets/Images/null.jpg" id="photoPreview" class="cursor-pointer w-[70%] h-[270px] rounded-full m-auto" (click)="triggerFileInput()">
+          <div class="overlay">
+            <p class="text-white text-center">Upload your image</p>
+          </div>
         </div>
         <input type="file" id="fileInput" class="hidden" (change)="onFileSelected($event)">
-        
+
         <div>
           <p class="text-white text-center">Welcome to our website where you can find rare breeds and will be easy for you to find clinics.</p>
         </div>
