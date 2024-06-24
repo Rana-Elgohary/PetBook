@@ -9,8 +9,8 @@ import { CommonModule, NgFor, NgForOf, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-search-vaccine-clicnic',
   standalone: true,
+  selector: 'app-search-vaccine-clicnic',
   imports: [FormsModule, NgFor, NgIf],
   templateUrl: './search-vaccine-clicnic.component.html',
   styleUrls: ['./search-vaccine-clicnic.component.css']

@@ -67,6 +67,36 @@ namespace PetBooK.PL.Controllers
             return Ok(petDTOs);
         }
 
+        ////---------------------------------search for both dogs orrr cats which are ready with pagination-----------------------------
+
+        //[HttpGet("SearchPetsReadyForBreeding")]
+        //public IActionResult GetAllPetsReadyForBreeding(int pageNumber = 1, int pageSize = 4)
+        //{
+        //    try
+        //    {
+        //        var pets = unitOfWork.petRepository.FindBy(p => p.ReadyForBreeding && (p.Type == "Dog" || p.Type == "Cat"));
+        //        if (!pets.Any()) { return NotFound("No pets ready for breeding found."); }
+
+        //        var petDTOs = mapper.Map<List<PetGetDTO>>(pets);
+
+        //        //for pagination
+        //        int total = petDTOs.Count();
+        //        var petDTOs2 = petDTOs.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+        //        var response = new
+        //        {
+        //            Data = petDTOs2,
+        //            AllData = petDTOs,
+        //            TotalItems = total
+        //        };
+        //        return Ok(response);
+        //    }
+        //    catch
+        //    {
+        //        return StatusCode(500, "error while retrievong data");
+        //    }
+
+        //}
+
         //-----------------------------------search for dogs only which are readyfor breading-------------
         [HttpGet("SearchDogsReadyForBreeding")]
         public IActionResult GetAllDogsReadyForBreeding()
