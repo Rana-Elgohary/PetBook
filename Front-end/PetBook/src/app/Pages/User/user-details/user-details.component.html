@@ -1,80 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pet Owner Profile</title>
-</head>
-<body>
-  <div class="bg-white shadow-lg rounded-lg p-8 max-w-4xl mx-auto py-2">
-    <div class="bg-yellow-50 shadow-lg rounded-lg p-8">
-      <div class="flex items-center space-x-4">
-        <img class="w-24 h-24 rounded-full" [src]="User.photo" alt="{{ User.name }}" width="100">
-        <div>
-          <h2 class="text-2xl font-bold text-gray-600">{{User.name}}</h2>
-        </div>
-      </div>
-    </div>
+<div class="py-5">
+  <div class="w-[1100px] h-[95vh] m-auto relative">
+    <section class="data w-[97%] h-[95%] bg-[#dcded9] absolute top-0 left-0">
 
-    <!-- Navigation Links -->
-    <div class="mt-8 border-b border-gray-200 pb-2">
-      <div class="sm:hidden">
-        <label for="tabs" class="sr-only">Select a tab</label>
-        <select id="tabs" name="tabs" class="block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
-          <option>Profile</option>
-          <option>Pet Info</option>
-          <option>Requests</option>
-        </select>
-      </div>
-      <div class="hidden sm:block">
-        <nav class="flex space-x-4" aria-label="Tabs">
-          <a routerLink="/Account" class="nav-link text-gray-500 hover:text-gray-700 px-3 py-2 font-medium text-sm rounded-md active-tab">Profile</a>
-          <a routerLink="/userPetInfo" class="nav-link text-gray-500 hover:text-gray-700 px-3 py-2 font-medium text-sm rounded-md">Pet Info</a>
-          <div class="relative group">
-            <button class="nav-link text-gray-500 hover:text-gray-700 px-3 py-2 font-medium text-sm rounded-md focus:outline-none">Requests</button>
-            <div class="absolute hidden group-hover:block mt-0.5 w-40 bg-white shadow-md rounded-md">
-              <a routerLink="/MyRequest" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">My Requests</a>
-              <a routerLink="/pendingRequest" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Pending Requests</a>
-            </div>
+    </section>
+
+    <section class="w-[97%] h-[95%] shadow-2xl bg-white absolute bottom-0 right-0 flex">
+      <div class="w-[70%] h-fit m-auto relative">
+        <div class="font-Laila text-gray-700 relative z-10">
+          <div class="mb-14">
+            <p class="text-6xl bg-[#dcded9] w-fit">{{User.name}}</p>
+            <p>UserName: {{User.userName}}</p>
+            <p>Email: {{User.email}}</p>
+            <p>Phone: {{User.phone}}</p>
+            <p>location: {{User.location}}</p>
+            <p>Age: {{User.age}}</p>
+            <p>Gender: {{ User.sex.toLowerCase() === 'f' ? 'Female' : 'Male' }}</p>
           </div>
-        </nav>
+          <a routerLink="/UpdateUser" class="p-2 ml-20 shadow-xl text-white text-center cursor-pointer tracking-wider bg-[#FE7A36] hover:bg-[#e66322]">Update Profile</a>
+        </div>
+        @if(nameOfImage == null){
+          <img class="w-[400px] h-[400px] absolute top-[calc((100%-400px)/2)] right-0" src="../../../../assets/Images/null.jpg" alt="{{ User.name }}">
+        }
+        @else {
+          <img class="w-[400px] h-[400px] absolute top-[calc((100%-400px)/2)] right-0" [src]="User.photo" alt="{{ User.name }}">
+        }
       </div>
-    </div>
-
-    <!-- Profile Section -->
-    <div class="mt-8">
-      <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="bg-yellow-50 p-4 rounded-lg shadow-sm">
-          <h4 class="font-semibold text-orange-600">UserName</h4>
-          <p class="mt-1 text-gray-700 ">{{User.userName}}</p>
-        </div>
-        <div class="bg-yellow-50 p-4 rounded-lg shadow-sm">
-          <h4 class="font-semibold text-orange-600">Email</h4>
-          <p class="mt-1 text-gray-700">{{User.email}}</p>
-        </div>
-        <div class="bg-yellow-50 p-4 rounded-lg shadow-sm">
-          <h4 class="font-semibold text-orange-600">Phone</h4>
-          <p class="mt-1 text-gray-700">{{User.phone}}</p>
-        </div>
-        <div class="bg-yellow-50 p-4 rounded-lg shadow-sm">
-          <h4 class="font-semibold text-orange-600">Location</h4>
-          <p class="mt-1 text-gray-700">{{User.location}}</p>
-        </div>
-        <div class="bg-yellow-50 p-4 rounded-lg shadow-sm">
-          <h4 class="font-semibold text-orange-600">Age</h4>
-          <p class="mt-1 text-gray-700">{{User.age}}</p>
-        </div>
-        <div class="bg-yellow-50 p-4 rounded-lg shadow-sm">
-          <h4 class="font-semibold text-orange-600">Gender</h4>
-          <p class="mt-1 text-gray-700">{{ User.sex.toLowerCase() === 'f' ? 'Female' : 'Male' }}</p>
-        </div>
-
-      </div>
-    </div>
-       <!-- Update Button -->
-       <div class="center">
-        <a routerLink="/UpdateUser" class="update-button">Update Profile</a>
-      </div>
+    </section>  
+      
   </div>
-</body>
-</html>
+</div>

@@ -25,8 +25,11 @@ private imageUrlBase: string = 'https://localhost:7066/Resources/';
     console.log(parseInt(this.AccountService.r.id))
   }
 
+  nameOfImage:string|null=null
+
   loadUserData(userId: number): void {
     this.userService.getUserById(userId).subscribe(user => {
+      this.nameOfImage = user.photo
       user.photo = this.imageUrlBase + user.photo;
       this.User = user;
       console.log(user);

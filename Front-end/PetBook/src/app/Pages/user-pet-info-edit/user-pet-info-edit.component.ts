@@ -111,11 +111,21 @@ export class UserPetInfoEditComponent implements OnInit {
         for (const key in this.editedUserPetInfo) {
           if (this.editedUserPetInfo.hasOwnProperty(key)) {
             const fieldPet = key as keyof EditPet;
-            if (!this.editedUserPetInfo[fieldPet]) {
-              this.validationErrorsForPet[fieldPet] = true;
-              isValid = false;
-            } else {
-              this.validationErrorsForPet[fieldPet] = false;
+            if(typeof this.editedUserPetInfo[fieldPet] == 'boolean'){
+                if (this.editedUserPetInfo[fieldPet] == undefined || this.editedUserPetInfo[fieldPet] == null) {
+                    this.validationErrorsForPet[fieldPet] = true;
+                    isValid = false;
+                } else {
+                    this.validationErrorsForPet[fieldPet] = false;
+                }
+            }
+            else{
+                if (!this.editedUserPetInfo[fieldPet]) {
+                  this.validationErrorsForPet[fieldPet] = true;
+                  isValid = false;
+                } else {
+                  this.validationErrorsForPet[fieldPet] = false;
+                }
             }
           }
         }
@@ -139,7 +149,7 @@ export class UserPetInfoEditComponent implements OnInit {
         if(this.isFormValid()){
             this.userPetInfoService.editUserPet(this.editedUserPetInfo ,this.petID).subscribe({ 
                 next: (d) => { console.log(d);
-                this.route.navigateByUrl("userPetInfo");
+                this.route.navigateByUrl("/Profile/userPetInfo");
                 }
             });
         }
