@@ -111,11 +111,21 @@ export class UserPetInfoEditComponent implements OnInit {
         for (const key in this.editedUserPetInfo) {
           if (this.editedUserPetInfo.hasOwnProperty(key)) {
             const fieldPet = key as keyof EditPet;
-            if (!this.editedUserPetInfo[fieldPet]) {
-              this.validationErrorsForPet[fieldPet] = true;
-              isValid = false;
-            } else {
-              this.validationErrorsForPet[fieldPet] = false;
+            if(typeof this.editedUserPetInfo[fieldPet] == 'boolean'){
+                if (this.editedUserPetInfo[fieldPet] == undefined || this.editedUserPetInfo[fieldPet] == null) {
+                    this.validationErrorsForPet[fieldPet] = true;
+                    isValid = false;
+                } else {
+                    this.validationErrorsForPet[fieldPet] = false;
+                }
+            }
+            else{
+                if (!this.editedUserPetInfo[fieldPet]) {
+                  this.validationErrorsForPet[fieldPet] = true;
+                  isValid = false;
+                } else {
+                  this.validationErrorsForPet[fieldPet] = false;
+                }
             }
           }
         }
