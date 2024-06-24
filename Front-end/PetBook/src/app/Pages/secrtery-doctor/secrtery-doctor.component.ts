@@ -49,7 +49,7 @@ export class SecrteryDoctorComponent {
             this.doctor[index] = updateddoctor;
           }
         }, error => {
-          console.error('Error updating clinic:', error);
+          alert('Email and User_Name Should be Unique' );
         });
       }
     });
@@ -71,7 +71,7 @@ export class SecrteryDoctorComponent {
           });
 
         }, error => {
-          console.error('Error updating clinic:', error);
+          alert(' Email and User_Name Should be Unique' );
         });
       }
     });

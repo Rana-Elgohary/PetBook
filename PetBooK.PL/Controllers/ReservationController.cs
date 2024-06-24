@@ -78,6 +78,34 @@ namespace PetBooK.PL.Controllers
             }
         }
 
+        [HttpGet("clinicIncludeUserInfo/{ClinicId}")]
+        public ActionResult GetReservationByClinicIdInclude(int ClinicId)
+        {
+            try
+            {
+                List<Reservation> reservations = unit.reservationRepository.FindByInclude(c => c.ClinicID == ClinicId, s => s.Pet.User);
+
+                if (reservations == null || !reservations.Any())
+                    return NotFound($"Reservation with Clinic ID {ClinicId} not found.");
+
+                List<ReservationIncludeUserDTO> reservationDTOs = mapper.Map<List<ReservationIncludeUserDTO>>(reservations);
+                foreach (var item in reservationDTOs)
+                {
+                    Pet pet = unit.petRepository.selectbyid(item.PetID);
+                    User us = unit.userRepository.selectbyid(pet.UserID);
+                    item.Phone = us.Phone;
+                    item.Name = us.Name;
+                    item.UserID= us.UserID;
+
+                }
+                return Ok(reservationDTOs);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while retrieving the reservation.");
+            }
+        }
+
         [HttpGet("{ClinicId:int}/{PetID:int}")]
         public ActionResult GetReservationByClinicAndPetId(int ClinicId, int PetID)
         {
