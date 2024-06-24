@@ -157,11 +157,19 @@ namespace PetBooK.BL.Config
           .ForMember(dest => dest.BankAccount, opt => opt.MapFrom(src => src.Clinic.BankAccount));
 
 
+            CreateMap<Reservation, ReservationIncludeUserDTO>()
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Pet.User.ClientNavigation.Name))
+            .ForMember(dest => dest.UserID, opt => opt.MapFrom(src => src.Pet.User.ClientNavigation.UserID))
+            .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.Pet.User.ClientNavigation.Phone))
+            .ForMember(dest => dest.PetName, opt => opt.MapFrom(src => src.Pet.Name));
+
 
             CreateMap<User, DoctorUser>();
             CreateMap<DoctorUser,User>();
             CreateMap<Doctor, DoctorUser>();
             CreateMap<DoctorUser, Doctor>();
+
+            CreateMap<Reservation_For_Vaccine, ReservationFoeVaccineInclude>().ReverseMap();
 
             ///map to get clinic by it's location and numbers
             // CreateMap<Clinic, ClinicByLocationsDTO>()

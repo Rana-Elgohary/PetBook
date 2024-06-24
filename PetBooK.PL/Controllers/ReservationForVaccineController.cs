@@ -104,6 +104,35 @@ namespace PetBooK.PL.Controllers
                 return Ok("deleted");
             }
         }
+
+
+        //---------------------------------------------------------------------------------
+
+        [HttpGet("reservation_For_VaccineRepository/{Cid}")]
+        public IActionResult getByClinicId( int Cid)
+        {
+            List<Reservation_For_Vaccine> reservationForVaccine = unit.reservation_For_VaccineRepository.FindByInclude(s => s.ClinicID == Cid, s => s.Clinic, s => s.Vaccine, s => s.Pet);
+            if (reservationForVaccine == null)
+            {
+                return NotFound("Requested Reservation For Vaccine is not found");
+            }
+
+            else
+            {
+               List<ReservationFoeVaccineInclude> reservationForVaccineDTO = mapper.Map<List<ReservationFoeVaccineInclude>>(reservationForVaccine);
+                foreach (var item in reservationForVaccineDTO)
+                {
+                    Pet pet = unit.petRepository.selectbyid(item.PetID);
+                    User us = unit.userRepository.selectbyid(pet.UserID);
+                    item.Phone = us.Phone;
+                    item.Name = us.Name;
+
+                }
+                return Ok(reservationForVaccineDTO);
+            }
+        }
+
+
     }
 
 }

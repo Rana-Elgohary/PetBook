@@ -27,6 +27,7 @@ export class ClinicService {
   }
 
   getDoctors(clinicId: number): Observable<Doctor[]> {
+    console.log(this.apiUrl2+"api/Doctor/"+clinicId+"/doctors");
     return this.http.get<Doctor[]>(`${this.apiUrl2}api/Doctor/${clinicId}/doctors`);
   }
 
