@@ -198,7 +198,7 @@ namespace PetBooK.PL.Controllers
         {
             try
             {
-                List<Clinic> clinics = unitOfWork.clinicRepository.SelectAllIncludePagination(pageNumber, pageSize, s => s.Clinic_Locations);
+                List<Clinic> clinics = unitOfWork.clinicRepository.SelectAllIncludePagination(s => s.Clinic_Locations);
                 List<ClinicByLocationsDTO> clinicByLocation = new List<ClinicByLocationsDTO>();
                 foreach (var clinic in clinics)
                 {

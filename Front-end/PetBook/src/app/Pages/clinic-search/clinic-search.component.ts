@@ -23,7 +23,7 @@ export class ClinicSearchComponent implements OnInit{
   Flag:boolean=false;
   //for pagination
   pageNumber: number = 1;
-  pageSize: number = 4;
+  pageSize: number = 9;
   totalPages: number = 0;
   AllClinicsWithoutPagination : ClinicLocation[]=[]
 

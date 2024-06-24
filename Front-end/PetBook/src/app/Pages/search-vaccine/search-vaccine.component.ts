@@ -19,6 +19,12 @@ export class SearchVaccineComponent implements OnInit {
   noResults: boolean = false;
   VaccineSuggestions: string[] = [];
   searchQuery: string = '';
+  /////here
+  Flag:boolean=false;
+  /////for pagination
+  pageNumber: number = 1;
+  pageSize: number = 9;
+  totalPages: number = 0;
 
 
   constructor(public vaccineService :VaccineService ,private router: Router
@@ -28,9 +34,15 @@ export class SearchVaccineComponent implements OnInit {
   }
 
   fetchVaccine(){
-   this.vaccineService.GatAllVaccine().subscribe(data=>{
-   this.vaccine=data;
+   this.vaccineService.GatAllVaccine(this.pageNumber, this.pageSize).subscribe(data=>{
+  //  this.vaccine=data;
+  //here
+   this.vaccine=data.data;
+   this.totalPages=data.totalItems;
    console.log(this.vaccine);
+   this.Flag=false;
+   //here
+   window.scrollTo({ top: 0, behavior: 'smooth' });
    })
   }
 
@@ -45,12 +57,16 @@ export class SearchVaccineComponent implements OnInit {
 
  searchBar() {
   if (this.searchQuery.trim() !== '') {
+    this.pageNumber=1;
     const encodedSearchQuery = encodeURIComponent(this.searchQuery);
       this.vaccineService.GatVaccineByName(this.searchQuery).subscribe(
         data => {
           this.vaccine = [];
           this.vaccine.push(data);
           this.noResults = this.vaccine.length === 0;
+          this.Flag=true;
+          this.totalPages=this.vaccine.length;
+
         },
         error => {
           console.error('Error fetching pets:', error);
@@ -72,5 +88,27 @@ selectBreed(vacc: string) {
 GoToClinic(id: number): void {
   this.router.navigate(['search-vaccine-clinic', id]);
 }
+ BackToVaccines(){
+  this.searchQuery = "";
+  this.fetchVaccine()
+ }
 
+
+ //for pagination
+ nextPage(): void {
+  if (this.pageNumber < this.totalitems) {
+    this.pageNumber++;
+    this.fetchVaccine();
+  }
+}
+
+prevPage(): void {
+  if (this.pageNumber > 1) {
+    this.pageNumber--;
+    this. fetchVaccine();
+  }
+}
+get totalitems(): number {
+  return Math.ceil(this.totalPages / this.pageSize);
+}
 }
