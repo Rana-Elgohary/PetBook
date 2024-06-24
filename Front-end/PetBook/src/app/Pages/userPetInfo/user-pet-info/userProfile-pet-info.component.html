@@ -1,62 +1,77 @@
-<!-- Main Content -->
-<div class="justify-center bg-gray-100 mainDiv">
-    <div *ngFor="let item of userPetList" class="flex items-center w-full">
-      <div class="top-60 ml-24">
-        <img [src]="item.photo" alt="Pet Image" class="w-60">
-      </div>
-      <!-- Form -->
-      <div class="bg-[#FFFBF1] p-8 rounded-lg shadow-md w-5/12 relative left-72 top-10  mb-5">
-        <div>
-          <div class="mb-4">
-            <label class="block text-gray-700">Name:</label>
-            <input type="text" class="mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" [value]="item.name" readonly>
-          </div>
-          <div class="mb-4">
-            <label class="block text-gray-700">Age:</label>
-            <input type="text" class="mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" [value]="item.ageInMonth" readonly>
-          </div>
-          <div class="mb-4 justify-center">
-            <label class="block text-gray-700">NoteBook:</label>
-            <img [src]="item.idNoteBookImage" alt="id NoteBook Image" class="w-60">
-          </div>
-          <div class="mb-4">
-            <label class="block text-gray-700">Sex:</label>
-            <input type="text" class="mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" [value]="item.sex" readonly>
-          </div>
-          <div class="mb-4">
-            <label class="block text-gray-700">Type:</label>
-            <input type="text" class="mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" [value]="item.type" readonly>
-          </div>
-          
-            <label class="block text-gray-700 mr-5">Pair With:</label>
-            <div class="mb-4 flex">
-            <input type="text" class="mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" [value]="item.pairWith" readonly>
-            <button  class="bg-[#FDBD68] hover:bg-[#ce7604] text-white font-bold w-20 ml-2 px-2 rounded-lg"
-                        [disabled]="item.pairWith === 'I\'m not paired'" (click)="UnPair(item.petID)">Unpair</button>
-            <!-- <button class="bg-[#FDBD68] hover:bg-[#ce7604] text-white font-bold w-20 ml-2  px-2 rounded-lg" (click)="UnPair(item.petID)">Unpair</button>   -->
+<div class="min-h-screen bg-white py-5">
+  <div class="w-[1100px] h-fit m-auto py-6">
+      @for(item of userPetList; track $index){  
+        <div class="flex w-8/12 m-auto h-96 relative justify-between my-8 shadow-lg">
+          <div class="w-[40%] bg-[#dcded9] h-full flex  flex-col justify-between">
+            <div class="h-full shadow-2xl">
+              <img [src]="item.photo" alt="Pet Image" class="h-full w-full">
+            </div> 
+  
+            <div class="m-3 space-x-3 absolute">
+              <button class=""  (click)="navigateToEdit(item.petID)">
+                <svg class="h-6 w-6 text-[#FE7A36]"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                </svg>              
+              </button>
+              <button (click)="deletePet(item.petID)">
+                <svg class="h-6 w-6 text-[#ae4141]"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                </svg>              
+              </button>
             </div>
-          <div class="mb-4">
-            <label class="block text-gray-700">Other Information:</label>
-            <input type="text" class="mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" [value]="item.other" readonly>
-          </div>
-          <div class="flex justify-between">
-            <div class="flex justify-center">
-              <button class="bg-[#FDBD68] hover:bg-[#ce7604] text-white font-bold py-2 px-4 rounded-lg"  [disabled]="item.pairWith !== 'I\'m not paired'" (click)="toggleBreedingStatus(item)">
+           
+
+            <div class="m-3 flex justify-center absolute bottom-2">
+              <button class="bg-[#FE7A36] hover:bg-[#e66322] text-white py-2 px-4 rounded-lg"  [disabled]="item.pairWith !== 'I\'m not paired'" (click)="toggleBreedingStatus(item)">
                 {{ item.isReadyForBreeding ? 'Not Ready For Breeding' : 'Ready For Breeding' }}
               </button>
             </div>
-            <div class="flex justify-center">
-              <button class="bg-[#FDBD68] hover:bg-[#ce7604] text-white font-bold py-2 px-4 rounded-lg" (click)="navigateToEdit(item.petID)">Edit</button>
+            
+          </div>
+
+
+          <!-- <div class="absolute top-[120px] left-[90%] w-[20%] h-[200px] shadow-2xl">
+            <img [src]="item.idNoteBookImage" alt="id NoteBook Image" class="h-full w-full">
+          </div>  -->
+
+          <div class="w-[50%] ">
+            <div class="ml-10 mt-12 flex  justify-end ">
+              <p class="font-Laila font-semibold text-3xl px-6 py-1 bg-[#dcded9] text-stone-600">{{item.name}}</p>
             </div>
-            <div class="flex justify-center">
-              <button class="bg-red-700 hover:bg-red-950 text-white font-bold py-2 px-4 rounded-lg" (click)="deletePet(item.petID)">Delete</button>
+
+            <div class="mr-10 space-y-2 ">
+                <div >
+                  <p class="font-Laila2 text-lg text-stone-800">Age: {{item.ageInMonth}}</p>
+                </div>
+                <div class="">
+                  <p class="font-Laila2 text-lg text-stone-800">Sex: {{item.sex}}</p>
+                </div>
+                <div class="">
+                  <p class="font-Laila2 text-lg text-stone-800">Type: {{item.type}}</p>
+                </div>
+                <div class="">
+                  <p class="font-Laila2 text-lg text-stone-800">pairWith: {{item.pairWith}}</p>
+                  <button  class="bg-[#FE7A36] hover:bg-[#e66322] text-white font-bold px-8 py-2 rounded-lg"
+                          [disabled]="item.pairWith === 'I\'m not paired'" (click)="UnPair(item.petID)">Unpair</button>
+                </div>
+                <div>
+                  <button class="bg-[#FE7A36] hover:bg-[#e66322] text-white font-bold px-8 py-2 rounded-lg" (click)="openDialog(myTemplate)">Tap to see NoteBook</button>
+                  <ng-template #myTemplate>
+                    <div class="m-auto  h-1/3 w-1/3">
+                      <img [src]="item.idNoteBookImage" class=" h-full w-full">
+                      <div class="text-center mt-3">
+                        <button class="bg-[#FE7A36] hover:bg-[#e66322] text-white font-bold px-8 py-2 rounded-lg" (click)="myDialogRef?.close()">Close</button>
+                      </div>
+                    </div>
+                  </ng-template>
+                </div>
             </div>
+            
           </div>
         </div>
-      </div>
-    </div>
-    <div class="ml-6 mt-10 mb-10 w-80">
-      <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg" (click)="navigateToAdd()">+ Add New Pet</button>
-    </div>
+      }
   </div>
-  
+  <div class="ml-6 mt-10 mb-10 w-80">
+    <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg" (click)="navigateToAdd()">+ Add New Pet</button>
+  </div>
+</div>  

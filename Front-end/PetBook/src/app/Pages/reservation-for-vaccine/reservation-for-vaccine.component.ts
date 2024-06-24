@@ -69,7 +69,7 @@ choosePet() {
       this.searchClinicByName(clinic.name);
     });
   }
-
+  
   // Fetch doctors for the clinic
   getDoctors(clinicId: number): void {
     this.clinicService.getDoctors(clinicId).subscribe(data => {
