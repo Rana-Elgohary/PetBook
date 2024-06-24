@@ -18,7 +18,9 @@ export class AddPetService {
     
     const formData = new FormData();
     formData.append('name', pet.name);
-    formData.append('ageInMonth', pet.ageInMonth.toString());
+    if(pet.ageInMonth !== null){
+      formData.append('ageInMonth', pet.ageInMonth.toString());
+    }
     formData.append('sex', pet.sex);
     formData.append('userID', pet.userID.toString());
     if(pet.readyForBreeding !== null){
