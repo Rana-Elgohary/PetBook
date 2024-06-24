@@ -26,11 +26,12 @@ export class UserPetInfoEditComponent implements OnInit {
 
     breedList: Breed[] = []
     editedUserPetInfo: EditPet = new EditPet(0,"", null, 0, "", null, 0, false, "", "");
-    petBreedID: PetBreed | null = null;
+    petBreedID: PetBreed = new PetBreed(0, 0);
     petID: number = 0;
-    photoPreview: string | ArrayBuffer | null |undefined= null; // For previewing the uploaded photo
-    bookImagePreview: string | ArrayBuffer | null |undefined= null; // For previewing the uploaded book ID image
     url:string='https://localhost:7066/Resources/'
+
+    validationErrorsForPet: { [key in keyof EditPet]?: boolean | string | null } = {};
+    validationErrorsForBreedPet: { [key in keyof PetBreed]?: boolean | string | null } = {};
 
     ngOnInit(): void {
         this.activatedRoute.params.subscribe({
@@ -48,13 +49,14 @@ export class UserPetInfoEditComponent implements OnInit {
         this.activatedRoute.params.subscribe({
             next: (d) => {
                 this.petID = d['id'];
-                
                 this.userPetInfoService.getPetById(this.petID).subscribe({
                     next: (d) => {
                         this.editedUserPetInfo.PetID=this.petID;
                         this.editedUserPetInfo = d;
-                        this.editedUserPetInfo.photo=this.url+d.photo
-                        this.editedUserPetInfo.idNoteBookImage=this.url+d.idNoteBookImage
+                        this.editedUserPetInfo.photo=this.url+d.photo;
+                        const photoPreview = document.getElementById('photoPreview') as HTMLImageElement;
+                        photoPreview.src = this.editedUserPetInfo.photo;
+                        this.editedUserPetInfo.idNoteBookImage=this.url+d.idNoteBookImage;
                         console.log(d);
                     }
                 });
@@ -72,37 +74,125 @@ export class UserPetInfoEditComponent implements OnInit {
         });
     }
 
+    triggerFileInput() {
+        const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+        fileInput.click();
+    }
+
     onFileSelected(event: any) {
         const file = event.target.files[0];
-        this.editedUserPetInfo.photo = file;
-        // Create a preview URL for the uploaded image
+        if (file) {
+            this.editedUserPetInfo.photo = file;
+            this.validationErrorsForPet.photo = false;
+            this.previewImage(file);
+        }
+    }
+
+    previewImage(file: File) {
         const reader = new FileReader();
-        reader.onload = (e) => {
-            this.photoPreview = e.target?.result;
-            
+        reader.onload = (e: any) => {
+            const photoPreview = document.getElementById('photoPreview') as HTMLImageElement;
+            photoPreview.src = e.target.result;
         };
         reader.readAsDataURL(file);
     }
 
     onFileSelectedBookImage(event: any) {
         const file = event.target.files[0];
-        this.editedUserPetInfo.idNoteBookImage = file;
-
-        // Create a preview URL for the uploaded book ID image
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            this.bookImagePreview = e.target?.result;
-        };
-        reader.readAsDataURL(file);
+        if (file) {
+            this.editedUserPetInfo.idNoteBookImage = file;
+            this.validationErrorsForPet.idNoteBookImage = false;
+        }
     }
+
+    isFormValid(): boolean {
+        let isValid = true;
     
+        for (const key in this.editedUserPetInfo) {
+          if (this.editedUserPetInfo.hasOwnProperty(key)) {
+            const fieldPet = key as keyof EditPet;
+            if (!this.editedUserPetInfo[fieldPet]) {
+              this.validationErrorsForPet[fieldPet] = true;
+              isValid = false;
+            } else {
+              this.validationErrorsForPet[fieldPet] = false;
+            }
+          }
+        }
+        
+        for (const key in this.petBreedID) {
+          if (this.petBreedID.hasOwnProperty(key)) {
+            const fieldBreedPet = key as keyof PetBreed;
+            if (!this.petBreedID[fieldBreedPet] && fieldBreedPet != "PetID") {
+              this.validationErrorsForBreedPet[fieldBreedPet] = true;
+              isValid = false;
+            } else {
+              this.validationErrorsForBreedPet[fieldBreedPet] = false;
+            }
+          }
+        }
+    
+        return isValid;
+    }
 
     SaveEdit() {
-        this.userPetInfoService.editUserPet(this.editedUserPetInfo ,this.petID).subscribe({ 
-            next: (d) => { console.log(d);
-            this.route.navigateByUrl("userPetInfo");
+        if(this.isFormValid()){
+            this.userPetInfoService.editUserPet(this.editedUserPetInfo ,this.petID).subscribe({ 
+                next: (d) => { console.log(d);
+                this.route.navigateByUrl("userPetInfo");
+                }
+            });
+        }
+    }
+
+    onInputValueChangeForPet(event: { field: keyof EditPet, value: any }) {
+        const { field, value } = event;
+        if (field in this.editedUserPetInfo) {
+          (this.editedUserPetInfo as any)[field] = value;
+          if (value) {
+            this.validationErrorsForPet[field] = false;
+          }
+        }
+    }
+    
+    onInputValueChangeForBreedPet(event: { field: keyof PetBreed, value: any }) {
+        const { field, value } = event;
+        if(this.petBreedID !== null){
+            if (field in this.petBreedID) {
+                (this.petBreedID as any)[field] = value;
+                if (value) {
+                    this.validationErrorsForBreedPet[field] = false;
+                }
             }
-        });
+        }
+    }
+    
+    onSexChange(event: any) {
+        const selectedValue = event.target.value;
+        // Assuming you have validation logic, update validationErrors object accordingly
+        this.validationErrorsForPet.sex = selectedValue ? null : 'Gender is required.';
+    }
+    
+    onTypeChange(event: any) {
+        const selectedValue = event.target.value;
+        // Assuming you have validation logic, update validationErrors object accordingly
+        this.validationErrorsForPet.type = selectedValue ? null : 'Type is required.';
+    }
+    
+    onTBreedChange(event: any) {
+        const selectedValue = event.target.value;
+        // Assuming you have validation logic, update validationErrors object accordingly
+        this.validationErrorsForBreedPet.BreedID = selectedValue ? null : 'Breed is required.';
+    }
+    
+    onReadyForBreedChange(event: any) {
+        const selectedValue = event.target.value;
+        // Assuming you have validation logic, update validationErrors object accordingly
+        this.validationErrorsForPet.readyForBreeding = selectedValue ? null : 'Is Ready for breeding is required.';
+    }
+
+    Cancel(){
+        this.route.navigateByUrl("/userPetInfo");
     }
 }
 

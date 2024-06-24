@@ -1,192 +1,142 @@
-<div class="main m-auto mt-3 w-1/2 bg-orange-100 rounded-md flex flex-col items-center justify-center shadow-2xl">
-    <div class="m-24">
-        <h1 class="tracking-wide font-medium text-2xl mb-3 text-slate-600">update Your Pet Information</h1>
-        <section class="my-9">
-            <div class="relative">
-                <input class="p-2 w-[100%] border-b-2 border-gray-800 focus:outline-none transition duration-200 ease-in" type="text" required
-                    onfocus="this.nextElementSibling.style.transform = 'translateY(-35px)'; 
-                    this.nextElementSibling.style.fontSize = '20px'; 
-                    this.nextElementSibling.style.color = '#fb923c';
-                    this.style.borderColor = '#fb923c';"  
-                    onblur="if(this.value==='') 
-                    { 
-                        this.nextElementSibling.style.transform = ''; 
-                        this.nextElementSibling.style.fontSize = ''; 
-                        this.nextElementSibling.style.color = ''; 
-                        this.style.borderColor = ''
-                    }"
-                    [(ngModel)]="editedUserPetInfo.name">
-            <label class="absolute left-2 bottom-2 text-slate-400 transition duration-200 ease-in capitalize">Pet Name</label>
-            </div>   
-            
-            <div class="relative mt-8">
-                <div class="relative">
-                    <input class="p-2 w-[100%] border-b-2 border-gray-800 focus:outline-none transition duration-200 ease-in" type="text" required
-                        onfocus="this.nextElementSibling.style.transform = 'translateY(-35px)'; 
-                        this.nextElementSibling.style.fontSize = '20px'; 
-                        this.nextElementSibling.style.color = '#fb923c';
-                        this.style.borderColor = '#fb923c';"  
-                        onblur="if(this.value==='') 
-                        { 
-                            this.nextElementSibling.style.transform = ''; 
-                            this.nextElementSibling.style.fontSize = ''; 
-                            this.nextElementSibling.style.color = ''; 
-                            this.style.borderColor = ''
-                        }"
-                        [(ngModel)]="editedUserPetInfo.ageInMonth">
-                        <label class="absolute left-2 bottom-2 text-slate-400 transition duration-200 ease-in capitalize">Pet Age</label>
+<div class="py-5">
+    <div class="flex w-[1100px] m-auto shadow-2xl">
+        <section class="w-1/2">
+            <div class="m-auto w-[70%] my-5">
+                <div class="highlight-container2">
+                    <p class="highlighted-text2 text-2xl">Edit Your <span class=" text-[#FE7A36]">Pet</span></p>
                 </div>
-            </div>   
-            
-            <div class="relative mt-8">
-                <select class="p-2 w-[100%] border-b-2 border-gray-800 focus:outline-none transition duration-200 ease-in"
-                        required
-                        [(ngModel)]="editedUserPetInfo.sex"
-                        onfocus="this.nextElementSibling.style.transform = 'translateY(-35px)'; 
-                                this.nextElementSibling.style.fontSize = '20px'; 
-                                this.nextElementSibling.style.color = '#fb923c';
-                                this.style.borderColor = '#fb923c';"
-                        onblur="if(this.value==='') 
-                                { 
-                                    this.nextElementSibling.style.transform = ''; 
-                                    this.nextElementSibling.style.fontSize = ''; 
-                                    this.nextElementSibling.style.color = ''; 
-                                    this.style.borderColor = ''
-                                }">
-                    <option value="" disabled selected hidden></option>
-                    <option value="F">Female</option>
-                    <option value="M">Male</option>
-                </select>
-                <label class="absolute left-2 bottom-2 text-slate-400 transition duration-200 ease-in capitalize">Gender</label>
-            </div>
 
-            <div class="relative mt-8">
-                <select class="p-2 w-[100%] border-b-2 border-gray-800 focus:outline-none transition duration-200 ease-in"
-                        required
-                        [(ngModel)]="editedUserPetInfo.type"
-                        onfocus="this.nextElementSibling.style.transform = 'translateY(-35px)'; 
-                                this.nextElementSibling.style.fontSize = '20px'; 
-                                this.nextElementSibling.style.color = '#fb923c';
-                                this.style.borderColor = '#fb923c';"
-                        onblur="if(this.value==='') 
-                                { 
-                                    this.nextElementSibling.style.transform = ''; 
-                                    this.nextElementSibling.style.fontSize = ''; 
-                                    this.nextElementSibling.style.color = ''; 
-                                    this.style.borderColor = ''
-                                }">
-                    <option value="" disabled selected hidden></option>
-                    <option value="Cat">Cat</option>
-                    <option value="Dog">Dog</option>
-                </select>
-                <label class="absolute left-2 bottom-2 text-slate-400 transition duration-200 ease-in capitalize">Type</label>
-            </div>
-
-            <div class="relative mt-8">
-                <select class="p-2 w-[100%] border-b-2 border-gray-800 focus:outline-none transition duration-200 ease-in"
-                        required
-                        [value]="petBreedID?.BreedID"
-                        onfocus="this.nextElementSibling.style.transform = 'translateY(-35px)'; 
-                                this.nextElementSibling.style.fontSize = '20px'; 
-                                this.nextElementSibling.style.color = '#fb923c';
-                                this.style.borderColor = '#fb923c';"
-                        onblur="if(this.value==='') 
-                                { 
-                                    this.nextElementSibling.style.transform = ''; 
-                                    this.nextElementSibling.style.fontSize = ''; 
-                                    this.nextElementSibling.style.color = ''; 
-                                    this.style.borderColor = ''
-                                }">
-                    <option value="" disabled selected hidden></option>
-                    <option *ngFor="let breed of breedList" [value]="breed.breedID">{{ breed.breed1 }}</option>
-                </select>
-                <label class="absolute left-2 bottom-2 text-slate-400 transition duration-200 ease-in capitalize">Breed</label>
-            </div>
-
-            <div class="relative mt-8">
-                <select class="p-2 w-[100%] border-b-2 border-gray-800 focus:outline-none transition duration-200 ease-in"
-                        required
-                        [(ngModel)]="editedUserPetInfo.readyForBreeding"
-                        onfocus="this.nextElementSibling.style.transform = 'translateY(-35px)'; 
-                                this.nextElementSibling.style.fontSize = '20px'; 
-                                this.nextElementSibling.style.color = '#fb923c';
-                                this.style.borderColor = '#fb923c';"
-                        onblur="if(this.value==='') 
-                                { 
-                                    this.nextElementSibling.style.transform = ''; 
-                                    this.nextElementSibling.style.fontSize = ''; 
-                                    this.nextElementSibling.style.color = ''; 
-                                    this.style.borderColor = ''
-                                }">
-                    <option value="" disabled selected hidden></option>
-                    <option value="false">False</option>
-                    <option value="true">True</option>
-                </select>
-                <label class="absolute left-2 bottom-2 text-slate-400 transition duration-200 ease-in capitalize">Ready For Breeding?</label>
-            </div>
-
-            <div class="relative mt-8">
-                <div class="relative">
-                    <input class="p-2 w-[100%] border-b-2 border-gray-800 focus:outline-none transition duration-200 ease-in" type="text" required
-                        onfocus="this.nextElementSibling.style.transform = 'translateY(-35px)'; 
-                        this.nextElementSibling.style.fontSize = '20px'; 
-                        this.nextElementSibling.style.color = '#fb923c';
-                        this.style.borderColor = '#fb923c';"  
-                        onblur="if(this.value==='') 
-                        { 
-                            this.nextElementSibling.style.transform = ''; 
-                            this.nextElementSibling.style.fontSize = ''; 
-                            this.nextElementSibling.style.color = ''; 
-                            this.style.borderColor = ''
-                        }"
-                        [(ngModel)]="editedUserPetInfo.other">
-    <label class="absolute left-2 bottom-2 text-slate-400 transition duration-200 ease-in capitalize">Other Information</label>
-                </div>
-            </div>  
-            <div class="flex justify-around">
-            <label class="block text-orange-400 font-medium mb-2 mt-2">
-                Update your pet's Photo
-                <div class="flex justify-center">
-               <img [src]="photoPreview" class="w-40" *ngIf="photoPreview">
-            <img [src]="editedUserPetInfo.photo" class="w-40" *ngIf="!photoPreview">
-                
-                <svg id="upload-icon" class="h-8 w-8 text-orange-400" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" style="cursor: pointer;">
-                    <path stroke="none" d="M0 0h24v24H0z"/>
-                    <path d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />
-                    <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />
-                    <line x1="16" y1="5" x2="19" y2="8" />
-                  </svg>
-                </div>
-                  <input type="file" id="file-input" class="hidden" (change)="onFileSelected($event)">
-                </label>
-
-            <label class="block text-orange-400 font-medium mb-2 mt-2">
-                Enter your pet's Book ID
-                <div class="flex justify-center">
-                    <img [src]="bookImagePreview" class="w-40" *ngIf="bookImagePreview">
-                    <img [src]="editedUserPetInfo.idNoteBookImage" class="w-40" *ngIf="!bookImagePreview">
-                    
-                    <svg id="upload-icon" class="h-8 w-8 text-orange-400" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" style="cursor: pointer;">
-                        <path stroke="none" d="M0 0h24v24H0z"/>
-                        <path d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />
-                        <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />
-                        <line x1="16" y1="5" x2="19" y2="8" />
-                      </svg>
+                <div class="my-10 flex flex-wrap justify-between">
+                    <div class="mb-5 relative">
+                        <div class="flex flex-col">
+                          <label class="text-slate-800 text-lg">Name</label>
+                          <input class="p-2 border-2 focus:outline-none focus:border-[#FE7A36] rounded-md" type="text"
+                                 [(ngModel)]="editedUserPetInfo.name"
+                                 (ngModelChange)="onInputValueChangeForPet({ field: 'name', value: $event })"
+                                 placeholder="KoKy">
+                        </div>
+                        <div *ngIf="validationErrorsForPet['name']" class="text-red-500 absolute">*Name is required.</div>
                     </div>
-                      <input type="file" id="file-input" class="hidden" (change)="onFileSelectedBookImage($event)">
-            </label>
-        </div>
+                
+                    <div class="mb-5 relative">
+                        <div class="flex flex-col">
+                          <label class="text-slate-800 text-lg">Age In Month</label>
+                          <input class="p-2 border-2 focus:outline-none focus:border-[#FE7A36] rounded-md" type="number"
+                                 [(ngModel)]="editedUserPetInfo.ageInMonth"
+                                 (ngModelChange)="onInputValueChangeForPet({ field: 'ageInMonth', value: $event })">
+                        </div>
+                        <div *ngIf="validationErrorsForPet['ageInMonth']" class="text-red-500 absolute">*Age in month is required.</div>
+                    </div>
+                
+                    <div class="w-[100%] my-5 relative">
+                        <div class="flex justify-between items-center">
+                          <label class="text-slate-800 text-lg w-[30%]">Gender</label>
+                          <div class="flex items-center p-2 border-2 hover:border-[#FE7A36] rounded-md w-[40%]">
+                            <input type="radio" id="female" name="gender" value="F" [(ngModel)]="editedUserPetInfo.sex" (change)="onSexChange($event)" class="mr-2">
+                            <label for="female" class="text-slate-800 text-base">Female</label>
+                          </div>
+                          <div class="flex items-center ml-7 p-2 border-2 hover:border-[#FE7A36] rounded-md w-[40%]">
+                            <input type="radio" id="male" name="gender" value="M" [(ngModel)]="editedUserPetInfo.sex" (change)="onSexChange($event)" class="mr-2">
+                            <label for="male" class="text-slate-800 text-base">Male</label>
+                          </div>
+                        </div>
+                        <div *ngIf="validationErrorsForPet['sex']" class="text-red-500 absolute">*Gender is required.</div>
+                    </div>
+                
+                    <div class="relative mb-5 w-[45%]">
+                        <div class="flex flex-col">
+                            <label class="text-slate-800 text-lg">Type</label>
+                            <select class="p-2 border-2 focus:outline-none focus:border-[#FE7A36] rounded-md"
+                                    required
+                                    [(ngModel)]="editedUserPetInfo.type"
+                                    (change)="onTypeChange($event)">
+                                <option value="" disabled selected hidden></option>
+                                <option value="Cat">Cat</option>
+                                <option value="Dog">Dog</option>
+                            </select>
+                        </div>
+                        <div *ngIf="validationErrorsForPet['type']" class="text-red-500 absolute">*Type is required.</div>
+                    </div>
+                
+                    <div class="relative mb-5 w-[45%]">
+                        <div class="flex flex-col">
+                            <label class="text-slate-800 text-lg">Breed</label>
+                            <select class="p-2 border-2 focus:outline-none focus:border-[#FE7A36] rounded-md"
+                                    required
+                                    [(ngModel)]="petBreedID.BreedID"
+                                    (change)="onTBreedChange($event)">
+                                <option value="" disabled selected hidden></option>
+                                <option *ngFor="let breed of breedList" [value]="petBreedID.BreedID">{{ breed.breed1 }}</option>
+                            </select>
+                        </div>
+                        <div *ngIf="validationErrorsForBreedPet['BreedID']" class="text-red-500 absolute">*Breed is required.</div>
+                    </div>
+                
+                    <div class="w-[100%] my-5 relative">
+                        <div class="flex justify-between items-center">
+                          <label class="text-slate-800 text-lg w-[30%]">Ready For Breeding?</label>
+                          <div class="flex items-center p-2 border-2 hover:border-[#FE7A36] rounded-md w-[40%]">
+                            <input type="radio" id="false" name="ready" [value]="false" [(ngModel)]="editedUserPetInfo.readyForBreeding" (change)="onReadyForBreedChange($event)" class="mr-2">
+                            <label for="false" class="text-slate-800 text-base">False</label>
+                          </div>
+                          <div class="flex items-center ml-7 p-2 border-2 hover:border-[#FE7A36] rounded-md w-[40%]">
+                            <input type="radio" id="true" name="ready" [value]="true" [(ngModel)]="editedUserPetInfo.readyForBreeding" (change)="onReadyForBreedChange($event)" class="mr-2">
+                            <label for="true" class="text-slate-800 text-base">True</label>
+                          </div>
+                        </div>
+                        <div *ngIf="validationErrorsForPet['readyForBreeding']" class="text-red-500 absolute">*Is Ready for breeding is required.</div>
+                    </div> 
+                    
+                
+                    <div class="my-5 relative w-[100%]">
+                        <div class="flex flex-col">
+                          <label class="text-slate-800 text-lg">Other Information</label>
+                          <input class="p-2 border-2 focus:outline-none focus:border-[#FE7A36] rounded-md" type="text"
+                                 [(ngModel)]="editedUserPetInfo.other"
+                                 (ngModelChange)="onInputValueChangeForPet({ field: 'other', value: $event })"
+                                 placeholder="Any other information about the pet">
+                        </div>
+                        <div *ngIf="validationErrorsForPet['other']" class="text-red-500 absolute">*Others is required.</div>
+                    </div>
+
+                    <div class="flex mt-5">
+                        <label class="text-slate-800 text-lg">Enter your pet's Book ID</label>
+                        <div class="relative">
+                            <input type="file" class="border-2 focus:outline-none focus:border-[#FE7A36] block w-full px-4 py-2 rounded-md" (change)="onFileSelectedBookImage($event)">
+                            <div *ngIf="validationErrorsForPet['idNoteBookImage']" class="text-red-500 absolute">*Pet Book Id is required.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <section class="flex justify-between">
+                    <button class="text-white bg-[#FE7A36] w-[40%] p-3 rounded-full hover:bg-[#e05e1d] transition duration-200 ease-in hover:-translate-x-1 hover:scale-105" (click)="SaveEdit()">Update Pet</button>
+                    <button class="text-white bg-[#979592] w-[40%] p-3 rounded-full hover:bg-[#605c5a] transition duration-200 ease-in hover:-translate-x-1 hover:scale-105" (click)="Cancel()">Cancel</button>
+                </section>
+            </div>
         </section>
-        <button class="text-white bg-orange-400 w-[100%] py-2 rounded-md hover:bg-orange-500 hover:text-gray-200 transition duration-200 ease-in hover:-translate-x-1 hover:scale-105" (click)="SaveEdit()">Done</button>
+
+        <section class="w-1/2 border-r-2 border-[#ccccccd6] FirstSection">
+            <div class="m-auto w-[70%] my-5">
+              <div class="highlight-container">
+                <p class="highlighted-text">ENJOY WITH PET</p>
+              </div>
+      
+              <div>
+                <div class="my-5 mt-16">
+                    <img src="" id="photoPreview" class="cursor-pointer w-[70%] h-[270px] rounded-full m-auto" (click)="triggerFileInput()">
+                </div>
+                <input type="file" id="fileInput" class="hidden" (change)="onFileSelected($event)">
+                <div *ngIf="validationErrorsForPet['photo']" class="bg-[#FE7A36] text-white text-center rounded-md py-2">*Pet Photo is required.</div>
+              </div>
+               
+              <div>
+                <p class="text-white text-center">Welcome to our website where you can find rare breeds and will be easy for you to find clinics.</p>
+              </div>
+      
+              <div class="flex justify-center mt-10">
+                <img src="../../../assets/Images/headerLogo.png" class="w-[40%] rounded-full">
+              </div>
+            </div>
+        </section>
     </div>
 </div>
-
-<script>
-    document.getElementById('upload-icon').addEventListener('click', function() {
-      document.getElementById('file-input').click();
-    });
-  
-    document.getElementById('file-input').addEventListener('change', function(event) {
-      onFileSelectedBookImage(event);
-    });
-  </script>

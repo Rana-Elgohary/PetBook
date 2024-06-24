@@ -36,17 +36,19 @@ export class UserPetInfoServiceService {
     {
       const formData = new FormData();
       formData.append('petID', id.toString());
-    formData.append('name', editedPet.name);
-    formData.append('ageInMonth', editedPet.ageInMonth.toString());
-    formData.append('sex', editedPet.sex);
-    formData.append('userID', editedPet.userID.toString());
-    formData.append('readyForBreeding', editedPet.readyForBreeding.toString());
-    formData.append('type',editedPet.type);
-    formData.append('other', editedPet.other);
-    
-    if (editedPet.photo && editedPet.idNoteBookImage) {
-      formData.append('photo', editedPet.photo);
-      formData.append('idNoteBookImage', editedPet.idNoteBookImage);
+      formData.append('name', editedPet.name);
+      formData.append('ageInMonth', editedPet.ageInMonth.toString());
+      formData.append('sex', editedPet.sex);
+      formData.append('userID', editedPet.userID.toString());
+      formData.append('readyForBreeding', editedPet.readyForBreeding.toString());
+      formData.append('type',editedPet.type);
+      formData.append('other', editedPet.other);
+      
+      if (editedPet.photo instanceof File) {
+        formData.append('photo', editedPet.photo);
+      }
+      if (editedPet.idNoteBookImage instanceof File) {
+        formData.append('idNoteBookImage', editedPet.idNoteBookImage);
       }
       return this.http.put<AddPet>(this.baseURL,formData);
     }
