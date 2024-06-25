@@ -102,6 +102,36 @@ export class BreedSearchComponent implements OnInit {
         }
       );
       }
+
+
+      // --female sex--
+else if (this.filterType === 'Female') {
+  this.breedSearchService.getFemalesReadyForBreeding(this.OwnderId).subscribe(
+    pets => {
+      this.pets = pets;
+      this.noResults = this.pets.length === 0;
+    },
+    error => {
+      console.error('Error fetching pets:', error);
+    }
+  );
+  }
+
+
+  else if (this.filterType === 'Male') {
+    this.breedSearchService.getMalesReadyForBreeding(this.OwnderId).subscribe(
+      pets => {
+        this.pets = pets;
+        this.noResults = this.pets.length === 0;
+      },
+      error => {
+        console.error('Error fetching pets:', error);
+      }
+    );
+    }
+
+
+  
   }
 
   onInputChange() {

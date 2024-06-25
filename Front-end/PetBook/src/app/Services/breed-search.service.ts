@@ -40,7 +40,27 @@ export class BreedSearchService {
       }))
     );
   }
-  
+
+
+  getFemalesReadyForBreeding(ownerId: number): Observable<PetDetails[]> {
+    return this.http.get<PetDetails[]>(`${this.baseApiUrl}SearchFemalesReadyForBreeding`).pipe(
+      map(pets => pets.filter(pet => pet.userID !== ownerId).map(pet => {
+        pet.photo = this.url + pet.photo;
+        return pet;
+      }))
+    );
+  }
+
+
+  getMalesReadyForBreeding(ownerId: number): Observable<PetDetails[]> {
+    return this.http.get<PetDetails[]>(`${this.baseApiUrl}SearchMalesReadyForBreeding`).pipe(
+      map(pets => pets.filter(pet => pet.userID !== ownerId).map(pet => {
+        pet.photo = this.url + pet.photo;
+        return pet;
+      }))
+    );
+  }
+
   searchBreedNameOfPetsReadyForBreeding(ownerId: number, breedName: string): Observable<PetDetails[]> {
     const encodedSearchQuery = encodeURIComponent(breedName);
     const searchUrl = `${this.baseApiUrl}SearchBreedNameOfPetsReadyForBreeding?name=${encodedSearchQuery}`;
