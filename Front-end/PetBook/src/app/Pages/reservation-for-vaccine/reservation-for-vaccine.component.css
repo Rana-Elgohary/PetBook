@@ -1,68 +1,15 @@
+.textBefore::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background-color: #fe7936;
+}
 
-
-
-.container {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 16px;
-  }
-  
-  .clinic-card {
-    position: relative; /* Necessary for positioning the overlay */
-    background-image: url('/assets/Images/Background.png');
-    background-size: cover;
-    background-position: center;
-    
-    border-radius: 8px;
-    padding: 24px;
-    margin-bottom: 24px;
-    color: black; /* Text color for contrast */
-  }
-  
-  .flex-container {
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  .clinic-info, .doctor-info {
-    flex: 1;
-    margin-bottom: 16px;
-    padding: 16px;
-    border-radius: 8px;
-  }
-  
-  .clinic-info {
-    background-color: rgba(255, 250, 240, 0.8); /* Slightly transparent blue background for readability */
-  }
-  
-  .clinic-info h3 {
-    color: orange;
-  }
-  
-  .clinic-info ul li, .doctor-info ul li {
-    padding: 8px;
-    border-radius: 4px;
-    margin: 8px 0;
-  }
-  
-  .doctor-info {
-    background-color: rgba(255, 250, 240, 0.8); /* Slightly transparent green background for readability */
-  }
-  
-  .doctor-info h4 {
-    color: orange;}
-    .rate i {
-      color: gold; /* Color for the stars */
-      margin-right: 5px; /* Space between stars */
-      font-size: 20px; /* Adjust star size as needed */
-  }
-  .book-appointment {
-    width: 50%;
-    background-color: rgba(255, 250, 240, 0.8); /* Slightly transparent white background for readability */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    padding: 24px;
-    margin-top: 24px;
-    text-align: center;
-  }
-  
+.clinic-card {
+  background-image: url('/assets/Images/Background.png');
+  background-size: cover;
+  background-position: bottom;
+}

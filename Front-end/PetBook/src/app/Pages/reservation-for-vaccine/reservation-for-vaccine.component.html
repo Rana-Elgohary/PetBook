@@ -1,60 +1,71 @@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-<style>
+<div class="bg-gray-100 p-8">
+  <div class="w-[70%] m-auto">
 
-.background-image {
-            background-image: url('../assets/Images/PetInfoBG.png');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            height: 109vh;
-            width: 100%;
-        }
+    <section class="m-auto text-center pb-14 space-y-8">
+      <p class="font-Laila text-[#FE7A36] text-[15px] font-semibold">BEST PET CARE</p>
+      <p class="font-Laila font-semibold text-[50px] text-[#051829]">Book Your Appointment</p>
+    </section>
 
-</style>
+    <section class="font-Laila2 bg-white p-5 shadow-xl">
+      <div class="clinic-card" *ngIf="clinicInfo">
+        <div class="flex justify-between text-gray-500">
+          <div class="mr-4 p-4 w-[50%]">
+            <p class="textBefore relative pl-5 text-2xl font-bold text-[#051829]">{{clinicInfo.name}}</p>
 
-<body class="bg-gray-100 background-image">
-    <div class="container mx-auto p-1">
-        <div class="clinic-card" *ngIf="clinicInfo">
-          <div class="flex-container">
-            <div class="content">
-              <div class="clinic-info mr-4">
-                <p class=" "><strong  class="text-orange-500">Name:</strong> {{clinicInfo.name}}</p>
-
-                 
-
-                <p><strong class="text-orange-500">Rate:</strong></p>
-
-                <div class="rate">
-                  <ng-container *ngFor="let star of stars; let i = index">
-                    <i class="fa" [ngClass]="{'fa-star': i < clinicInfo.rate, 'fa-star-o': i >= clinicInfo.rate}"></i>
-                  </ng-container>
-                </div>
-                <p><strong class="text-orange-500">Locations:</strong></p>
-                <ul>
-                  <li *ngFor="let location of clinicInfo?.locations">{{location}}</li>
-                </ul>
-                <p><strong class="text-orange-500">Phones:</strong></p>
-                <ul>
-                  <li *ngFor="let phone of clinicInfo?.phoneNumbers">{{phone}}</li>
-                </ul>
-              </div>
-              <div class="doctor-info mr-4">
-                <h4 class="text-md font-semibold text-center"><strong class="text-orange-500">Doctors</strong></h4>
-                <ul>
-                  <li *ngFor="let doctor of doctors">Dr: {{doctor.name}}</li>
-                </ul>
-              </div>
+            <div>
+              <span class="textBefore relative pl-5 text-2xl font-bold text-[#051829]">Rate: </span>
+              <ng-container *ngFor="let star of stars; let i = index">
+                <i class="fa text-[gold] mr-2 text-lg" [ngClass]="{'fa-star': i < clinicInfo.rate, 'fa-star-o': i >= clinicInfo.rate}"></i>
+              </ng-container>
             </div>
-            <div class="book-appointment">
-                <h4 class="text-md font-semibold mb-2"><strong class="text-orange-500">Book an Appointment</strong></h4>
-                <input type="text" placeholder="Your Name" class="border p-2 rounded mb-2 w-full">
-                <input type="date"  [(ngModel)]="appointment.date" class="border p-2 rounded mb-2 w-full">
-                <input type="text" placeholder="Your Phone"  class="border p-2 rounded mb-2 w-full">
-               <textarea placeholder="Additional Information" class="border p-2 rounded mb-2 w-full"></textarea>
-               <button (click)="choosePet()" class="bg-orange-300 text-white px-11 py-2 rounded-full slanted-text" ><strong>Choose Pet</strong></button>
-                <button (click)="bookAppointment()" class="bg-orange-300 text-white px-11 py-2 rounded-full slanted-text" ><strong>Book</strong></button>
+            
+            <div class="my-3">
+              <span class="textBefore relative pl-5 text-2xl font-bold text-[#051829]">Locations: </span>
+              <ul>
+                <li class="ml-10 text-base" *ngFor="let location of clinicInfo?.locations">{{location}}</li>
+              </ul>
             </div>
+            
+            <div class="my-3">
+              <span class="textBefore relative pl-5 text-2xl font-bold text-[#051829]">Phones: </span>
+              <ul>
+                <li class="ml-10 text-base" *ngFor="let phone of clinicInfo?.phoneNumbers">{{phone}}</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="book-appointment text-center p-5 bg-[#fffaf0] w-[50%]">
+              <p class="text-xl font-bold mb-2 text-[#fe7936]">Book an Appointment</p>
+              <input type="text" placeholder="Your Name" class="border p-2 rounded mb-2 w-full">
+              <input type="date"  [(ngModel)]="appointment.date" class="border p-2 rounded mb-2 w-full">
+              <input type="text" placeholder="Your Phone"  class="border p-2 rounded mb-2 w-full">
+              <textarea placeholder="Additional Information" class="border p-2 rounded mb-2 w-full"></textarea>
+              <button (click)="choosePet()" class="bg-[#746f6c] hover:bg-[#746f6c86] text-white px-8 py-2 text-base mr-4" ><strong>Choose Pet</strong></button>
+              <button (click)="bookAppointment()" class="bg-[#fe7936] hover:bg-[#e66322] text-white px-8 py-2 text-base">Book</button>
           </div>
         </div>
       </div>
-    </body>
+    </section>
+
+    <section class="m-auto text-center py-14 space-y-8">
+      <p class="font-Laila text-[#FE7A36] text-[15px] font-semibold">BEST PET CARE</p>
+      <p class="font-Laila font-semibold text-[50px] text-[#051829]">Meet Our Doctors</p>
+      <div class="w-[610px] m-auto">
+          <p class="font-Laila2 text-[#696969] text-[19px]" >We understand the importance of proper care for pets. That's why we've created a place where you can find the best doctors.</p>
+      </div>
+    </section>
+
+    <section class="font-Laila2 flex flex-wrap justify-center space-x-12">
+      <div class="bg-white w-[30%] p-5 shadow-xl mb-12">
+        <img src="https://images.unsplash.com/photo-1488161628813-04466f872be2?crop=entropy&cs=srgb&fm=jpg&ixid=MnwxNDU4OXwwfDF8cmFuZG9tfHx8fHx8fHx8MTYyMzMxNTMwNQ&ixlib=rb-1.2.1&q=85">
+        <div class="flex align-middle mt-5">
+          <span class="textBefore relative pl-5 text-2xl font-bold">Dr. Mark Carusso</span>
+        </div>
+        <div class="text-gray-400 flex flex-col text-base items-center">
+          <span class="p-0 m-0">Koko Loo Doo</span>
+          <span class="p-0 m-0">01227821763</span>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
