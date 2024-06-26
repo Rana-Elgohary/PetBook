@@ -48,7 +48,7 @@ export class SearchVaccineComponent implements OnInit {
 
   hideSuggestions() {
     this.VaccineSuggestions = [];
-    }
+   }
 
  onInputChange() {
       this.VaccineSuggestions = this.vaccineService.getVaccineSuggestions(this.searchQuery);
