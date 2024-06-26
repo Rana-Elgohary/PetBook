@@ -166,6 +166,12 @@ namespace PetBooK.BL.Config
             ///map to get clinic by it's location and numbers
             // CreateMap<Clinic, ClinicByLocationsDTO>()
             //.ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.Clinic_Locations.Select(cl => cl.Location).FirstOrDefault()));
+
+           
         }
+
+
+
+
     }
 }
