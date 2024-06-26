@@ -322,8 +322,5 @@ namespace PetBooK.BL.Reo
 
             return query.Where(e => EF.Property<int>(e, str) == Id).ToList();
         }
-
-
-
     }
 }
