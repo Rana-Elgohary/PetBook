@@ -9,6 +9,8 @@ import { SignalRServiceService } from '../../Services/signal-rservice.service';
 import { Router,ActivatedRoute } from '@angular/router';
 import { AccountServiceService } from '../../Services/account-service.service';
 import { BreedSearchService } from '../../Services/breed-search.service';
+import { SetFilterModule } from '@ag-grid-enterprise/set-filter';
+import { AgGridModule } from '@ag-grid-community/angular';
 
 @Component({
   selector: 'app-breed-search',
@@ -26,6 +28,7 @@ export class BreedSearchComponent implements OnInit {
   showFilterMenu: boolean = false; // Variable to toggle filter menu visibility
   filteredPets: PetDetails[] = []; // Filtered list based on search and filter criteria
   filterType: string = ''; // For filtering by dog or cat
+  filterSex: string = ''
   showSearchBar: boolean = false; // Variable to toggle search bar visibility
   noResults: boolean = false;
   OwnderId:number= parseInt(this.AccountService.r.id);
@@ -79,47 +82,7 @@ export class BreedSearchComponent implements OnInit {
     this.showFilterMenu = !this.showFilterMenu;
   }
   applyFilter() {
-    if (this.filterType === '') {
-      this.fetchPets();
-    } else if (this.filterType === 'Cat') {
-      this.breedSearchService.getCatsReadyForBreeding(this.OwnderId).subscribe(
-        pets => {
-          this.pets = pets;
-          this.noResults = this.pets.length === 0;
-        },
-        error => {
-          console.error('Error fetching pets:', error);
-        }
-      );
-    } else if (this.filterType === 'Dog') {
-      this.breedSearchService.getDogsReadyForBreeding(this.OwnderId).subscribe(
-        pets => {
-          this.pets = pets;
-          this.noResults = this.pets.length === 0;
-        },
-        error => {
-          console.error('Error fetching pets:', error);
-        }
-      );
-      }
-
-
-      // --female sex--
-else if (this.filterType === 'Female') {
-  this.breedSearchService.getFemalesReadyForBreeding(this.OwnderId).subscribe(
-    pets => {
-      this.pets = pets;
-      this.noResults = this.pets.length === 0;
-    },
-    error => {
-      console.error('Error fetching pets:', error);
-    }
-  );
-  }
-
-
-  else if (this.filterType === 'Male') {
-    this.breedSearchService.getMalesReadyForBreeding(this.OwnderId).subscribe(
+    this.breedSearchService.filterPetsReadyForBreeding(this.filterType, this.filterSex, this.OwnderId).subscribe(
       pets => {
         this.pets = pets;
         this.noResults = this.pets.length === 0;
@@ -128,11 +91,11 @@ else if (this.filterType === 'Female') {
         console.error('Error fetching pets:', error);
       }
     );
-    }
+  }
 
 
   
-  }
+  
 
   onInputChange() {
     this.breedSuggestions = this.autoCorrectService.getBreedSuggestions(this.searchQuery);
