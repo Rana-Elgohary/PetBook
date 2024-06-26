@@ -7,6 +7,7 @@ import { ClinlicLocationService } from '../../Services/clinlic-location.service'
 import { VaccineClinicLocation } from '../../Models/vaccine-clinic-location';
 import { CommonModule, NgFor, NgForOf, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { VaccineCliniccAdd } from '../../Models/vaccine-clinicc-add';
 
 @Component({
   standalone: true,
@@ -38,6 +39,7 @@ export class SearchVaccineClicnicComponent implements OnInit {
     ).subscribe(
       data => {
         this.vaccineClinic = data;
+        console.log(this.vaccineClinic);
         this.vaccineClinic.forEach(element => {
           this.getClinckwithLocatiion(element.clinicID);
         });
@@ -52,6 +54,14 @@ export class SearchVaccineClicnicComponent implements OnInit {
     this.clinicLocation.GatClincsWithLocations(id).subscribe(
       data2 => {
         this.vaccineClinicLocation.push(...data2); // Use spread operator to push array elements
+        this.vaccineClinicLocation.forEach(element => {
+          const item=this.vaccineClinic.find(c=>c.clinicID==element.clinicID&&c.vaccineID==this.VaccineId);
+          if(item){
+          element.price=item.price;
+          element.Quantity=item?.quantity;
+          }
+        });
+        console.log(this.vaccineClinicLocation);
       },
       error => {
         console.error('An error occurred while fetching clinic locations:', error);

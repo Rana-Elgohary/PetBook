@@ -9,6 +9,8 @@ import { ClinicInfo } from '../../Models/clinic-info';
 import { CommonModule, NgClass, NgFor } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AccountServiceService } from '../../Services/account-service.service';
+import { ClinicDoctor } from '../../Models/clinic-doctor';
+import { ClinicDoctorService } from '../../Services/clinic-doctor.service';
 
 @Component({
   selector: 'app-clinic',
@@ -20,13 +22,13 @@ import { AccountServiceService } from '../../Services/account-service.service';
 export class ClinicComponent {
   
   clinic: Clinic = new Clinic(0, "", 0, "");
-  doctors: Doctor[] = [];
   appointment: Reservation = new Reservation(1, 1, new Date(2020, 0, 6));
   clinicName: string = 'Default Clinic Name';
   clinicInfo: ClinicInfo | null = null;
   stars: number[] = [1, 2, 3, 4, 5];
+  ClinicDoctors: ClinicDoctor[] = []
 
-  constructor(private route: ActivatedRoute, private clinicService: ClinicService, public account:AccountServiceService) { }
+  constructor(private route: ActivatedRoute, private clinicService: ClinicService, public account:AccountServiceService, private clinicDoctor: ClinicDoctorService) { }
 
   ngOnInit(): void {
     this.route.params.pipe(
@@ -42,10 +44,12 @@ export class ClinicComponent {
   }
 
   getDoctors(clinicId: number): void {
-    this.clinicService.getDoctors(clinicId).subscribe(data => {
-      this.doctors = data;
-      
-    });
+    this.clinicDoctor.GetDoctorsByClinicID(clinicId).subscribe(
+      data => {
+        this.ClinicDoctors = data
+        console.log(this.ClinicDoctors)
+      }
+    )
   }
 
   bookAppointment(): void {

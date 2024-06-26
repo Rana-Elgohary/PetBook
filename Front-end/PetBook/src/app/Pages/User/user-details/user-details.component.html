@@ -1,5 +1,5 @@
 <div class="py-5">
-  <div class="w-[1100px] h-[95vh] m-auto relative">
+  <div class="w-[1000px] h-[95vh] m-auto relative">
     <section class="data w-[97%] h-[95%] bg-[#dcded9] absolute top-0 left-0">
 
     </section>
@@ -16,13 +16,13 @@
             <p>Age: {{User.age}}</p>
             <p>Gender: {{ User.sex.toLowerCase() === 'f' ? 'Female' : 'Male' }}</p>
           </div>
-          <a routerLink="/UpdateUser" class="p-2 ml-20 shadow-xl text-white text-center cursor-pointer tracking-wider bg-[#FE7A36] hover:bg-[#e66322]">Update Profile</a>
+          <a routerLink="/UpdateUser" class="p-2 ml-10 shadow-xl text-white text-center cursor-pointer tracking-wider bg-[#FE7A36] hover:bg-[#e66322]">Update Profile</a>
         </div>
         @if(nameOfImage == null){
-          <img class="w-[400px] h-[400px] absolute top-[calc((100%-400px)/2)] right-0" src="../../../../assets/Images/null.jpg" alt="{{ User.name }}">
+          <img class="w-[400px] h-[400px] absolute top-[calc((100%-400px)/2)] right-0 object-cover" src="../../../../assets/Images/null.jpg" alt="{{ User.name }}">
         }
         @else {
-          <img class="w-[400px] h-[400px] absolute top-[calc((100%-400px)/2)] right-0" [src]="User.photo" alt="{{ User.name }}">
+          <img class="w-[350px] h-[350px] absolute top-[calc((100%-350px)/2)] right-0 rounded-full object-cover" [src]="User.photo" alt="{{ User.name }}">
         }
       </div>
     </section>  

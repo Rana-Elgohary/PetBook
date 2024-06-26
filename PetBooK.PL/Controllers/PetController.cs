@@ -142,6 +142,36 @@ namespace PetBooK.PL.Controllers
             var petDTOs = mapper.Map<List<PetGetDTO>>(pets);
             return Ok(petDTOs);
         }
+
+
+
+        //-------------------------------------------------------------------------------------
+
+        [HttpGet("SearchFemalesReadyForBreeding")]
+
+        public IActionResult GetAllFemalesReadyForBreeding()
+        {
+            var pets = unitOfWork.petRepository.FindBy(p => p.ReadyForBreeding && p.Sex == "F");
+            if (!pets.Any()) { return NotFound("No Female pets ready for breeding found."); }
+
+            var petDTOs = mapper.Map<List<PetGetDTO>>(pets);
+            return Ok(petDTOs);
+        }
+        //-------------------------------------------------------------------------------------
+
+        [HttpGet("SearchMalesReadyForBreeding")]
+
+        public IActionResult GetAllMalesReadyForBreeding()
+        {
+            var pets = unitOfWork.petRepository.FindBy(p => p.ReadyForBreeding && p.Sex == "M");
+            if (!pets.Any()) { return NotFound("No Female pets ready for breeding found."); }
+
+            var petDTOs = mapper.Map<List<PetGetDTO>>(pets);
+            return Ok(petDTOs);
+        }
+
+
+        
         //--------------------------------------------------------------------------------------
         [HttpPost] //Edit By Amira
         public async Task<IActionResult> PostPet([FromForm] PetAddDTO NewPet)

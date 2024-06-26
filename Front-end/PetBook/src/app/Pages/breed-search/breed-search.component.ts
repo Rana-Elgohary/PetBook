@@ -8,6 +8,7 @@ import { AutoCorrectService } from '../../Services/auto-correct.service';
 import { SignalRServiceService } from '../../Services/signal-rservice.service';
 import { Router,ActivatedRoute } from '@angular/router';
 import { AccountServiceService } from '../../Services/account-service.service';
+import { BreedSearchService } from '../../Services/breed-search.service';
 
 @Component({
   selector: 'app-breed-search',
@@ -35,7 +36,8 @@ export class BreedSearchComponent implements OnInit {
     public autoCorrectService: AutoCorrectService, 
     public signalRService:SignalRServiceService,
      public router:Router,
-     public AccountService:AccountServiceService
+     public AccountService:AccountServiceService,
+     public breedSearchService: BreedSearchService
      ) { }
 
   ngOnInit() {
@@ -56,61 +58,80 @@ export class BreedSearchComponent implements OnInit {
   }
 
   fetchPets() {
-    this.http.get<PetDetails[]>('https://localhost:7066/api/Pet/SearchPetsReadyForBreeding')
-      .subscribe(
+    this.breedSearchService.getPetsReadyForBreeding(this.OwnderId).subscribe(
+      pets => {
+        this.pets = pets;
+        this.noResults = this.pets.length === 0;
+      },
+      error => {
+        console.error('Error fetching pets:', error);
+      }
+    );
+  }
+  chooseme(id:number){
+    this.router.navigateByUrl(`Pet/details/${id}`)
+  }
+  SearchBar() {
+  this.showSearchBar = !this.showSearchBar;
+  }
+
+  toggleFilterMenu() {
+    this.showFilterMenu = !this.showFilterMenu;
+  }
+  applyFilter() {
+    if (this.filterType === '') {
+      this.fetchPets();
+    } else if (this.filterType === 'Cat') {
+      this.breedSearchService.getCatsReadyForBreeding(this.OwnderId).subscribe(
         pets => {
-          this.pets = pets.filter(pet => pet.userID !== this.OwnderId);
-          this.pets.forEach(pet => pet.photo = this.url + pet.photo);
+          this.pets = pets;
           this.noResults = this.pets.length === 0;
         },
         error => {
           console.error('Error fetching pets:', error);
         }
       );
-  }
-  chooseme(id:number){
-    this.router.navigateByUrl(`Pet/details/${id}`)
-  }
-  SearchBar() {
-    this.showSearchBar = !this.showSearchBar;
-  }
-
-  toggleFilterMenu() {
-    this.showFilterMenu = !this.showFilterMenu;
-  }
-
-  applyFilter() {
-    if (this.filterType === '') {
-      this.fetchPets();
-    } else if (this.filterType === 'Cat') {
-      this.http.get<PetDetails[]>('https://localhost:7066/api/Pet/SearchCatsReadyForBreeding')
-        .subscribe(
-          pets => {
-            for (let index = 0; index < pets.length; index++) {
-              pets[index].photo = this.url + pets[index].photo;
-            }
-            this.pets = pets.filter(pet => pet.userID !== this.OwnderId);
-            this.noResults = this.pets.length === 0;
-          },
-          error => {
-            console.error('Error fetching pets:', error);
-          }
-        );
     } else if (this.filterType === 'Dog') {
-      this.http.get<PetDetails[]>('https://localhost:7066/api/Pet/SearchDogsReadyForBreeding')
-        .subscribe(
-          pets => {
-            for (let index = 0; index < pets.length; index++) {
-              pets[index].photo = this.url + pets[index].photo;
-            }
-            this.pets = pets.filter(pet => pet.userID !== this.OwnderId);
-            this.noResults = this.pets.length === 0;
-          },
-          error => {
-            console.error('Error fetching pets:', error);
-          }
-        );
+      this.breedSearchService.getDogsReadyForBreeding(this.OwnderId).subscribe(
+        pets => {
+          this.pets = pets;
+          this.noResults = this.pets.length === 0;
+        },
+        error => {
+          console.error('Error fetching pets:', error);
+        }
+      );
+      }
+
+
+      // --female sex--
+else if (this.filterType === 'Female') {
+  this.breedSearchService.getFemalesReadyForBreeding(this.OwnderId).subscribe(
+    pets => {
+      this.pets = pets;
+      this.noResults = this.pets.length === 0;
+    },
+    error => {
+      console.error('Error fetching pets:', error);
     }
+  );
+  }
+
+
+  else if (this.filterType === 'Male') {
+    this.breedSearchService.getMalesReadyForBreeding(this.OwnderId).subscribe(
+      pets => {
+        this.pets = pets;
+        this.noResults = this.pets.length === 0;
+      },
+      error => {
+        console.error('Error fetching pets:', error);
+      }
+    );
+    }
+
+
+  
   }
 
   onInputChange() {
@@ -129,27 +150,21 @@ export class BreedSearchComponent implements OnInit {
   
   searchBar() {
     if (this.searchQuery.trim() !== '') {
-      const encodedSearchQuery = encodeURIComponent(this.searchQuery);
-      const searchUrl = `https://localhost:7066/api/Pet/SearchBreedNameOfPetsReadyForBreeding?name=${encodedSearchQuery}`;
-      this.http.get<PetDetails[]>(searchUrl)
-        .subscribe(
-          breeds => {
-            this.Breeds = breeds;
-            this.pets = this.Breeds;
-            for (let index = 0; index < this.pets.length; index++) {
-              this.pets[index].photo = this.url + this.pets[index].photo;
-            }
-            this.pets = breeds.filter(pet => pet.userID !== this.OwnderId);
-            this.noResults = this.pets.length === 0;
-          },
-          error => {
-            console.error('Error fetching pets:', error);
-            this.noResults = true;
-          }
-        );
+      this.breedSearchService.searchBreedNameOfPetsReadyForBreeding(this.OwnderId, this.searchQuery).subscribe(
+        breeds => {
+          this.Breeds = breeds;
+          this.pets = this.Breeds;
+          this.noResults = this.pets.length === 0;
+        },
+        error => {
+          console.error('Error fetching pets:', error);
+          this.noResults = true;
+        }
+      );
     } else {
       this.fetchPets();
       this.hideSuggestions();
     }
   }
+  //-------------------original-----------------
 }
