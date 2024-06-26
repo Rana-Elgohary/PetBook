@@ -43,9 +43,16 @@ export class UpdateUserDetailsComponent {
       this.user = user;
       ///
       this.user.previewPhoto = user.photo;
-      this.updateImagePreview(user.photo);
+      if(this.user.photo == "https://localhost:7066/Resources/null"){
+        this.updateImagePreview("../../../../assets/Images/null.jpg");
+      }
+      else{
+        this.updateImagePreview(user.photo);
+      }
       ///
       console.log(user)
+      console.log(this.user.previewPhoto)
+      console.log(this.user.photo)
     });
   }
 

@@ -43,4 +43,12 @@ export class ClinlicVccineReservationService {
     // Return an observable with a user-facing error message.
     return throwError('Something bad happened; please try again later.');
   }
+
+  getVaccineReservationByPetId(id:number){
+    return this.http.get<any>(`${this.reservationUrl}/GetReservationforVaccinebypetID/${id}`)
+  }
+
+  DeleteVaccineDialogComponent(PetID:number,clinicID:number,VaccID:number){
+    return this.http.delete<any>(`${this.reservationUrl}/${VaccID}/${clinicID}/${PetID}`)
+  }
 }

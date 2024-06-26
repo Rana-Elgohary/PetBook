@@ -176,7 +176,7 @@ namespace PetBooK.PL.Controllers
             }
         }
 
-        [HttpDelete]
+        [HttpDelete("{PetID:int}/{ClinicId:int}")]
         public ActionResult DeleteReservation(int PetID, int ClinicID)
         {
             try
@@ -198,6 +198,25 @@ namespace PetBooK.PL.Controllers
                 return StatusCode(500, "An unexpected error occurred.");
             }
         }
-       
+
+        [HttpGet("GetReservationForClinicbypetID/{id}")]
+        public IActionResult GetReservationsForClinicByPetId(int id)
+        {
+            List<Reservation> reservationForVaccine = unit.reservationRepository.FindByInclude(s => s.PetID == id, s => s.Clinic,s=>s.Pet);
+            if (reservationForVaccine == null)
+            {
+                return Ok("there is no reservation for this pet");
+            }
+            else
+            {
+                List<ReservationGetDTO> reservationForClinicDTO = mapper.Map<List<ReservationGetDTO>>(reservationForVaccine);
+                
+                return Ok(reservationForClinicDTO);
+            }
+        }
+
+
     }
+
 }
+

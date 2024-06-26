@@ -1,13 +1,13 @@
-<div class="min-h-screen bg-white py-5">
-  <div class="w-[1100px] h-fit m-auto py-6">
+<div class="min-h-screen">
+  <div class="w-[1000px] h-fit m-auto">
       @for(item of userPetList; track $index){  
-        <div class="flex w-8/12 m-auto h-96 relative justify-between my-8 shadow-lg">
+        <div class="flex w-full m-auto h-96 relative justify-between my-16 shadow-lg">
           <div class="w-[40%] bg-[#dcded9] h-full flex  flex-col justify-between">
-            <div class="h-full shadow-2xl">
-              <img [src]="item.photo" alt="Pet Image" class="h-full w-full">
+            <div class="h-full shadow-2xl object-cover">
+              <img [src]="item.photo" alt="Pet Image" class="h-full w-full object-cover	">
             </div> 
   
-            <div class="m-3 space-x-3 absolute">
+            <div class="m-3 space-x-6 absolute right-4 bottom-6">
               <button class=""  (click)="navigateToEdit(item.petID)">
                 <svg class="h-6 w-6 text-[#FE7A36]"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
@@ -21,18 +21,13 @@
             </div>
            
 
-            <div class="m-3 flex justify-center absolute bottom-2">
+            <div class="absolute bottom-2 left-[105px]">
               <button class="bg-[#FE7A36] hover:bg-[#e66322] text-white py-2 px-4 rounded-lg"  [disabled]="item.pairWith !== 'I\'m not paired'" (click)="toggleBreedingStatus(item)">
                 {{ item.isReadyForBreeding ? 'Not Ready For Breeding' : 'Ready For Breeding' }}
               </button>
             </div>
             
           </div>
-
-
-          <!-- <div class="absolute top-[120px] left-[90%] w-[20%] h-[200px] shadow-2xl">
-            <img [src]="item.idNoteBookImage" alt="id NoteBook Image" class="h-full w-full">
-          </div>  -->
 
           <div class="w-[50%] ">
             <div class="ml-10 mt-12 flex  justify-end ">
@@ -44,7 +39,7 @@
                   <p class="font-Laila2 text-lg text-stone-800">Age: {{item.ageInMonth}}</p>
                 </div>
                 <div class="">
-                  <p class="font-Laila2 text-lg text-stone-800">Sex: {{item.sex}}</p>
+                  <p class="font-Laila2 text-lg text-stone-800">Sex: {{item.sex === 'F' ? 'Female' : 'Male'}}</p>
                 </div>
                 <div class="">
                   <p class="font-Laila2 text-lg text-stone-800">Type: {{item.type}}</p>
@@ -55,7 +50,7 @@
                           [disabled]="item.pairWith === 'I\'m not paired'" (click)="UnPair(item.petID)">Unpair</button>
                 </div>
                 <div>
-                  <button class="bg-[#FE7A36] hover:bg-[#e66322] text-white font-bold px-8 py-2 rounded-lg" (click)="openDialog(myTemplate)">Tap to see NoteBook</button>
+                  <button class="bg-[#FE7A36] hover:bg-[#e66322] text-white px-8 py-2 rounded-lg" (click)="openDialog(myTemplate)">Tap to see NoteBook</button>
                   <ng-template #myTemplate>
                     <div class="m-auto  h-1/3 w-1/3">
                       <img [src]="item.idNoteBookImage" class=" h-full w-full">
@@ -72,6 +67,6 @@
       }
   </div>
   <div class="ml-6 mt-10 mb-10 w-80">
-    <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg" (click)="navigateToAdd()">+ Add New Pet</button>
+    <button class="bg-green-400 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg" (click)="navigateToAdd()">+ Add New Pet</button>
   </div>
-</div>  
+</div>

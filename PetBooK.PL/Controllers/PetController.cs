@@ -243,7 +243,7 @@ namespace PetBooK.PL.Controllers
         [HttpGet("{id}")]
             public IActionResult GetId(int id)
             {
-                Pet pet = unitOfWork.petRepository.selectbyid(id);
+                Pet pet = unitOfWork.petRepository.selectbyPetid(id);
                 if (pet == null) { return BadRequest(); }
                 PetGetDTO petDTO = mapper.Map<PetGetDTO>(pet);
                 return Ok(petDTO);
