@@ -67,6 +67,36 @@ namespace PetBooK.PL.Controllers
             return Ok(petDTOs);
         }
 
+        ////---------------------------------search for both dogs orrr cats which are ready with pagination-----------------------------
+
+        //[HttpGet("SearchPetsReadyForBreeding")]
+        //public IActionResult GetAllPetsReadyForBreeding(int pageNumber = 1, int pageSize = 4)
+        //{
+        //    try
+        //    {
+        //        var pets = unitOfWork.petRepository.FindBy(p => p.ReadyForBreeding && (p.Type == "Dog" || p.Type == "Cat"));
+        //        if (!pets.Any()) { return NotFound("No pets ready for breeding found."); }
+
+        //        var petDTOs = mapper.Map<List<PetGetDTO>>(pets);
+
+        //        //for pagination
+        //        int total = petDTOs.Count();
+        //        var petDTOs2 = petDTOs.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+        //        var response = new
+        //        {
+        //            Data = petDTOs2,
+        //            AllData = petDTOs,
+        //            TotalItems = total
+        //        };
+        //        return Ok(response);
+        //    }
+        //    catch
+        //    {
+        //        return StatusCode(500, "error while retrievong data");
+        //    }
+
+        //}
+
         //-----------------------------------search for dogs only which are readyfor breading-------------
         [HttpGet("SearchDogsReadyForBreeding")]
         public IActionResult GetAllDogsReadyForBreeding()
@@ -112,6 +142,36 @@ namespace PetBooK.PL.Controllers
             var petDTOs = mapper.Map<List<PetGetDTO>>(pets);
             return Ok(petDTOs);
         }
+
+
+
+        //-------------------------------------------------------------------------------------
+
+        [HttpGet("SearchFemalesReadyForBreeding")]
+
+        public IActionResult GetAllFemalesReadyForBreeding()
+        {
+            var pets = unitOfWork.petRepository.FindBy(p => p.ReadyForBreeding && p.Sex == "F");
+            if (!pets.Any()) { return NotFound("No Female pets ready for breeding found."); }
+
+            var petDTOs = mapper.Map<List<PetGetDTO>>(pets);
+            return Ok(petDTOs);
+        }
+        //-------------------------------------------------------------------------------------
+
+        [HttpGet("SearchMalesReadyForBreeding")]
+
+        public IActionResult GetAllMalesReadyForBreeding()
+        {
+            var pets = unitOfWork.petRepository.FindBy(p => p.ReadyForBreeding && p.Sex == "M");
+            if (!pets.Any()) { return NotFound("No Female pets ready for breeding found."); }
+
+            var petDTOs = mapper.Map<List<PetGetDTO>>(pets);
+            return Ok(petDTOs);
+        }
+
+
+        
         //--------------------------------------------------------------------------------------
         [HttpPost] //Edit By Amira
         public async Task<IActionResult> PostPet([FromForm] PetAddDTO NewPet)
@@ -158,7 +218,7 @@ namespace PetBooK.PL.Controllers
         [HttpGet("{id}")]
             public IActionResult GetId(int id)
             {
-                Pet pet = unitOfWork.petRepository.selectbyid(id);
+                Pet pet = unitOfWork.petRepository.selectbyPetid(id);
                 if (pet == null) { return BadRequest(); }
                 PetGetDTO petDTO = mapper.Map<PetGetDTO>(pet);
                 return Ok(petDTO);

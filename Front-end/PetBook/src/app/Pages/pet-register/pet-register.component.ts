@@ -39,7 +39,7 @@ export class PetRegisterComponent implements OnInit {
     name:"",
     photo: null,
     idNoteBookImage: null,
-    ageInMonth: 0,
+    ageInMonth: null,
     sex: "",
     userID:1,
     readyForBreeding: null,
@@ -57,9 +57,25 @@ export class PetRegisterComponent implements OnInit {
   validationErrorsForPet: { [key in keyof AddPet]?: boolean | string | null } = {};
   validationErrorsForBreedPet: { [key in keyof AddBreedToPet]?: boolean | string | null } = {};
 
-  onFileSelected(event:any){
-    this.Pet.photo = event.target.files[0];
-    this.validationErrorsForPet.photo = false;
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.Pet.photo = file;
+      this.validationErrorsForPet.photo = false;
+
+      // Update the image preview
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        const photoPreview = document.getElementById('photoPreview') as HTMLImageElement;
+        photoPreview.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  triggerFileInput() {
+    const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+    fileInput.click();
   }
 
   onFileSelectedBookImage(event:any){
@@ -67,9 +83,9 @@ export class PetRegisterComponent implements OnInit {
     this.validationErrorsForPet.idNoteBookImage = false;
   }
 
+
   isFormValid(): boolean {
     let isValid = true;
-
 
     for (const key in this.Pet) {
       if (this.Pet.hasOwnProperty(key)) {
@@ -122,7 +138,7 @@ export class PetRegisterComponent implements OnInit {
 
         console.log('Pet readyForBreeding value:', this.Pet.readyForBreeding); 
 
-        this.router.navigateByUrl("/userPetInfo")
+        this.router.navigateByUrl("/Profile/userPetInfo")
     
         // Success message or any further actions after successful signup
       } catch (err: any) {
@@ -143,7 +159,7 @@ export class PetRegisterComponent implements OnInit {
     const { field, value } = event;
     if (field in this.Pet) {
       (this.Pet as any)[field] = value;
-      if (field === 'other' && value) {
+      if (value) {
         this.validationErrorsForPet[field] = false;
       }
     }
@@ -181,5 +197,9 @@ export class PetRegisterComponent implements OnInit {
     const selectedValue = event.target.value;
     // Assuming you have validation logic, update validationErrors object accordingly
     this.validationErrorsForPet.readyForBreeding = selectedValue ? null : 'Is Ready for breeding is required.';
+  }
+
+  Cancel(){
+    this.router.navigateByUrl("Profile/userPetInfo");
   }
 }

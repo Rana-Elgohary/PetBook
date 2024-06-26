@@ -10,7 +10,10 @@ module.exports = {
       fontFamily:{
         aclonica: ['Aclonica'],
         glutin:['Gluten'],
-        inter:['Inter']
+        inter:['Inter'],
+        Laila:['Laila'],
+        Bitter:['Bitter'],
+        Laila2:['Nunito Sans']
 
       }
     },

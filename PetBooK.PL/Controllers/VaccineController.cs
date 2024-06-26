@@ -20,15 +20,47 @@ namespace PetBooK.PL.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllVaccines()
+        //public IActionResult GetAllVaccines()
+        //{
+        //    try
+        //    {
+        //        List<Vaccine> Vaccines = unit.vaccineRepository.selectall();
+        //        List<VaccineDTO> VaccinesDTO = mapper.Map<List<VaccineDTO>>(Vaccines);
+        //        if(VaccinesDTO.Count > 0)
+        //        {
+        //            return Ok(VaccinesDTO);
+        //        }
+        //        else
+        //        {
+        //            return NotFound("There's no vaccines");
+        //        }
+
+        //    }
+        //    catch
+        //    {
+        //        return StatusCode(500, "An error occurred while processing your request");
+
+        //    }
+        //}
+        ////////////////////////edit to pagination 
+        public IActionResult GetAllVaccines(int pageNumber = 1, int pageSize = 4)
         {
             try
             {
                 List<Vaccine> Vaccines = unit.vaccineRepository.selectall();
                 List<VaccineDTO> VaccinesDTO = mapper.Map<List<VaccineDTO>>(Vaccines);
-                if(VaccinesDTO.Count > 0)
+                int Total = VaccinesDTO.Count();
+                if (VaccinesDTO.Count > 0)
                 {
-                    return Ok(VaccinesDTO);
+                    List<VaccineDTO> VaccinesDTO2 = VaccinesDTO.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+
+                    var response = new
+                    {
+                        Data = VaccinesDTO2,
+                        AllData = VaccinesDTO,
+                        TotalItems = Total
+                    };
+                    return Ok(response);
                 }
                 else
                 {

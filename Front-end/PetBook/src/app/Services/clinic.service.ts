@@ -13,7 +13,7 @@ import { ClinicLocation } from '../Models/clinic_location';
 export class ClinicService {
   
   private apiUrl = 'https://localhost:7066/api/Clinic'; 
-  private apiUrlPhoneNumber = 'http://localhost:5226/api/ClinicPhone/clinic'; 
+  private apiUrlPhoneNumber = 'https://localhost:7066/api/ClinicPhone/clinic'; 
   private apiUrl2 = 'https://localhost:7066/'; 
 
   constructor(private http: HttpClient) { }
@@ -27,6 +27,7 @@ export class ClinicService {
   }
 
   getDoctors(clinicId: number): Observable<Doctor[]> {
+    console.log(this.apiUrl2+"api/Doctor/"+clinicId+"/doctors");
     return this.http.get<Doctor[]>(`${this.apiUrl2}api/Doctor/${clinicId}/doctors`);
   }
 
@@ -34,6 +35,7 @@ export class ClinicService {
   bookAppointment(reservation: Reservation): Observable<any> {
     return this.http.post(`${this.apiUrl2}api/Reservation`, reservation);
   }
+  
 /////////////////////////////////////////////////////////////////
 
   getAllClinics(pageNumber: number, pageSize: number): Observable<{ data: ClinicLocation[],allData:ClinicLocation[] ,totalItems: number }>{

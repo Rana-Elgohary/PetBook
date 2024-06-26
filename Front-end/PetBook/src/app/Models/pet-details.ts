@@ -10,6 +10,7 @@ export class PetDetails {
    public  idNoteBookImage: string,
    public  userID: number,
    public  readyForBreeding: boolean,
+   public breedName:string,
    public  type: string,
    public other: string){}
   

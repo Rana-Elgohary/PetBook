@@ -1,66 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pet Details</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <style>
-        .background-image {
-            background-image: url('../assets/Images/PetInfoBG.png'); 
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            height: 109vh; 
-            width: 100%;
-        }
-
-        .slanted-text {
-            font-style: italic;
-        }
-
-        .notebook-image {
-            width: auto; 
-            height: 150px; 
-        }
-    </style>
-</head>
-<body class="bg-gray-100 background-image">
-    <div class="max-w-5xl mx-auto mt-4 p-6 rounded-lg flex flex-col md:flex-row">
-        <!-- Left Column -->
-        <div class="w-full md:w-1/3 mb-4 md:mb-0">
-            <img [src]="pet?.photo" alt="Pet" class="w-full h-auto mb-6">
-            <div class="flex justify-center mt-4">
-                <button (click)="openPairPopup()" class="bg-orange-300 text px-11 py-2 rounded-full slanted-text"><strong>Pair</strong></button>    
-            </div>
+<div class="bg-gray-100 p-8">
+    <div class="w-[70%] m-auto">
+        <section class="text-center py-5">
+            <p class="font-Laila font-semibold text-4xl text-[#051829]">Meet Me</p>
+        </section>
+        
+        <div class="flex justify-between items-center">
+            <section class="font-Laila2 flex flex-wrap justify-around w-[30%]">
+                <div class="bg-white h-[400px] p-5 shadow-xl">
+                    <img [src]="pet?.photo" alt="Pet" class="object-cover h-[80%] w-[100%]">
+                    <div class="flex justify-center mt-4">
+                        <button (click)="openPairPopup()" class="bg-[#fe7936] hover:bg-[#e66322] text-white px-8 py-2 text-base">Pair</button>    
+                    </div>
+                </div>
+            </section>
+            
+            <section class="font-Laila2 bg-white p-5 shadow-xl w-[65%] h-[400px]">
+                <div class="h-[100%] flex items-center">
+                    <div class="flex justify-between w-[100%] h-[100%]">
+                        <div class="mr-4 p-4 w-[50%]">
+                            <p class="textBefore relative pl-5 text-xl font-bold text-[#051829]">{{pet?.name}}</p>
+                            <p class="textBefore relative pl-5 text-xl font-bold text-[#051829]">Age: <span class="ml-2 text-base text-gray-500">{{pet?.ageInMonth}}</span></p> 
+                            <p class="textBefore relative pl-5 text-xl font-bold text-[#051829]">Gender: <span class="ml-2 text-base text-gray-500">{{ pet?.sex === 'F' ? 'Female' : 'Male' }}</span></p> 
+                            <p class="textBefore relative pl-5 text-xl font-bold text-[#051829]">Type: <span class="ml-2 text-base text-gray-500">{{pet?.type}}</span></p> 
+                            <p class="textBefore relative pl-5 text-xl font-bold text-[#051829]">Breed: <span class="ml-2 text-base text-gray-500">{{pet?.breedName}} </span></p> 
+                            <p class="textBefore relative pl-5 text-xl font-bold text-[#051829]">Other Information: </p> <span class="ml-10 text-base text-gray-500">{{pet?.other}}</span>
+                        </div>
+                        <div class="book-appointment flex justify-end w-[50%]">
+                            <img [src]="pet?.idNoteBookImage" alt="Notebook Image" class="notebook-image object-cover h-[100%]">
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
 
-        <!-- Right Column --> 
-        <div class="w-full md:w-2/3 md:pl-8">
-            <div class="bg-yellow-100 p-9 rounded-lg mb-9">
-                <h2 class="text-xl font-bold text-center slanted-text">Me</h2>
-                <p class="slanted-text mt-2"><strong class="text-orange-500">Name:</strong> {{ pet?.name }}</p>
-                <p class="slanted-text mt-2"><strong class="text-orange-500">Age:</strong> {{ pet?.ageInMonth }} Months</p>
-                <p class="slanted-text mt-2"><strong class="text-orange-500">Sex:</strong> {{ pet?.sex }}</p>
-                <p class="slanted-text mt-2"><strong class="text-orange-500">Type:</strong> {{ pet?.type }}</p>
-                <p class="slanted-text mt-2"><strong class="text-orange-500">Other Information:</strong> {{ pet?.other }}</p>
-                <div class="flex flex-col items-center mt-4">
-                    <strong class="slanted-text text-orange-500">vaccination certificate</strong>
-                    <img [src]="pet?.idNoteBookImage" alt="Notebook Image" class="notebook-image object-cover mt-2">
-                </div>
+        <section class="text-center py-5 mt-10">
+            <p class="font-Laila font-semibold text-4xl text-[#051829]">Meet My Owner</p>
+        </section>
+        
+        <section class="font-Laila2 flex flex-wrap justify-around">
+            <div class="bg-white w-[30%] h-[500px] p-5 shadow-xl mb-12">
+              @if(owner?.photo !== null){
+                <img class="object-cover h-[75%] w-[100%]" [src]="owner?.photo">
+              }
+              @else {
+                <img class="object-cover h-[75%] w-[100%]" src="../../../assets/Images/null.jpg">
+              }
+              <div class="flex align-middle mt-5">
+                <span class="textBefore relative pl-5 text-2xl font-bold">{{owner?.name}}</span>
+              </div>
+              <div class="text-gray-400 flex flex-col text-base items-center">
+                <span class="p-0 m-0">{{owner?.email}}</span>
+                <span class="p-0 m-0">{{owner?.phone}}</span>
+              </div>
             </div>
-            <div class="bg-blue-100 p-9 rounded-lg flex items-center justify-between">
-                <div class="flex-1">
-                    <h2 class="text-xl font-bold text-center slanted-text">My Owner</h2>
-                    <p class="slanted-text mt-2"><strong class="text-orange-500">Name:</strong> {{ owner?.name }}</p>
-                    <p class="slanted-text mt-2"><strong class="text-orange-500">Email:</strong> {{ owner?.email }}</p>
-                    <p class="slanted-text mt-2"><strong class="text-orange-500">Phone:</strong> {{ owner?.phone }}</p>
-                </div>
-                <div class="ml-2">
-                    <img [src]="owner?.photo" alt="Owner" class="w-24 h-24 rounded-full object-cover">
-                </div>
-            </div>
-        </div>
+        </section>
     </div>
-</body>
-</html>
+</div>

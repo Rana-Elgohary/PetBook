@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Vaccine } from '../Models/vaccine';
-import { map } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -18,9 +18,17 @@ export class VaccineService {
   url="https://localhost:7066/api/Vaccine";
   constructor(private http: HttpClient) {}
 
-  GatAllVaccine(){
+  // GatAllVaccine(){
+  //   this.GatAllVaccineName();
+  //   return this.http.get<Vaccine[]>(this.url)
+  // }
+  //////////for pagination
+  GatAllVaccine(pageNumber: number, pageSize: number): Observable<{ data: Vaccine[],allData:Vaccine[],totalItems: number }>{
+    let params = new HttpParams()
+    .set('pageNumber', pageNumber.toString())
+    .set('pageSize', pageSize.toString());
     this.GatAllVaccineName();
-    return this.http.get<Vaccine[]>(this.url)
+    return this.http.get<{ data: Vaccine[],allData:Vaccine[], totalItems: number }>(this.url, { params });
   }
 
   GatAllVaccineName(): void {

@@ -101,6 +101,22 @@ namespace PetBooK.PL.Controllers
                 return StatusCode(500, "An error occurred while processing your request.");
             }
         }
-        
+
+        [HttpGet("{cid}")]
+        public IActionResult GetDoctorsByClinicId(int cid)
+        {
+            List<Clinic_Doctor> ClinicDoctors = unit.clinic_DoctorRepository.FindByInclude(s => s.ClinicID == cid,
+                s => s.doctor.DoctorNavigation, s => s.clinic);
+            if (ClinicDoctors == null)
+            {
+                return Ok("there is no Doctors in this clinic");
+            }
+            else
+            {
+                List<ClinicDoctorssDTO> ClinicDoctorsDTO = mapper.Map<List<ClinicDoctorssDTO>>(ClinicDoctors);
+                return Ok(ClinicDoctorsDTO);
+            }
+        }
+
     }
 }

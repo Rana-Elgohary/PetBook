@@ -157,18 +157,41 @@ namespace PetBooK.BL.Config
           .ForMember(dest => dest.BankAccount, opt => opt.MapFrom(src => src.Clinic.BankAccount));
 
 
+            CreateMap<Reservation, ReservationIncludeUserDTO>()
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Pet.User.ClientNavigation.Name))
+            .ForMember(dest => dest.UserID, opt => opt.MapFrom(src => src.Pet.User.ClientNavigation.UserID))
+            .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.Pet.User.ClientNavigation.Phone))
+            .ForMember(dest => dest.PetName, opt => opt.MapFrom(src => src.Pet.Name));
+
 
             CreateMap<User, DoctorUser>();
             CreateMap<DoctorUser,User>();
             CreateMap<Doctor, DoctorUser>();
             CreateMap<DoctorUser, Doctor>();
 
-            ///map to get clinic by it's location and numbers
-            // CreateMap<Clinic, ClinicByLocationsDTO>()
-            //.ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.Clinic_Locations.Select(cl => cl.Location).FirstOrDefault()));
+
+            
 
            
+
+            CreateMap<Reservation_For_Vaccine, ReservationFoeVaccineInclude>().ReverseMap();
+
+            CreateMap<Clinic_Doctor, ClinicDoctorssDTO>()
+            .ForMember(dest => dest.ClinicID, opt => opt.MapFrom(src => src.ClinicID))
+            .ForMember(dest => dest.DoctorID, opt => opt.MapFrom(src => src.DoctorID))
+            .ForMember(dest => dest.DoctorName, opt => opt.MapFrom(src => src.doctor.DoctorNavigation.Name))
+            .ForMember(dest => dest.Degree, opt => opt.MapFrom(src => src.doctor.Degree))
+            .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.doctor.DoctorNavigation.Phone))
+            .ForMember(dest => dest.Photo, opt => opt.MapFrom(src => src.doctor.DoctorNavigation.Photo));
+
+            CreateMap<Pet, PetGetDTO>()
+    .ForMember(dest => dest.BreedName, opt => opt.MapFrom(src => src.Pet_Breeds.FirstOrDefault().Breed.Breed1));
+
+
+
+
         }
+
 
 
 

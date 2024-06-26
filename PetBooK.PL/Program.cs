@@ -20,6 +20,7 @@ namespace PetBooK.PL
         {
             var builder = WebApplication.CreateBuilder(args);
 
+
             // Configure logging
             builder.Logging.ClearProviders();
             builder.Logging.AddConsole();
@@ -81,6 +82,8 @@ namespace PetBooK.PL
 
             ///////////////////// Register SignalR: /////////////////////
             builder.Services.AddSignalR();
+
+            
 
             var app = builder.Build();
 

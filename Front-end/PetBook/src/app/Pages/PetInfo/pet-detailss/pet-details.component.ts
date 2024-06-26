@@ -90,12 +90,18 @@ export class PetDetailsComponent {
       );
     }
 
+    userPetsWithTrueValues:PetDetails[] = []
 
     openPairPopup(): void {
+      this.userPets.forEach(element => {
+        if(element.readyForBreeding == true){
+          this.userPetsWithTrueValues.push(element)
+        }
+      });
 
       const dialogRef = this.dialog.open(PairPetsDialogComponent, {
         width: '400px',
-        data: { pets: this.userPets }
+        data: { pets: this.userPetsWithTrueValues }
       });
   
       dialogRef.afterClosed().subscribe(selectedPetId => {

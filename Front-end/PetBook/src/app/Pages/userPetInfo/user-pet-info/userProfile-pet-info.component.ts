@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { UserPetInfoServiceService } from '../../../Services/user-pet-info-service.service';
 import { UserPetInfo } from '../../../Models/user-pet-info';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -7,6 +7,8 @@ import { AccountServiceService } from '../../../Services/account-service.service
 import { CommonModule } from '@angular/common';
 import { MyRequestService } from '../../../Services/my-request.service';
 import Swal from 'sweetalert2';
+import { Dialog, DialogRef } from '@angular/cdk/dialog';
+
 
 @Component({
   selector: 'app-userProfile-pet-info',
@@ -21,26 +23,35 @@ export class UserProfilePetInfoComponent implements OnInit {
   userID: number = Number(this.account.r.id);
   petInfo: UserPetInfo | null = null;
   url: string = 'https://localhost:7066/Resources/';
+  //here
+  myDialogRef: DialogRef<any> | null = null;
+
 
   constructor(
     public userpetInfoService: UserPetInfoServiceService,
     public account: AccountServiceService,
     public router: Router,
-    public requestForBreedService: MyRequestService
+    public requestForBreedService: MyRequestService,
+    //here
+    private dialog: Dialog
   ) {
     this.Upload();
   }
 
   ngOnInit(): void {
     this.Upload();
+    console.log(this.userPetList);
   }
-
+//here
+  openDialog(template: TemplateRef<unknown>) {
+    // you can pass additional params, choose the size and much more
+    this.myDialogRef = this.dialog.open(template);
+ }
   Upload(): void {
     this.userpetInfoService.getPetByUserId(this.userID).subscribe({
       next: (UserPetInfoData) => {
         this.userPetList = UserPetInfoData;
         
-        console.log(this.userPetList);
 
         UserPetInfoData.forEach(element => {
           element.photo = this.url + element.photo;
@@ -49,7 +60,6 @@ export class UserProfilePetInfoComponent implements OnInit {
 
           this.userpetInfoService.isPaired(element.petID).subscribe({
             next: (d) => {
-              console.log(d);
               if (d.petIDSender == element.petID) {
                 element.pairWith = d.receiverPetName;
               } else {
@@ -75,7 +85,6 @@ export class UserProfilePetInfoComponent implements OnInit {
       // Handle the case when the pet is already ready for breeding
       this.requestForBreedService.makeThisPetBeNotReadyForBreeding(pet.petID).subscribe({
         next: (d) => {
-          console.log(d);
           Swal.fire("Your Pet Is Not Ready For Breeding");
           this.requestForBreedService.DeleteALLReq(pet.petID).subscribe({
             next:(d)=>{console.log(d)}
