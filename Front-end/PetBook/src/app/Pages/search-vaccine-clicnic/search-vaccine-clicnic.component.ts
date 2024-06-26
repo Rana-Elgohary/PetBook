@@ -7,7 +7,6 @@ import { ClinlicLocationService } from '../../Services/clinlic-location.service'
 import { VaccineClinicLocation } from '../../Models/vaccine-clinic-location';
 import { CommonModule, NgFor, NgForOf, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { VaccineCliniccAdd } from '../../Models/vaccine-clinicc-add';
 
 @Component({
   standalone: true,
@@ -17,23 +16,30 @@ import { VaccineCliniccAdd } from '../../Models/vaccine-clinicc-add';
   styleUrls: ['./search-vaccine-clicnic.component.css']
 })
 export class SearchVaccineClicnicComponent implements OnInit {
-  location:string="abu qier";
-  VaccineId :number |null=null;
+  location: string = "abu qier";
+  VaccineId: number | null = null;
   vaccineClinic: VaccineClinic[] = [];
   vaccineClinicLocation: VaccineClinicLocation[] = [];
+  clinicsName: string[] = [];
+  searchQuery: string = '';
+  ClinicSuggestions: string[] = [];
+  Flag: boolean = false;
+  noResults: boolean = false;
+  MainData: VaccineClinicLocation[] = [];
 
   constructor(
     private route: ActivatedRoute,
     private vaccineClinicService: VaccineClinicsService,
     private clinicLocation: ClinlicLocationService,
-    private routerr: Router
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.route.paramMap.pipe(
       switchMap(params => {
         const id = +params.get('VaccineId')!; // Non-null assertion
-        this.VaccineId=id;
+        this.VaccineId = id;
+        console.log(this.VaccineId);
         return this.vaccineClinicService.GatAllClincsHasThisVaccine(id);
       })
     ).subscribe(
@@ -41,8 +47,10 @@ export class SearchVaccineClicnicComponent implements OnInit {
         this.vaccineClinic = data;
         console.log(this.vaccineClinic);
         this.vaccineClinic.forEach(element => {
+          this.clinicsName.push(element.name);
           this.getClinckwithLocatiion(element.clinicID);
         });
+        console.log(this.clinicsName);
       },
       error => {
         console.error('An error occurred:', error);
@@ -55,13 +63,14 @@ export class SearchVaccineClicnicComponent implements OnInit {
       data2 => {
         this.vaccineClinicLocation.push(...data2); // Use spread operator to push array elements
         this.vaccineClinicLocation.forEach(element => {
-          const item=this.vaccineClinic.find(c=>c.clinicID==element.clinicID&&c.vaccineID==this.VaccineId);
-          if(item){
-          element.price=item.price;
-          element.Quantity=item?.quantity;
+          const item = this.vaccineClinic.find(c => c.clinicID == element.clinicID && c.vaccineID == this.VaccineId);
+          if (item) {
+            element.price = item.price;
+            element.Quantity = item.quantity;
           }
         });
         console.log(this.vaccineClinicLocation);
+        this.MainData = this.vaccineClinicLocation;
       },
       error => {
         console.error('An error occurred while fetching clinic locations:', error);
@@ -69,12 +78,54 @@ export class SearchVaccineClicnicComponent implements OnInit {
     );
   }
 
+  BackToVaccines() {
+    this.searchQuery = "";
+    this.vaccineClinicLocation = this.MainData;
+    this.Flag=false;
+    //here
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  }
+
   getStars(rate: number): number[] {
     return Array(rate).fill(0).map((x, i) => i);
   }
-  
-  GoToClinic(clinicId: number): void {
-    this.routerr.navigate([`/ReservationVaccine/${clinicId}/${this.VaccineId}`]);
 
+  GoToClinic(clinicId: number): void {
+    this.router.navigate([`/ReservationVaccine/${clinicId}/${this.VaccineId}`]);
+  }
+
+  hideSuggestions() {
+    this.ClinicSuggestions = [];
+  }
+
+  getClinicSuggestions(input: string): string[] {
+    return this.clinicsName.filter(clinic => clinic.toLowerCase().includes(input.toLowerCase()));
+  }
+
+  onInputChange() {
+    this.ClinicSuggestions = this.getClinicSuggestions(this.searchQuery);
+    this.noResults = this.ClinicSuggestions.length === 0;
+  }
+
+  selectClinic(clinic: string) {
+    this.searchQuery = clinic;
+    this.ClinicSuggestions = [];
+    this.searchBar();
+  }
+
+  searchBar() {
+    if (this.searchQuery.trim() !== '') {
+      this.vaccineClinicLocation=this.MainData;
+      this.vaccineClinicLocation = this.vaccineClinicLocation.filter(clinic => clinic.name.toLowerCase() === this.searchQuery.toLowerCase());
+      this.Flag=true;
+            
+    } else {
+      this.vaccineClinicLocation = this.MainData;
+      this.Flag=false;
+      //here
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      this.hideSuggestions();
+    }
   }
 }

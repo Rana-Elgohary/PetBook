@@ -25,7 +25,7 @@ namespace PetBooK.BL.DTO
         public int UserID { get; set; }
 
         public bool ReadyForBreeding { get; set; }
-
+        public string BreedName { get; set; }
         public string Type { get; set; }
 
         public string Other { get; set; }
