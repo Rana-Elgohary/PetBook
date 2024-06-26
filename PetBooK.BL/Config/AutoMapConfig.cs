@@ -171,9 +171,13 @@ namespace PetBooK.BL.Config
 
             CreateMap<Reservation_For_Vaccine, ReservationFoeVaccineInclude>().ReverseMap();
 
-            ///map to get clinic by it's location and numbers
-            // CreateMap<Clinic, ClinicByLocationsDTO>()
-            //.ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.Clinic_Locations.Select(cl => cl.Location).FirstOrDefault()));
+            CreateMap<Clinic_Doctor, ClinicDoctorssDTO>()
+            .ForMember(dest => dest.ClinicID, opt => opt.MapFrom(src => src.ClinicID))
+            .ForMember(dest => dest.DoctorID, opt => opt.MapFrom(src => src.DoctorID))
+            .ForMember(dest => dest.DoctorName, opt => opt.MapFrom(src => src.doctor.DoctorNavigation.Name))
+            .ForMember(dest => dest.Degree, opt => opt.MapFrom(src => src.doctor.Degree))
+            .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.doctor.DoctorNavigation.Phone))
+            .ForMember(dest => dest.Photo, opt => opt.MapFrom(src => src.doctor.DoctorNavigation.Photo));
         }
     }
 }

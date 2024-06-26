@@ -16,6 +16,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { PetDetails } from '../../Models/pet-details';
 import { PairPetsDialogComponent } from '../PetInfo/pair-pets-dialog/pair-pets-dialog.component';
 import { ClinlicVccineService } from '../../Services/clinlic-vccine.service';
+import { ClinicDoctorService } from '../../Services/clinic-doctor.service';
+import { ClinicDoctor } from '../../Models/clinic-doctor';
 
 @Component({
   selector: 'app-reservation-for-vaccine',
@@ -34,12 +36,13 @@ choosePet() {
   petId: number | null = null;
   url:string='https://localhost:7066/Resources/'
   userPets: PetDetails[] = [];
-  doctors: Doctor[] = [];
   appointment: Reservation = new Reservation(1, 1, new Date(2020, 0, 6));
   clinicName: string = 'Default Clinic Name';
   clinicInfo: ClinicInfo | null = null;
   stars: number[] = [1, 2, 3, 4, 5];
   userId:number | null = null;
+  ClinicDoctors: ClinicDoctor[] = []
+
   constructor(
     private route: ActivatedRoute,
     private VaccineclinicService: ClinlicVccineReservationService,
@@ -48,7 +51,8 @@ choosePet() {
     public Account:AccountServiceService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
-    private clicnicVaccineSer :ClinlicVccineService
+    private clicnicVaccineSer :ClinlicVccineService,
+    private clinicDoctor: ClinicDoctorService
   ) { }
 
   ngOnInit(): void {
@@ -72,9 +76,12 @@ choosePet() {
   
   // Fetch doctors for the clinic
   getDoctors(clinicId: number): void {
-    this.clinicService.getDoctors(clinicId).subscribe(data => {
-      this.doctors = data;
-    });
+    this.clinicDoctor.GetDoctorsByClinicID(clinicId).subscribe(
+      data => {
+        this.ClinicDoctors = data
+        console.log(this.ClinicDoctors)
+      }
+    )
   }
 
   loadUserPets(): void {

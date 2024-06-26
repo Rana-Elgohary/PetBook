@@ -54,15 +54,20 @@
       </div>
     </section>
 
-    <section class="font-Laila2 flex flex-wrap justify-center space-x-12">
-      <div class="bg-white w-[30%] p-5 shadow-xl mb-12">
-        <img src="https://images.unsplash.com/photo-1488161628813-04466f872be2?crop=entropy&cs=srgb&fm=jpg&ixid=MnwxNDU4OXwwfDF8cmFuZG9tfHx8fHx8fHx8MTYyMzMxNTMwNQ&ixlib=rb-1.2.1&q=85">
+    <section class="font-Laila2 flex flex-wrap justify-around">
+      <div class="bg-white w-[30%] h-[500px] p-5 shadow-xl mb-12" *ngFor="let doctor of ClinicDoctors; let i = index">
+        @if(doctor.photo !== null){
+          <img class="object-cover h-[75%] w-[100%]" src="https://images.unsplash.com/photo-1488161628813-04466f872be2?crop=entropy&cs=srgb&fm=jpg&ixid=MnwxNDU4OXwwfDF8cmFuZG9tfHx8fHx8fHx8MTYyMzMxNTMwNQ&ixlib=rb-1.2.1&q=85">
+        }
+        @else {
+          <img class="object-cover h-[75%] w-[100%]" src="../../../assets/Images/null.jpg">
+        }
         <div class="flex align-middle mt-5">
-          <span class="textBefore relative pl-5 text-2xl font-bold">Dr. Mark Carusso</span>
+          <span class="textBefore relative pl-5 text-2xl font-bold">Dr. {{doctor.doctorName}}</span>
         </div>
         <div class="text-gray-400 flex flex-col text-base items-center">
-          <span class="p-0 m-0">Koko Loo Doo</span>
-          <span class="p-0 m-0">01227821763</span>
+          <span class="p-0 m-0">{{doctor.degree}}</span>
+          <span class="p-0 m-0">{{doctor.phone}}</span>
         </div>
       </div>
     </section>
