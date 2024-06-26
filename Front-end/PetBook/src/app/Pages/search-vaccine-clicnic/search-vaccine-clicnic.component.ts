@@ -84,6 +84,7 @@ export class SearchVaccineClicnicComponent implements OnInit {
     this.Flag=false;
     //here
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    
 
   }
 
