@@ -24,6 +24,7 @@ import { SecretaryVaccineComponent } from './Pages/vaccine_Secretary/secretary-v
 import { SecretaryComponent } from './Pages/secretary/secretary.component';
 import { SecrteryclinicComponent } from './Pages/secrteryclinic/secrteryclinic.component';
 import { UserProfileMainComponent } from './Pages/user-profile-main/user-profile-main.component';
+import { ShowReservationsComponent } from './Pages/show-reservations/show-reservations.component';
 
 export const routes: Routes = [
     {path: "Login", component:UserLoginComponent, title:"Login", canActivate: [noNavigateToLoginPageIfTokenGuard]},
@@ -36,6 +37,7 @@ export const routes: Routes = [
         {path:"pendingRequest", component:PendingRequestComponent , title:"pending Request"},
         {path: "MyRequest", component:MyRequestComponent, title:"MY Request"},
         {path: "userPetInfo",component: UserProfilePetInfoComponent, title:"Pet Information"},
+        {path: "Reservations",component: ShowReservationsComponent , title:"Reservatios"},
     ]},
 
     {path: "UpdateUser", component:UpdateUserDetailsComponent, title:"Edit"},

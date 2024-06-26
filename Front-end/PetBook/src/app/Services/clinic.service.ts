@@ -35,6 +35,7 @@ export class ClinicService {
   bookAppointment(reservation: Reservation): Observable<any> {
     return this.http.post(`${this.apiUrl2}api/Reservation`, reservation);
   }
+  
 /////////////////////////////////////////////////////////////////
 
   getAllClinics(pageNumber: number, pageSize: number): Observable<{ data: ClinicLocation[],allData:ClinicLocation[] ,totalItems: number }>{
