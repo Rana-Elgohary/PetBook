@@ -55,6 +55,31 @@ namespace PetBooK.PL.Controllers
             List<PetGetDTO> PetDTO = mapper.Map<List<PetGetDTO>>(pets);
             return Ok(PetDTO);
         }
+        //-------------------------Filter---------------------
+        [HttpGet("FilterPetsReadyForBreeding")]
+        public IActionResult FilterPetsReadyForBreeding(string Type = null, string sex = null)
+        {
+            var petsQuery = unitOfWork.petRepository.FindBy(p => p.ReadyForBreeding).AsQueryable();
+
+            if (!string.IsNullOrEmpty(Type))
+            {
+                petsQuery = petsQuery.Where(p => p.Type == Type);
+            }
+
+            if (!string.IsNullOrEmpty(sex))
+            {
+                petsQuery = petsQuery.Where(p => p.Sex == sex);
+            }
+
+            var pets = petsQuery.ToList();
+            if (!pets.Any())
+            {
+                return NotFound("No pets ready for breeding found.");
+            }
+
+            var petDTOs = mapper.Map<List<PetGetDTO>>(pets);
+            return Ok(petDTOs);
+        }
 
         //---------------------------------search for both dogs orrr cats which are ready-----------------------------
         [HttpGet("SearchPetsReadyForBreeding")]

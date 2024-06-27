@@ -72,5 +72,17 @@ export class BreedSearchService {
     );
   }
 
+  filterPetsReadyForBreeding(type: string | null, sex: string | null, ownerId: number): Observable<PetDetails[]> {
+    let queryParams = [];
+    if (type) queryParams.push(`Type=${type}`);
+    if (sex) queryParams.push(`sex=${sex}`);
+    const queryString = queryParams.length ? `?${queryParams.join('&')}` : '';
 
+    return this.http.get<PetDetails[]>(`${this.baseApiUrl}FilterPetsReadyForBreeding${queryString}`).pipe(
+      map(pets => pets.filter(pet => pet.userID !== ownerId).map(pet => {
+        pet.photo = this.url + pet.photo;
+        return pet;
+      }))
+    );
+  }
 }

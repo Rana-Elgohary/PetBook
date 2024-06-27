@@ -95,20 +95,30 @@ namespace PetBooK.PL.Controllers
                 return BadRequest();
             else
             {
-                User us =mapper.Map<User>(doctoraddDTO);
-                us.RoleID = 1;
-                unitOfWork.userRepository.add(us);
-                unitOfWork.SaveChanges();
-                User user=  unitOfWork.userRepository.FirstOrDefault(u => u.UserName == doctoraddDTO.UserName);
+                User existUser =unitOfWork.userRepository.FirstOrDefault(u=>u.UserName == doctoraddDTO.UserName&&u.Email==doctoraddDTO.Email);
+                if (existUser == null) // if this user does not eist before 
+                {
 
-                Doctor doctor = mapper.Map<Doctor>(doctoraddDTO);
-                doctor.DoctorID = user.UserID;
-                unitOfWork.doctorRepository.add(doctor);
-                unitOfWork.SaveChanges();
+                    // ADD this user in user table 
+                    User us = mapper.Map<User>(doctoraddDTO);
+                    us.RoleID = 1;
+                    unitOfWork.userRepository.add(us);
+                    unitOfWork.SaveChanges();
+                    User user = unitOfWork.userRepository.FirstOrDefault(u => u.UserName == doctoraddDTO.UserName);
 
-                Clinic_Doctor cD=new Clinic_Doctor();
+
+                    // then in doctor table
+                    Doctor doctor = mapper.Map<Doctor>(doctoraddDTO);
+                    doctor.DoctorID = user.UserID;
+                    unitOfWork.doctorRepository.add(doctor);
+                    unitOfWork.SaveChanges();
+                }
+
+                // Add this doctor in this clinic in clinic octor table
+                User userr = unitOfWork.userRepository.FirstOrDefault(u => u.UserName == doctoraddDTO.UserName);
+                Clinic_Doctor cD =new Clinic_Doctor();
                 cD.ClinicID = ClinicId;
-                cD.DoctorID=doctor.DoctorID;
+                cD.DoctorID=userr.UserID;
                 unitOfWork.clinic_DoctorRepository.add(cD);
                 unitOfWork.SaveChanges();
                 return Ok(doctoraddDTO);

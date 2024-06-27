@@ -28,7 +28,6 @@ export class SecretaryVaccineComponent {
   ngOnInit(): void {
      if(this.ClinicId)
       this.fetchVaccines(this.ClinicId);
-  
 
     }
   
@@ -56,7 +55,6 @@ export class SecretaryVaccineComponent {
       if (updatedVaccine) {
         this.vaccineClinicsService.updateVaccine(updatedVaccine).subscribe(response => {
           Object.assign(vaccineToEdit, updatedVaccine);
-          console.log('Vaccine updated successfully.');
         }, error => {
           console.error('Error updating vaccine:', error);
         });
@@ -78,11 +76,11 @@ export class SecretaryVaccineComponent {
     });
   
     dialogRef.afterClosed().subscribe(result => {
-      if (result&&this.ClinicId) {
-        this.vaccineClinicsService.deleteVaccine(vaccineId,this.ClinicId).subscribe(
+      if (result && this.ClinicId) {
+        this.vaccineClinicsService.deleteVaccine(vaccineId, this.ClinicId).subscribe(
           (response: any) => {
-            console.log('Vaccine deleted successfully:', response);
             this.vaccines = this.vaccines.filter(vaccine => vaccine.vaccineID !== vaccineId);
+            this.refreshVaccines();
           },
           (error: any) => {
             console.error('Error deleting vaccine:', error);
@@ -91,7 +89,14 @@ export class SecretaryVaccineComponent {
       }
     });
   }
-
+  refreshVaccines(): void {
+    if (this.ClinicId) {
+      this.vaccineClinicsService.getVaccinesByClinicId(this.ClinicId).subscribe(data => {
+        this.vaccines = data;
+      });
+    }
+  }
+  
   addVaccine(): void {
     const dialogRef = this.dialog.open(AddVaccineDialogComponent, {
       width: '400px',
@@ -106,7 +111,7 @@ export class SecretaryVaccineComponent {
           (response: any) => {
             const addedVaccine: VaccineCliniccAdd = response; 
             this.vaccines.push(addedVaccine);
-            console.log('Vaccine added successfully:');
+            this.refreshVaccines();
           },
           (error: any) => {
             console.error('Error adding vaccine:', error);

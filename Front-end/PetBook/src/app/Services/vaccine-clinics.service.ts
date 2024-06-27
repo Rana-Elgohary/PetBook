@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { VaccineClinic } from '../Models/vaccine-clinic';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
+import { VaccineCliniccAdd } from '../Models/vaccine-clinicc-add';
 
 @Injectable({
   providedIn: 'root'
@@ -29,5 +30,5 @@ export class VaccineClinicsService {
   addVaccine(vaccineDto: any): Observable<any> {
     return this.http.post(`${this.url}/addVaccine`, vaccineDto);
   }
-}
 
+}
