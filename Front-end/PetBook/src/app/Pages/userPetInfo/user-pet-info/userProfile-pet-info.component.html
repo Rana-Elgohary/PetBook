@@ -48,6 +48,11 @@
                   <p class="font-Laila2 text-lg text-stone-800">pairWith: {{item.pairWith}}</p>
                   <button  class="bg-[#FE7A36] hover:bg-[#e66322] text-white font-bold px-8 py-2 rounded-lg"
                           [disabled]="item.pairWith === 'I\'m not paired'" (click)="UnPair(item.petID)">Unpair</button>
+
+                  <button class="bg-[#FE7A36] hover:bg-[#e66322] text-white font-bold px-8 py-2 rounded-lg"
+                    *ngIf="item.pairWith !== 'I\'m not paired' && item.PairedWithPetID" (click)="GoToPairedPetDetails(item.PairedWithPetID)">
+                    Show Details
+                  </button>
                 </div>
                 <div>
                   <button class="bg-[#FE7A36] hover:bg-[#e66322] text-white px-8 py-2 rounded-lg" (click)="openDialog(myTemplate)">Tap to see NoteBook</button>

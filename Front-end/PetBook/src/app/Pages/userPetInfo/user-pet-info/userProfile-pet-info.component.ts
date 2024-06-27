@@ -26,7 +26,6 @@ export class UserProfilePetInfoComponent implements OnInit {
   //here
   myDialogRef: DialogRef<any> | null = null;
 
-
   constructor(
     public userpetInfoService: UserPetInfoServiceService,
     public account: AccountServiceService,
@@ -34,26 +33,24 @@ export class UserProfilePetInfoComponent implements OnInit {
     public requestForBreedService: MyRequestService,
     //here
     private dialog: Dialog
-  ) {
-    this.Upload();
-  }
+  ) {}
 
   ngOnInit(): void {
     this.Upload();
-    console.log(this.userPetList);
   }
 //here
   openDialog(template: TemplateRef<unknown>) {
     // you can pass additional params, choose the size and much more
     this.myDialogRef = this.dialog.open(template);
  }
+
   Upload(): void {
     this.userpetInfoService.getPetByUserId(this.userID).subscribe({
       next: (UserPetInfoData) => {
         this.userPetList = UserPetInfoData;
         
 
-        UserPetInfoData.forEach(element => {
+        this.userPetList.forEach(element => {
           element.photo = this.url + element.photo;
           element.idNoteBookImage = this.url + element.idNoteBookImage;
           element.isReadyForBreeding = element.readyForBreeding;  // Initialize the property
@@ -62,8 +59,10 @@ export class UserProfilePetInfoComponent implements OnInit {
             next: (d) => {
               if (d.petIDSender == element.petID) {
                 element.pairWith = d.receiverPetName;
+                element.PairedWithPetID = d.petIDReceiver
               } else {
                 element.pairWith = d.senderPetName;
+                element.PairedWithPetID = d.petIDSender
               }
             },
             error: (error) => {
@@ -124,6 +123,10 @@ UnPair(id: number) {
       this.Upload();
       }
   });
+}
+
+GoToPairedPetDetails(pairedPetId:number){
+  this.router.navigateByUrl(`/Pet/details/${pairedPetId}/false`)
 }
 
 deletePet(id:number){
