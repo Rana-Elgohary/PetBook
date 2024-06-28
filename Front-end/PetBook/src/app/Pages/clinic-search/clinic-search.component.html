@@ -1,4 +1,4 @@
-<div class=" bg-[#f7f7f7] p-8 min-h-screen">
+<div class=" bg-[#f7f7f7] p-8 min-h-screen" (click)="hideSuggestions()">
     <div >
             <div class="flex w-[50%] m-auto" >
                 @if (Flag==true) {
@@ -7,14 +7,19 @@
                     </button>
                 }
                 <div class="relative m-auto w-[500px]">
-                    <input type="text" placeholder="Search for Clinic" class="w-full text-lg pl-4 pr-10 py-3 border rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#FE7A36]" [(ngModel)]="clinicSearch"/>
+                    <input type="text" placeholder="Search for Clinic" class="w-full text-lg pl-4 pr-10 py-3 border rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#FE7A36]" [(ngModel)]="clinicSearch" (ngModelChange)="onInputChange()"/>
                     <button class="absolute  right-4 top-3 text-[#FE7A36]" (click)="searchClinics()">
                     <svg
                         class="w-8 h-9" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l5-5m0 0l-5-5m5 5H4"></path>
                     </svg>
-                    </button>
-                </div>
+                </button>
+                <ul class="absolute  z-10 top-full left-0 right-0 bg-white border border-gray-300 rounded-b-md shadow-md" *ngIf="clinicSuggestions.length > 0">
+                  <li *ngFor="let suggestion of clinicSuggestions" class="py-2 px-4 cursor-pointer hover:bg-gray-100" (click)="selectClinic(suggestion)">
+                    {{ suggestion }}
+                  </li>
+                </ul>           
+             </div>
             </div>
     </div>
     <section class="Section mt-14">
