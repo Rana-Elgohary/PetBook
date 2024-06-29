@@ -185,8 +185,10 @@ namespace PetBooK.BL.Config
             .ForMember(dest => dest.Photo, opt => opt.MapFrom(src => src.doctor.DoctorNavigation.Photo));
 
             CreateMap<Pet, PetGetDTO>()
-    .ForMember(dest => dest.BreedName, opt => opt.MapFrom(src => src.Pet_Breeds.FirstOrDefault().Breed.Breed1));
+               .ForMember(dest => dest.BreedName, opt => opt.MapFrom(src => src.Pet_Breeds.FirstOrDefault().Breed.Breed1));
 
+
+            
 
 
 

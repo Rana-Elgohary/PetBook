@@ -1,11 +1,10 @@
-/* Global styles */
+/* Global styles
 .all{
   background-image: url('../../../assets/Images/PetInfoBG.png') !important;
   background-size: cover;
   background-repeat: no-repeat;
 }
 
-/* Search icon */
 .search-icon {
   border: none;
   background: none;
@@ -13,7 +12,6 @@
   outline: none;
 }
 
-/* Input field */
 input[type="text"] {
   transition: width 0.4s ease-in-out;
   width: 100%;
@@ -55,4 +53,4 @@ input[type="text"] {
 .pet-photo {
   width: 300px;
   height: 250px;
-}
+} */

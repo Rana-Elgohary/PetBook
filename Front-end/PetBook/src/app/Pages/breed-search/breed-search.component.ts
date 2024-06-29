@@ -11,6 +11,7 @@ import { AccountServiceService } from '../../Services/account-service.service';
 import { BreedSearchService } from '../../Services/breed-search.service';
 import { SetFilterModule } from '@ag-grid-enterprise/set-filter';
 import { AgGridModule } from '@ag-grid-community/angular';
+import { flush } from '@angular/core/testing';
 
 @Component({
   selector: 'app-breed-search',
@@ -22,16 +23,19 @@ import { AgGridModule } from '@ag-grid-community/angular';
 export class BreedSearchComponent implements OnInit {
 
   pets: PetDetails[] = []; // get list of pets available for breeding
-  Breeds: PetDetails[] = []; // for search breed name to get the pets available for breed with this name
-  searchQuery: string = '';
-  breedSuggestions: string[] = [];
-  showFilterMenu: boolean = false; // Variable to toggle filter menu visibility
-  filteredPets: PetDetails[] = []; // Filtered list based on search and filter criteria
-  filterType: string = ''; // For filtering by dog or cat
-  filterSex: string = ''
-  showSearchBar: boolean = false; // Variable to toggle search bar visibility
-  noResults: boolean = false;
+  AllPets:PetDetails[]=[];
+  type:string="";
+  sex:string="";
+  search:string="";
+  FlagToBack:Boolean=false;
+  breedSuggestions:string[]=[]
+  CountIsZero:boolean=false;
+  pageNumber: number = 1;
+  pageSize: number =9;
+  totalPages: number = 0;
   OwnderId:number= parseInt(this.AccountService.r.id);
+
+
 
   url: string = 'https://localhost:7066/Resources/';
 
@@ -42,7 +46,6 @@ export class BreedSearchComponent implements OnInit {
      public AccountService:AccountServiceService,
      public breedSearchService: BreedSearchService
      ) { }
-
   ngOnInit() {
     this.signalRService.startConnection()
     this.signalRService.PetWithReadyForBreedTrueListener((pet) => {
@@ -56,78 +59,85 @@ export class BreedSearchComponent implements OnInit {
         }
       });
     })
-
+    this.hideSuggestions();
     this.fetchPets();
+    this.GetSuggesstions()
   }
 
   fetchPets() {
-    this.breedSearchService.getPetsReadyForBreeding(this.OwnderId).subscribe(
+    this.breedSearchService.getPetsReadyForBreeding(this.OwnderId,this.pageNumber, this.pageSize,this.type,this.sex,this.search).subscribe(
       pets => {
-        this.pets = pets;
-        this.noResults = this.pets.length === 0;
+        this.hideSuggestions();
+        this.pets = pets.Data;
+        this.totalPages = pets.totalItems;
+        this.CountIsZero= this.pets.length===0;
+        if(this.CountIsZero){
+          this.totalPages=this.pageSize
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       },
       error => {
         console.error('Error fetching pets:', error);
       }
     );
+  }
+  CallToFetch(){
+    this.pageNumber=1;
+    this.FlagToBack=true;
+    this.fetchPets()
+  }
+
+
+  hideSuggestions() {
+    this.breedSuggestions = [];
   }
   chooseme(id:number){
     this.router.navigateByUrl(`Pet/details/${id}`)
   }
-  SearchBar() {
-  this.showSearchBar = !this.showSearchBar;
-  }
 
-  toggleFilterMenu() {
-    this.showFilterMenu = !this.showFilterMenu;
-  }
-  applyFilter() {
-    this.breedSearchService.filterPetsReadyForBreeding(this.filterType, this.filterSex, this.OwnderId).subscribe(
-      pets => {
-        this.pets = pets;
-        this.noResults = this.pets.length === 0;
-      },
-      error => {
-        console.error('Error fetching pets:', error);
-      }
-    );
-  }
-
-
-  
-  
-
-  onInputChange() {
-    this.breedSuggestions = this.autoCorrectService.getBreedSuggestions(this.searchQuery);
-    this.noResults = this.breedSuggestions.length === 0;
-  }
-
-  selectBreed(breed: string) {
-    this.searchQuery = breed;
-    this.breedSuggestions = [];
-    this.searchBar();
-  }
-  hideSuggestions() {
-    this.breedSuggestions = [];
-  }
-  
-  searchBar() {
-    if (this.searchQuery.trim() !== '') {
-      this.breedSearchService.searchBreedNameOfPetsReadyForBreeding(this.OwnderId, this.searchQuery).subscribe(
-        breeds => {
-          this.Breeds = breeds;
-          this.pets = this.Breeds;
-          this.noResults = this.pets.length === 0;
-        },
-        error => {
-          console.error('Error fetching pets:', error);
-          this.noResults = true;
-        }
-      );
-    } else {
+  nextPage(): void {
+    if (this.pageNumber < this.totalitems) {
+      this.pageNumber++;
       this.fetchPets();
-      this.hideSuggestions();
     }
   }
-  //-------------------original-----------------
+
+  prevPage(): void {
+    if (this.pageNumber > 1) {
+      this.pageNumber--;
+      this.fetchPets();
+    }
+  }
+  get totalitems(): number {
+    return Math.ceil(this.totalPages / this.pageSize);
+  }
+  
+
+  GetSuggesstions(){
+    this.breedSearchService.GetBreedNames().subscribe(
+      data=>{
+        this.breedSuggestions=data
+    })
+  }
+
+  onInputChange() {
+    this.breedSuggestions = this.autoCorrectService.getBreedSuggestions(this.search);
+  }
+
+  FunctionTakesSuggAndBindIt(sugg:string){
+    this.search=sugg;
+    this.pageNumber=1;
+    this.FlagToBack=true
+    this.fetchPets();
+  }
+  BackToPets(){
+    this.sex=""
+    this.type=""
+    this.search=""
+    this.FlagToBack=false;
+    this.fetchPets();
+  }
+
 }
+
+

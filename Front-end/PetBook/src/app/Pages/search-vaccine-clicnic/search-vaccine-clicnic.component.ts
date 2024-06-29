@@ -1,3 +1,4 @@
+
 import { Component, OnInit } from '@angular/core';
 import { VaccineClinicsService } from '../../Services/vaccine-clinics.service';
 import { VaccineClinic } from '../../Models/vaccine-clinic';
@@ -26,6 +27,12 @@ export class SearchVaccineClicnicComponent implements OnInit {
   Flag: boolean = false;
   noResults: boolean = false;
   MainData: VaccineClinicLocation[] = [];
+  numbofpages:number=0;
+
+  // Pagination properties
+  currentPage: number = 1;
+  itemsPerPage: number = 5;
+  paginatedData: VaccineClinicLocation[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -69,8 +76,10 @@ export class SearchVaccineClicnicComponent implements OnInit {
             element.Quantity = item.quantity;
           }
         });
+        this.numbofpages=Math.ceil(this.vaccineClinicLocation.length/5);
         console.log(this.vaccineClinicLocation);
         this.MainData = this.vaccineClinicLocation;
+        this.updatePaginatedData();
       },
       error => {
         console.error('An error occurred while fetching clinic locations:', error);
@@ -78,14 +87,18 @@ export class SearchVaccineClicnicComponent implements OnInit {
     );
   }
 
+  updatePaginatedData(): void {
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    const end = start + this.itemsPerPage;
+    this.paginatedData = this.vaccineClinicLocation.slice(start, end);
+  }
+
   BackToVaccines() {
     this.searchQuery = "";
     this.vaccineClinicLocation = this.MainData;
-    this.Flag=false;
-    //here
+    this.Flag = false;
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    
-
+    this.updatePaginatedData();
   }
 
   getStars(rate: number): number[] {
@@ -117,16 +130,34 @@ export class SearchVaccineClicnicComponent implements OnInit {
 
   searchBar() {
     if (this.searchQuery.trim() !== '') {
-      this.vaccineClinicLocation=this.MainData;
+      this.vaccineClinicLocation = this.MainData;
       this.vaccineClinicLocation = this.vaccineClinicLocation.filter(clinic => clinic.name.toLowerCase() === this.searchQuery.toLowerCase());
-      this.Flag=true;
-            
+      this.Flag = true;
     } else {
       this.vaccineClinicLocation = this.MainData;
-      this.Flag=false;
-      //here
+      this.Flag = false;
       window.scrollTo({ top: 0, behavior: 'smooth' });
       this.hideSuggestions();
     }
+    this.updatePaginatedData();
   }
+
+  nextPage(): void {
+    if ((this.currentPage * this.itemsPerPage) < this.vaccineClinicLocation.length) {
+      this.currentPage++;
+      this.updatePaginatedData();
+    }
+  }
+
+  previousPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.updatePaginatedData();
+    }
+  }
+
+  trackByFn(index: number, item: VaccineClinicLocation): number {
+    return item.clinicID;
+  }
+  
 }

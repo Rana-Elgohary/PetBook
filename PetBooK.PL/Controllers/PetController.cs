@@ -55,146 +55,65 @@ namespace PetBooK.PL.Controllers
             List<PetGetDTO> PetDTO = mapper.Map<List<PetGetDTO>>(pets);
             return Ok(PetDTO);
         }
-        //-------------------------Filter---------------------
-        [HttpGet("FilterPetsReadyForBreeding")]
-        public IActionResult FilterPetsReadyForBreeding(string Type = null, string sex = null)
-        {
-            var petsQuery = unitOfWork.petRepository.FindBy(p => p.ReadyForBreeding).AsQueryable();
-
-            if (!string.IsNullOrEmpty(Type))
-            {
-                petsQuery = petsQuery.Where(p => p.Type == Type);
-            }
-
-            if (!string.IsNullOrEmpty(sex))
-            {
-                petsQuery = petsQuery.Where(p => p.Sex == sex);
-            }
-
-            var pets = petsQuery.ToList();
-            if (!pets.Any())
-            {
-                return NotFound("No pets ready for breeding found.");
-            }
-
-            var petDTOs = mapper.Map<List<PetGetDTO>>(pets);
-            return Ok(petDTOs);
-        }
-
-        //---------------------------------search for both dogs orrr cats which are ready-----------------------------
-        [HttpGet("SearchPetsReadyForBreeding")]
-        public IActionResult GetAllPetsReadyForBreeding()
-        {
-            var pets = unitOfWork.petRepository.FindBy(p => p.ReadyForBreeding && (p.Type == "Dog" || p.Type == "Cat"));
-            if (!pets.Any()) { return NotFound("No pets ready for breeding found."); }
-
-            var petDTOs = mapper.Map<List<PetGetDTO>>(pets);
-            return Ok(petDTOs);
-        }
-
-        ////---------------------------------search for both dogs orrr cats which are ready with pagination-----------------------------
-
-        //[HttpGet("SearchPetsReadyForBreeding")]
-        //public IActionResult GetAllPetsReadyForBreeding(int pageNumber = 1, int pageSize = 4)
-        //{
-        //    try
-        //    {
-        //        var pets = unitOfWork.petRepository.FindBy(p => p.ReadyForBreeding && (p.Type == "Dog" || p.Type == "Cat"));
-        //        if (!pets.Any()) { return NotFound("No pets ready for breeding found."); }
-
-        //        var petDTOs = mapper.Map<List<PetGetDTO>>(pets);
-
-        //        //for pagination
-        //        int total = petDTOs.Count();
-        //        var petDTOs2 = petDTOs.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
-        //        var response = new
-        //        {
-        //            Data = petDTOs2,
-        //            AllData = petDTOs,
-        //            TotalItems = total
-        //        };
-        //        return Ok(response);
-        //    }
-        //    catch
-        //    {
-        //        return StatusCode(500, "error while retrievong data");
-        //    }
-
-        //}
-
-        //-----------------------------------search for dogs only which are readyfor breading-------------
-        [HttpGet("SearchDogsReadyForBreeding")]
-        public IActionResult GetAllDogsReadyForBreeding()
-        {
-            var pets = unitOfWork.petRepository.FindBy(p => p.ReadyForBreeding && p.Type == "Dog");
-            if (!pets.Any()) { return NotFound("No pets ready for breeding found."); }
-
-            var petDTOs = mapper.Map<List<PetGetDTO>>(pets);
-            return Ok(petDTOs);
-        }
         //-----------------------------------search breedname-------------
         [HttpGet("SearchBreedNameOfPetsReadyForBreeding")]
-        public IActionResult BreedNameOfPetsReadyForBreeding(string name)
+        public IActionResult BreedNameOfPetsReadyForBreeding()
         {
-            var targetBreed = unitOfWork.breedRepository.FindBy(b => b.Breed1 == name).FirstOrDefault();
-            if (targetBreed == null)
+            try
             {
-                return NotFound($"Breed '{name}' not found.");
+                var targetBreed = unitOfWork.breedRepository.selectall();
+               
+                List<string> Names = new List<string>();
+                foreach (var item in targetBreed)
+                {
+                    Names.Add(item.Breed1);
+                }
+               
+                return Ok(Names);
+                
             }
-
-            var petBreedRelationships = unitOfWork.pet_BreedRepository.FindBy(pb => pb.BreedID == targetBreed.BreedID).ToList();
-            var petIds = petBreedRelationships.Select(pb => pb.PetID).ToList();
-
-            var pets = unitOfWork.petRepository.FindBy(p => p.ReadyForBreeding == true && petIds.Contains(p.PetID)).ToList();
-            if (!pets.Any())
+            catch
             {
-                return NotFound("No pets ready for breeding found.");
+                return StatusCode(500, "error while retrieving data");
             }
+            //var petBreedRelationships = unitOfWork.pet_BreedRepository.FindBy(pb => pb.BreedID == targetBreed.BreedID).ToList();
+            //var petIds = petBreedRelationships.Select(pb => pb.PetID).ToList();
 
-            var petDTOs = mapper.Map<List<PetGetDTO>>(pets);
-            return Ok(petDTOs);
+            //var pets = unitOfWork.petRepository.FindBy(p => p.ReadyForBreeding == true && petIds.Contains(p.PetID)).ToList();
+            //if (!pets.Any())
+            //{
+            //    return NotFound("No pets ready for breeding found.");
+            //}
+
+            //var petDTOs = mapper.Map<List<PetGetDTO>>(pets);
+            //return Ok(petDTOs);
 
         }
-
-        //-------------------------------------------------------------------------------------
-
-        [HttpGet("SearchCatsReadyForBreeding")]
-        public IActionResult GetAllCatsReadyForBreeding()
+        /////////Lookkkk
+        [HttpGet("SearchPetsReadyForBreeding")]
+        public IActionResult GetAllPetsReadyForBreeding(string type = "", string sex = "", string search = "", int pageNumber = 1, int pageSize = 4)
         {
-            var pets = unitOfWork.petRepository.FindBy(p => p.ReadyForBreeding && p.Type == "Cat");
-            if (!pets.Any()) { return NotFound("No pets ready for breeding found."); }
+            var petsQuery = unitOfWork.petRepository.FindByIncludeThenInclude(
+                p => p.ReadyForBreeding &&
+                     (string.IsNullOrEmpty(type) || p.Type == type) &&
+                     (string.IsNullOrEmpty(sex) || p.Sex == sex) &&
+                     (string.IsNullOrEmpty(search) || p.Pet_Breeds.Any(pb => pb.Breed.Breed1.Contains(search))),
+                p => p.Pet_Breeds,
+                pb => pb.Breed);
 
-            var petDTOs = mapper.Map<List<PetGetDTO>>(pets);
-            return Ok(petDTOs);
+
+            var petDTOs = mapper.Map<List<PetGetDTO>>(petsQuery);
+
+            int total = petDTOs.Count();
+            List<PetGetDTO> petDTOs2 = petDTOs.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+            var response = new
+            {
+                Data = petDTOs2,
+                AllData = petDTOs,
+                TotalItems = total
+            };
+            return Ok(response);
         }
-
-
-
-        //-------------------------------------------------------------------------------------
-
-        [HttpGet("SearchFemalesReadyForBreeding")]
-
-        public IActionResult GetAllFemalesReadyForBreeding()
-        {
-            var pets = unitOfWork.petRepository.FindBy(p => p.ReadyForBreeding && p.Sex == "F");
-            if (!pets.Any()) { return NotFound("No Female pets ready for breeding found."); }
-
-            var petDTOs = mapper.Map<List<PetGetDTO>>(pets);
-            return Ok(petDTOs);
-        }
-        //-------------------------------------------------------------------------------------
-
-        [HttpGet("SearchMalesReadyForBreeding")]
-
-        public IActionResult GetAllMalesReadyForBreeding()
-        {
-            var pets = unitOfWork.petRepository.FindBy(p => p.ReadyForBreeding && p.Sex == "M");
-            if (!pets.Any()) { return NotFound("No Female pets ready for breeding found."); }
-
-            var petDTOs = mapper.Map<List<PetGetDTO>>(pets);
-            return Ok(petDTOs);
-        }
-
 
         
         //--------------------------------------------------------------------------------------

@@ -117,6 +117,14 @@ namespace PetBooK.BL.Reo
 
             return query.Where(predicate).ToList();
         }
+        public List<TEntity> FindByIncludeThenInclude<TProperty, TThenProperty>(Expression<Func<TEntity, bool>> predicate,Expression<Func<TEntity, IEnumerable<TProperty>>> includes, Expression<Func<TProperty, TThenProperty>> thenIncludes)
+        {
+            IQueryable<TEntity> query = db.Set<TEntity>();
+
+            query = query.Include(includes).ThenInclude(thenIncludes);
+
+            return query.Where(predicate).ToList();
+        }
 
 
         public void DeleteEntities(List<TEntity> entities)
@@ -321,7 +329,7 @@ namespace PetBooK.BL.Reo
             return query.Where(e => EF.Property<int>(e, str) == Id).ToList();
         }
 
-      
+
 
 
     }
