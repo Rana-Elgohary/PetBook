@@ -46,8 +46,15 @@
                 </div>
                 <div class="">
                   <p class="font-Laila2 text-lg text-stone-800">pairWith: {{item.pairWith}}</p>
-                  <button  class="bg-[#FE7A36] hover:bg-[#e66322] text-white font-bold px-8 py-2 rounded-lg"
-                          [disabled]="item.pairWith === 'I\'m not paired'" (click)="UnPair(item.petID)">Unpair</button>
+                  <div class="flex justify-between">
+                    <button  class="bg-[#FE7A36] hover:bg-[#e66322] text-white font-bold px-8 py-2 rounded-lg"
+                            [disabled]="item.pairWith === 'I\'m not paired'" (click)="UnPair(item.petID)">Unpair</button>
+  
+                    <button class="border-2 outline-offset-4 outline outline-4 outline-[#FE7A36] text-stone-700 border-[#FE7A36] hover:bg-[#FE7A36] hover:border-white hover:text-white font-semibold px-4 rounded-lg"
+                      *ngIf="item.pairWith !== 'I\'m not paired' && item.PairedWithPetID" (click)="GoToPairedPetDetails(item.PairedWithPetID)">
+                      Show Details
+                    </button>
+                  </div>
                 </div>
                 <div>
                   <button class="bg-[#FE7A36] hover:bg-[#e66322] text-white px-8 py-2 rounded-lg" (click)="openDialog(myTemplate)">Tap to see NoteBook</button>

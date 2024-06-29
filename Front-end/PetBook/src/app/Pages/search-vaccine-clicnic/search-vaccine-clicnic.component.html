@@ -32,7 +32,7 @@
             <div class="p-5 pb-0">
               <p class="font-Laila font-semibold text-lg">{{ Vaccine.name }}</p>
               <p class="font-extralight text-gray-500 text-[17px]">{{ Vaccine.location }}</p>
-              <p class="font-extralight text-gray-500 text-[17px]">{{ Vaccine.price }}</p>
+              <p class="font-extralight text-gray-500 text-[17px]">Price: {{ Vaccine.price }} L.E</p>
               <div class="flex justify-center">
                 <div *ngFor="let star of getStars(Vaccine.rate)">
                   <svg class="w-6 h-6 text-yellow-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
@@ -61,5 +61,5 @@
       <button class="bg-[#FE7A36] text-white w-20 rounded-xl" (click)="nextPage()" [disabled]="currentPage >= (vaccineClinicLocation.length / itemsPerPage)">Next</button>
   </div>
   </div>
-
 </div>
+

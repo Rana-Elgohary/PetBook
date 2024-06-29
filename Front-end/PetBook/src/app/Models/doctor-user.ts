@@ -9,7 +9,9 @@ export class DoctorUser {
         public age: number|null,
         public sex: string,
         public degree: string,
-        public hiringDate: Date
+        public hiringDate: Date,
+        public photo: File|null
+
           )
           {}
       }

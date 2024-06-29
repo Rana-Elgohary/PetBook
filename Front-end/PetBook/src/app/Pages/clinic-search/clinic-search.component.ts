@@ -35,10 +35,6 @@ export class ClinicSearchComponent implements OnInit{
   noResults: boolean = false;
   clinicsName: string[] = [];
 
-
-
-
-
   constructor(private clinicService:ClinicService){}
   ngOnInit(): void {
     this.getAllClinics()
@@ -48,6 +44,7 @@ export class ClinicSearchComponent implements OnInit{
       next: (data) => {
         this.Clinics = data.data;
         this.MainData = data.allData;
+        this.MainData = this.Clinics;
         this.Flag=false;
         this.clinicSearch=""
         this.countIsZero= this.Clinics.length===0;
@@ -68,19 +65,9 @@ export class ClinicSearchComponent implements OnInit{
   searchClinics() {
     if (this.clinicSearch.trim() !== '') {
       this.pageNumber=1;
-      // this.AllClinicsWithoutPagination.forEach(cl => 
-      //   {
-      //     if(cl.name.toLowerCase() == this.clinicSearch.trim().toLocaleLowerCase()){
-      //       this.ClinicsByName.push(cl)
-      //     }
-      //   }
-      // )
       this.Clinics = this.MainData;
       this.Clinics = this.Clinics.filter(clinic => clinic.name.toLowerCase() === this.clinicSearch.toLowerCase());
       this.ClinicsByName=[];
-      // if(this.Clinics.length==0){
-        //   document.getElementById("HiddenParag")?.classList.remove("hidden")
-        // }
         this.Flag=true;
         this.totalPages=this.Clinics.length;
         this.countIsZero=this.Clinics.length===0;
@@ -97,7 +84,6 @@ export class ClinicSearchComponent implements OnInit{
 
   BackToClinics(){
     this.ClinicsByName=[];
-    // document.getElementById("HiddenParag")?.classList.add("hidden")
     this.getAllClinics() 
     
   }
@@ -160,15 +146,16 @@ async getClinicPhones(id: number) {
 
   getClinicsName() {
     this.ClinicNames = [];  // Make sure ClinicNames is reset
-    this.MainData.forEach(element => {
+    this.Clinics.forEach(element => {
       this.ClinicNames.push(element.name);
     });
     this.ClinicNames = [...new Set(this.ClinicNames)]; // Remove duplicates using Set
   }
-  
   selectClinic(clinic: string) {
     this.clinicSearch = clinic;
     this.clinicSuggestions = [];
     this.searchClinics();
   }
 }
+
+

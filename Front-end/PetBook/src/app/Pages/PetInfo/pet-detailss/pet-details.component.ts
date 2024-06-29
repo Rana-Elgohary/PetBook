@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PetDetailsService } from '../../../Services/pet-details.service';
 import { PetDetails } from '../../../Models/pet-details';
 import { UserPetDetails } from '../../../Models/user-pet-details';
@@ -17,30 +17,37 @@ import { PairPetsDialogComponent } from '../pair-pets-dialog/pair-pets-dialog.co
   styleUrl: './pet-details.component.css'
 })
 export class PetDetailsComponent {
-
-
     pet: PetDetails | undefined;
     owner: UserPetDetails | undefined;
     url:string='https://localhost:7066/Resources/'
     userPets: PetDetails[] = [];
     selectedPetId: number | undefined;
+    IsButtonShown:boolean = true
+
     constructor(
       private route: ActivatedRoute,
       private petDetailsService: PetDetailsService,
       public Account:AccountServiceService   ,
       private snackBar: MatSnackBar,
-      private dialog: MatDialog
+      private dialog: MatDialog,
+      private router: Router
      ) {}
   
+    //  this.route.queryParams.subscribe(params => {
+    //    this.IsButtonShown = params['DoNotShowButton'] || true;
+    //  });
     ngOnInit(): void {
+
       this.route.params.subscribe(params => {
         const petId = +params['id'];
         console.log('ngOnInit: petId', petId);
         this.loadPetDetails(petId);
         const userId = Number(this.Account.r.id)
         this.loadUserPets(userId);
-       
 
+        if (params['DoNotShowButton']) {
+          this.IsButtonShown = params['DoNotShowButton'];
+        }
       });
     }
   
