@@ -1,69 +1,85 @@
-<!-- Main Content -->
-<div class="justify-center bg-gray-100 mainDiv">
-    <div *ngFor="let item of reservationClinic" class="flex items-center w-full">
-      <!-- Form -->
-      <div class="bg-[#FFFBF1] p-8 rounded-lg shadow-md w-5/12 relative left-72 top-10  mb-5">
-        <div>
-          <div class="mb-4">
-            <label class="block text-gray-700">Pet Name:</label>
-            {{item.petName}}
-          </div>
-          <div class="mb-4">
-            <label class="block text-gray-700">Clinic Name:</label>
-            {{item.clinicName}}
-          </div>
-          <div class="mb-4 justify-center">
-            <label class="block text-gray-700">Date:</label>
-            {{item.date}}           
-          </div>
-          <div class="mb-4" *ngFor="let phone of item.clinicPhones" >
-            <label class="block text-gray-700"  >Phone:</label>
-            {{phone.phoneNumber}}
-          </div>
+<div class="bg-gray-100 ">
+  <div class="px-8 table-container">
+    <ng-container >
+      <section class="m-auto py-10 text-center">
+        <p class="font-Laila font-semibold text-4xl text-[#051829]">Your Clinic Reservations</p>
+      </section>
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead>
+          <tr class="text-left text-xl text-gray-800 tracking-wider">
+            <th scope="col" class="px-4 py-7 font-medium">Pet</th>
+            <th scope="col" class="px-4 py-7 font-medium">Clinic</th>
+            <th scope="col" class="px-4 py-7 font-medium">Date</th>
+            <th scope="col" class="px-4 py-7 font-medium">Phone</th>
+            <th scope="col" class="px-4 py-7 font-medium">Delete</th>
+          </tr>
+        </thead>
+        <tbody class="bg-gray-100 text-lg">
+          <tr *ngFor="let item of reservationClinic">
+            <td class="px-6 py-4 whitespace-nowrap text-gray-800">{{ item.petName }}</td>
+            <td class="px-6 py-4 text-orange-500">{{ item.clinicName}}</td>
+            <td class="px-6 py-4 text-gray-800">{{ item.date | date}}</td>
+            <td class="px-6 py-4 text-gray-800" *ngFor="let phone of item.clinicPhones">{{phone.phoneNumber}}</td>
 
-          <div class="mb-4">
-        <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg" (click)="DeleteClinicReservation(item.petID,item.clinicID)">Delete</button>
-          </div>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <button class="text-red-600 hover:text-red-900 font-bold" (click)="DeleteClinicReservation(item.petID,item.clinicID)">
+                <i class="fas fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
-          </div>
+      <hr class="my-16 border-[#FE7A36]">
+    </ng-container>
+
+    <ng-template #noRequestMessage>
+      <div class="flex justify-center items-center min-h-screen">
+        <div class="bg-white shadow-md rounded-lg p-6">
+          <p class="text-center font-aclonica text-2xl text-gray-800">You does not have reservations</p>
         </div>
       </div>
-    </div>
+    </ng-template>
 
-    <div class="justify-center bg-gray-100 mainDiv">
-        <div *ngFor="let item of reservationVacc" class="flex items-center w-full">
-          
-         
-          <div class="bg-[#FFFBF1] p-8 rounded-lg shadow-md w-5/12 relative left-72 top-10  mb-5">
-            <div>
-              <div class="mb-4">
-                <label class="block text-gray-700">Pet Name:</label>
-                <input type="text" class="mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" [value]="item.petName" readonly>
-              </div>
-              <div class="mb-4">
-                <label class="block text-gray-700">Vaccine Name:</label>
-                <input type="text" class="mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" [value]="item.vaccineName" readonly>
-              </div>
-              <div class="mb-4 justify-center">
-                <label class="block text-gray-700">Date:</label>
-                <input type="text" class="mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" [value]="item.date" readonly>
-               
-              </div>
-              <div class="mb-4">
-                <label class="block text-gray-700">clinic Name:</label>
-                <input type="text" class="mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" [value]="item.clinicName" readonly>
-              </div>
-              <div class="mb-4" *ngFor="let phone of item.Phones" >
-                <label class="block text-gray-700"  >Phone:</label>
-                {{phone.phoneNumber}}
-              </div>
+    <ng-container >
+      <section class="m-auto pb-10 text-center">
+        <p class="font-Laila font-semibold text-4xl text-[#051829]">Your Vaccine Reservations</p>
+      </section>
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead>
+          <tr class="text-left text-xl text-gray-800 tracking-wider">
+            <th scope="col" class="px-4 py-7 font-medium">Pet</th>
+            <th scope="col" class="px-4 py-7 font-medium">Vaccine</th>
+            <th scope="col" class="px-4 py-7 font-medium">Date</th>
+            <th scope="col" class="px-4 py-7 font-medium">Clinic</th>
+            <th scope="col" class="px-4 py-7 font-medium">Phone</th>
+            <th scope="col" class="px-4 py-7 font-medium">Delete</th>
+          </tr>
+        </thead>
+        <tbody class="bg-gray-100 text-lg">
+          <tr *ngFor="let item of reservationVacc">
+            <td class="px-6 py-4 whitespace-nowrap text-gray-800">{{ item.petName }}</td>
+            <td class="px-6 py-4 text-orange-500">{{ item.vaccineName}}</td>
+            <td class="px-6 py-4 text-gray-800">{{ item.date | date}}</td>
+            <td class="px-6 py-4 text-orange-500">{{ item.clinicName}}</td>
 
-              <div class="mb-4">
-                <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg" (click)="DeleteVaccReservation(item.petID,item.clinicID,item.vaccineID)">Delete</button>
-                  </div>
-              </div>
-            </div>
-          </div>
+            <td class="px-6 py-4 text-gray-800" *ngFor="let phone of item.Phones">{{phone.phoneNumber}}</td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <button class="text-red-600 hover:text-red-900 font-bold" (click)="DeleteVaccReservation(item.petID,item.clinicID,item.vaccineID)">
+                <i class="fas fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ng-container>
+
+    <ng-template #noRequestMessage>
+      <div class="flex justify-center items-center min-h-screen">
+        <div class="bg-white shadow-md rounded-lg p-6">
+          <p class="text-center font-aclonica text-2xl text-gray-800">You does not have reservations</p>
         </div>
-   
-  
+      </div>
+    </ng-template>
+  </div>
+</div>
