@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
 })
 export class SearchVaccineComponent implements OnInit {
 
-
+  
   vaccine :Vaccine[]=[]
   noResults: boolean = false;
   VaccineSuggestions: string[] = [];
@@ -48,7 +48,7 @@ export class SearchVaccineComponent implements OnInit {
 
   hideSuggestions() {
     this.VaccineSuggestions = [];
-    }
+   }
 
  onInputChange() {
       this.VaccineSuggestions = this.vaccineService.getVaccineSuggestions(this.searchQuery);

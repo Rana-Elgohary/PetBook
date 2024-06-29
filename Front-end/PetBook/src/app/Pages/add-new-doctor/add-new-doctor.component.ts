@@ -22,7 +22,8 @@ export class AddNewDoctorComponent {
     age: null,
     sex: '',
     degree: '',
-    hiringDate: ''
+    hiringDate: '',
+    photo: ''
   };  doc:any;
   constructor(
     public dialogRef: MatDialogRef<AddNewDoctorComponent>,
@@ -37,5 +38,18 @@ export class AddNewDoctorComponent {
 
   closeDialog() {
     this.dialogRef.close();
+  }
+
+  triggerFileInput() {
+    const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+    fileInput.click();
+  }
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.DoctorUs.photo= file;
+
+
+    }
   }
 }

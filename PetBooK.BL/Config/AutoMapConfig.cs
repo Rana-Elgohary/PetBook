@@ -169,6 +169,11 @@ namespace PetBooK.BL.Config
             CreateMap<Doctor, DoctorUser>();
             CreateMap<DoctorUser, Doctor>();
 
+
+            
+
+           
+
             CreateMap<Reservation_For_Vaccine, ReservationFoeVaccineInclude>().ReverseMap();
 
             CreateMap<Clinic_Doctor, ClinicDoctorssDTO>()
@@ -178,6 +183,20 @@ namespace PetBooK.BL.Config
             .ForMember(dest => dest.Degree, opt => opt.MapFrom(src => src.doctor.Degree))
             .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.doctor.DoctorNavigation.Phone))
             .ForMember(dest => dest.Photo, opt => opt.MapFrom(src => src.doctor.DoctorNavigation.Photo));
+
+            CreateMap<Pet, PetGetDTO>()
+               .ForMember(dest => dest.BreedName, opt => opt.MapFrom(src => src.Pet_Breeds.FirstOrDefault().Breed.Breed1));
+
+
+            
+
+
+
         }
+
+
+
+
+
     }
 }

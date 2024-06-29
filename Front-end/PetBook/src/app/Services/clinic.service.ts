@@ -31,7 +31,6 @@ export class ClinicService {
     return this.http.get<Doctor[]>(`${this.apiUrl2}api/Doctor/${clinicId}/doctors`);
   }
 
-
   bookAppointment(reservation: Reservation): Observable<any> {
     return this.http.post(`${this.apiUrl2}api/Reservation`, reservation);
   }

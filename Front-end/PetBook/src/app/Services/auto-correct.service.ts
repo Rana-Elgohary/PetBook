@@ -18,23 +18,18 @@ export class AutoCorrectService {
   private url = 'https://localhost:7066/api/Breed';
 
   constructor(private http: HttpClient) {
-    this.fetchBreeds();
-  }
-
-  // Method to fetch all breeds and update the breeds array
-  private fetchBreeds(): void {
+    // this.fetchBreeds();
     this.http.get<Breed[]>(this.url)
-      .pipe(
-        map((data: Breed[]) => data.map(breed => breed.breed1))
-      )
-      .subscribe((names: string[]) => {
-        this.breeds = names;
-      });
+    .pipe(
+      map((data: Breed[]) => data.map(breed => breed.breed1))
+    )
+    .subscribe((names: string[]) => {
+      this.breeds = names;
+    });
   }
 
-  // Method to get breed suggestions based on input
   getBreedSuggestions(input: string): string[] {
-    this.fetchBreeds();
+    console.log("from service",this.breeds.filter(breed => breed.toLowerCase().includes(input.toLowerCase())))
     return this.breeds.filter(breed => breed.toLowerCase().includes(input.toLowerCase()));
   }
 }

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using PetBooK.BL.DTO;
 using PetBooK.BL.UOW;
 using PetBooK.DAL.Models;
+using PetBooK.DAL.Services;
 
 namespace PetBooK.PL.Controllers
 {
@@ -14,10 +15,13 @@ namespace PetBooK.PL.Controllers
     {
             UnitOfWork unitOfWork;
             IMapper mapper;
-            public DoctorController(UnitOfWork unitOfWork, IMapper mapper)
+            IFileService fileService;
+
+        public DoctorController(UnitOfWork unitOfWork, IMapper mapper, IFileService fileService)
             {
                 this.unitOfWork = unitOfWork;
                 this.mapper = mapper;
+            this.fileService = fileService;
             }
             //------------------------------------------Get----------------------------------------
             //------------------GetAll-----------
@@ -89,26 +93,41 @@ namespace PetBooK.PL.Controllers
 
 
         [HttpPost("adduserfirstthenadddoctor")]
-        public ActionResult AddUserThenDoctor(int ClinicId,DoctorUser doctoraddDTO )
+        public async Task<ActionResult> AddUserThenDoctor(int ClinicId, [FromForm]DoctorUser doctoraddDTO)
         {
             if (doctoraddDTO == null)
                 return BadRequest();
             else
             {
-                User us =mapper.Map<User>(doctoraddDTO);
-                us.RoleID = 1;
-                unitOfWork.userRepository.add(us);
-                unitOfWork.SaveChanges();
-                User user=  unitOfWork.userRepository.FirstOrDefault(u => u.UserName == doctoraddDTO.UserName);
 
-                Doctor doctor = mapper.Map<Doctor>(doctoraddDTO);
-                doctor.DoctorID = user.UserID;
-                unitOfWork.doctorRepository.add(doctor);
-                unitOfWork.SaveChanges();
+                User existUser = unitOfWork.userRepository.FirstOrDefault(u => u.UserName == doctoraddDTO.UserName && u.Email == doctoraddDTO.Email);
+                if (existUser == null) // if this user does not eist before 
+                {
+                    string[] allowedFileExtensions = new string[] { ".jpg", ".jpeg", ".png", ".webp" };
+                    string createdImageName = await fileService.SaveFileAsync(doctoraddDTO.Photo, allowedFileExtensions);
 
-                Clinic_Doctor cD=new Clinic_Doctor();
+
+                    // ADD this user in user table 
+                    User us = mapper.Map<User>(doctoraddDTO);
+                    us.RoleID = 1;
+                    us.Photo = createdImageName;
+                    unitOfWork.userRepository.add(us);
+                    unitOfWork.SaveChanges();
+                    User user = unitOfWork.userRepository.FirstOrDefault(u => u.UserName == doctoraddDTO.UserName);
+
+
+                    // then in doctor table
+                    Doctor doctor = mapper.Map<Doctor>(doctoraddDTO);
+                    doctor.DoctorID = user.UserID;
+                    unitOfWork.doctorRepository.add(doctor);
+                    unitOfWork.SaveChanges();
+                }
+
+                // Add this doctor in this clinic in clinic octor table
+                User userr = unitOfWork.userRepository.FirstOrDefault(u => u.UserName == doctoraddDTO.UserName);
+                Clinic_Doctor cD = new Clinic_Doctor();
                 cD.ClinicID = ClinicId;
-                cD.DoctorID=doctor.DoctorID;
+                cD.DoctorID = userr.UserID;
                 unitOfWork.clinic_DoctorRepository.add(cD);
                 unitOfWork.SaveChanges();
                 return Ok(doctoraddDTO);

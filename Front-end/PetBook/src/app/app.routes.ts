@@ -9,7 +9,6 @@ import { UserDetailsComponent } from './Pages/User/user-details/user-details.com
 import { UpdateUserDetailsComponent } from './Pages/User/update-user-details/update-user-details.component';
 import { LandingPageComponent } from './Pages/LandingPage/landing-page/landing-page.component';
 import { PetDetailsComponent } from './Pages/PetInfo/pet-detailss/pet-details.component';
-import { UserPetInfoComponent } from './Pages/PetInfo/Pet-Inf/user-pet-info/user-pet-info.component';
 import { BreedSearchComponent } from './Pages/breed-search/breed-search.component';
 import { ClinicComponent } from './Pages/clinic/clinic.component';
 import { UserProfilePetInfoComponent } from './Pages/userPetInfo/user-pet-info/userProfile-pet-info.component';
@@ -43,7 +42,7 @@ export const routes: Routes = [
     {path: "UpdateUser", component:UpdateUserDetailsComponent, title:"Edit"},
     {path: "BreedSearch", component:BreedSearchComponent, title:"Search Breed"},
     {path: 'Pet/details/:id', component: PetDetailsComponent,title:"Pet Details" },
-    {path: 'Pet/information/:id', component: UserPetInfoComponent,title:"User Pet Information" },
+    { path: 'Pet/details/:id/:DoNotShowButton', component: PetDetailsComponent,title:"Pet Details"  },
     {path:"Vaccine",component:SearchVaccineComponent,title:"Vaccine"},
     {path: 'search-vaccine-clinic/:VaccineId', component: SearchVaccineClicnicComponent },
     {path:"userPetEdit/:id",component:UserPetInfoEditComponent, title: "Edit Pet Information"},

@@ -202,8 +202,7 @@ namespace PetBooK.PL.Controllers
         [HttpDelete("{VaccineId}/{ClinicID}")]
         public ActionResult DeleteVaccineClinic(int VaccineId, int ClinicID)
         {
-            try
-            {
+            
                 if (ClinicID == null || VaccineId == null)
                     return BadRequest("Vaccine Clinic data is null");
 
@@ -214,12 +213,9 @@ namespace PetBooK.PL.Controllers
 
                 unit.vaccine_ClinicRepository.deleteEntity(vaccineClinic);
                 unit.SaveChanges();
-                return Ok("Successfully deleted");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, "An unexpected error occurred.");
-            }
+                return Ok();
+            
+            
         }
 
         [HttpGet("clinicc/{ClinicId}")]

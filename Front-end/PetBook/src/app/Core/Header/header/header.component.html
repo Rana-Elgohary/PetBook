@@ -13,21 +13,33 @@
         </div>
         <div class="hidden md:flex items-center space-x-4">
             <ul class="flex justify-between space-x-4 text-xl font-light">
-                <li><a class="hover:font-normal" routerLink="">Home</a></li>
-                <ng-container *ngIf="user">
-                    <li><a class="hover:font-normal" routerLink="/Profile/Account">Account</a></li>
-                    <li><a class="hover:font-normal" routerLink="/BreedSearch">Breed</a></li>
-                    <li><a class="hover:font-normal" routerLink="/clinics">Clinic</a></li>
-                    <li><a class="hover:font-normal" routerLink="/Vaccine">Vaccine</a></li>
-                    <li><a class="bg-[#FE7A36] p-2 px-4 rounded-xl text-lg w-[150px] hover:bg-[#e66322] text-white" (click)="Logout()" routerLink="">Logout</a></li>
-                </ng-container>
-                <ng-container *ngIf="!user">
-                    <li><a class="hover:font-normal" routerLink="/BreedSearch">Breed</a></li>
-                    <li><a class="hover:font-normal" routerLink="/clinics">Clinic</a></li>
-                    <li><a class="hover:font-normal" routerLink="/Vaccine">Vaccine</a></li>
-                    <li><a class="ml-14 hover:font-normal" routerLink="/UserSignUp">Sign-Up</a></li>
-                    <li><a class="bg-[#FE7A36] p-2 px-4 rounded-xl text-lg w-[150px] text-white hover:bg-[#e66322]" routerLink="/Login">Login</a></li>
-                </ng-container>
+                @if(role=="2"&& user)
+                {
+                    <ng-container>
+                        <li><a class="hover:font-normal" routerLink="">Home</a></li>
+                        <li><a class="hover:font-normal" routerLink="/Profile/Account">Account</a></li>
+                        <li><a class="hover:font-normal" routerLink="/BreedSearch">Breed</a></li>
+                        <li><a class="hover:font-normal" routerLink="/clinics">Clinic</a></li>
+                        <li><a class="hover:font-normal" routerLink="/Vaccine">Vaccine</a></li>
+                        <li><a class="bg-[#FE7A36] p-2 px-4 rounded-xl text-lg w-[150px] hover:bg-[#e66322] text-white" (click)="Logout()" routerLink="">Logout</a></li>
+                    </ng-container>
+                }
+                @if(!user){
+                    <ng-container>
+                        <li><a class="hover:font-normal" routerLink="">Home</a></li>
+                        <li><a class="hover:font-normal" routerLink="/BreedSearch">Breed</a></li>
+                        <li><a class="hover:font-normal" routerLink="/clinics">Clinic</a></li>
+                        <li><a class="hover:font-normal" routerLink="/Vaccine">Vaccine</a></li>
+                        <li><a class="ml-14 hover:font-normal" routerLink="/UserSignUp">Sign-Up</a></li>
+                        <li><a class="bg-[#FE7A36] p-2 px-4 rounded-xl text-lg w-[150px] text-white hover:bg-[#e66322]" routerLink="/Login">Login</a></li>
+                    </ng-container>
+                }
+                @if(role=="3" && user){
+                    <ng-container >
+                        <li><p class="hover:font-normal font-Laila">{{Name}}</p></li>
+                        <li><a class="bg-[#FE7A36] p-2 px-4 rounded-xl text-lg w-[150px] text-white hover:bg-[#e66322]" (click)="Logout()" routerLink="">Logout</a></li>
+                    </ng-container>
+                }
             </ul>
         </div>
     </div>

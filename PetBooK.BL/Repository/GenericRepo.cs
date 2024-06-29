@@ -97,15 +97,13 @@ namespace PetBooK.BL.Reo
 
             return query.ToList();
         }
-
-
-
-
-
-
-
-
-
+        public Pet selectbyPetid(int id)
+        {
+            return db.Set<Pet>()
+                     .Include(p => p.Pet_Breeds)
+                     .ThenInclude(pb => pb.Breed)
+                     .FirstOrDefault(p => p.PetID == id);
+        }
 
 
         public List<TEntity> FindByInclude(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes)
@@ -116,6 +114,14 @@ namespace PetBooK.BL.Reo
             {
                 query = query.Include(include);
             }
+
+            return query.Where(predicate).ToList();
+        }
+        public List<TEntity> FindByIncludeThenInclude<TProperty, TThenProperty>(Expression<Func<TEntity, bool>> predicate,Expression<Func<TEntity, IEnumerable<TProperty>>> includes, Expression<Func<TProperty, TThenProperty>> thenIncludes)
+        {
+            IQueryable<TEntity> query = db.Set<TEntity>();
+
+            query = query.Include(includes).ThenInclude(thenIncludes);
 
             return query.Where(predicate).ToList();
         }
@@ -322,5 +328,9 @@ namespace PetBooK.BL.Reo
 
             return query.Where(e => EF.Property<int>(e, str) == Id).ToList();
         }
+
+
+
+
     }
 }

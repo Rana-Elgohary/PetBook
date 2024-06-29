@@ -18,17 +18,12 @@ export class HeaderComponent implements OnInit{
 
 constructor(private account : AccountServiceService){}
 id : string= "";
+role:string|undefined=""
+Name:string|undefined=""
 Logout(){
   this.account.logout();
   this.id="";
 }
-
-// ngOnInit(): void {
-//   this.account.r$.subscribe(user => {
-//     this.user = user;
-//   });}
-  
-// }
 
 ngOnInit(): void {
   this.account.r$.subscribe(user => {
@@ -39,5 +34,7 @@ ngOnInit(): void {
   document.getElementById('mobile-menu-toggle')?.addEventListener('click', () => {
     document.getElementById('mobile-menu')?.classList.toggle('hidden');
   });
+  this.role=this.user?.RoleId.toString();
+  this.Name=this.user?.Name;  
   }
 }

@@ -57,7 +57,7 @@
     <section class="font-Laila2 flex flex-wrap justify-around">
       <div class="bg-white w-[30%] h-[500px] p-5 shadow-xl mb-12" *ngFor="let doctor of ClinicDoctors; let i = index">
         @if(doctor.photo !== null){
-          <img class="object-cover h-[75%] w-[100%]" src="https://images.unsplash.com/photo-1488161628813-04466f872be2?crop=entropy&cs=srgb&fm=jpg&ixid=MnwxNDU4OXwwfDF8cmFuZG9tfHx8fHx8fHx8MTYyMzMxNTMwNQ&ixlib=rb-1.2.1&q=85">
+          <img class="object-cover h-[75%] w-[100%]" [src]="doctor.photo">
         }
         @else {
           <img class="object-cover h-[75%] w-[100%]" src="../../../assets/Images/null.jpg">
