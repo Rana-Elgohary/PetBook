@@ -16,7 +16,7 @@ export const navigateIfClientGuard: CanActivateFn = (route, state) => {
       duration: 5000,
       verticalPosition: 'top'
     });
-    router.navigateByUrl('');
+    router.navigateByUrl('/Secretary');
     return false;
   }
 

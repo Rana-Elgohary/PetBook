@@ -54,7 +54,7 @@ export const routes: Routes = [
     {path: 'secretary-vaccine/:ClinicId', component: SecretaryVaccineComponent ,title:"Secretary-vaccine", canActivate:[noNavigateWithoutLoginGuard, navigateIfSecretaryGuard]},
     {path:"Secretary",component:SecretaryComponent,title:"Secretary", canActivate:[noNavigateWithoutLoginGuard, navigateIfSecretaryGuard]},
     {path:"SecretaryClinic/:id",component:SecrteryclinicComponent,title:"Secretary", canActivate:[noNavigateWithoutLoginGuard, navigateIfSecretaryGuard]},
-    {path:"",component:LandingPageComponent,title:"PetBook"},
+    {path:"",component:LandingPageComponent,title:"PetBook", canActivate:[navigateIfClientGuard]},
     {path: '**', redirectTo: '/'}
 ];
 
