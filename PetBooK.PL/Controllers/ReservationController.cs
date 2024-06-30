@@ -128,13 +128,13 @@ namespace PetBooK.PL.Controllers
         [HttpPost]
         public ActionResult AddReservation(ReservationPostDTO reservationDTO)
         {
-            try 
+            try
             {
                 if (reservationDTO == null)
                     return BadRequest("Reservation data is null");
 
                 var existingReservation = unit.reservationRepository
-                .FirstOrDefault(c => c.ClinicID == reservationDTO.ClinicID && c.PetID == reservationDTO.PetID);
+                    .FirstOrDefault(c => c.ClinicID == reservationDTO.ClinicID && c.PetID == reservationDTO.PetID);
 
                 if (existingReservation != null)
                     return BadRequest("Reservation already exists");
@@ -142,13 +142,17 @@ namespace PetBooK.PL.Controllers
                 Reservation reservation = mapper.Map<Reservation>(reservationDTO);
                 unit.reservationRepository.add(reservation);
                 unit.SaveChanges();
-                return Ok("Successfully added");
+                return Ok(new { message = "Successfully added" }); // Returning JSON
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
-                return StatusCode(500, "An unexpected error occurred.");
+                // Log the exception message for debugging purposes
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, new { error = "An unexpected error occurred." }); // Returning JSON
             }
         }
+
+
 
         [HttpPut]
         public ActionResult UpdateReservation(ReservationPostDTO reservationDTO)
