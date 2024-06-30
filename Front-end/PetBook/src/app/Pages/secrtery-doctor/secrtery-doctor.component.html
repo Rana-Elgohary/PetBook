@@ -21,14 +21,14 @@
             <div class="text-sm text-gray-900">{{ doctor1.hiringDate | date: 'shortDate' }}</div>
           </td>
           <td class="px-6 py-4 whitespace-nowrap text-right">
-            <button class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 mr-2 update-button" (click)="openEditDialog(doctor1)">Edit</button>
-            <button class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 update-button" (click)="deleteDoctor(doctor1.doctorID)">Delete</button>
+            <button class="px-4 py-2 bg-[#FE7A36] text-white rounded-md hover:bg-[#fe7936b1] mr-2" (click)="openEditDialog(doctor1)">Edit</button>
+            <button class="px-4 py-2 bg-[#FE7A36] text-white rounded-md hover:bg-[#fe7936b1]" (click)="deleteDoctor(doctor1.doctorID)">Delete</button>
           </td>
         </tr>
       </tbody>
     </table>
     <div class="mt-4 flex justify-end">
-      <button class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700" (click)="openAddDialog()">Add Doctor</button>
+      <button class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-700" (click)="openAddDialog()">Add Doctor</button>
     </div>
   </div>
 </div>

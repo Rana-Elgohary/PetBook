@@ -9,9 +9,9 @@ import { SignalRServiceService } from '../../Services/signal-rservice.service';
 import { Router,ActivatedRoute } from '@angular/router';
 import { AccountServiceService } from '../../Services/account-service.service';
 import { BreedSearchService } from '../../Services/breed-search.service';
-import { SetFilterModule } from '@ag-grid-enterprise/set-filter';
-import { AgGridModule } from '@ag-grid-community/angular';
-import { flush } from '@angular/core/testing';
+//import { SetFilterModule } from '@ag-grid-enterprise/set-filter';
+//import { AgGridModule } from '@ag-grid-community/angular';
+//import { flush } from '@angular/core/testing';
 
 @Component({
   selector: 'app-breed-search',
