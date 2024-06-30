@@ -1,3 +1,15 @@
+
+<style>.error-message {
+  color: red;
+  margin-top: 10px;
+}
+</style>
+
+
+<div *ngIf="errorMessage" class="error-message">
+  {{ errorMessage }}
+</div>
+
 <div class="bg-gray-100 p-8">
   <div class="w-[70%] m-auto">
 
@@ -40,6 +52,7 @@
               <input type="date"  [(ngModel)]="appointment.date" class="border p-2 rounded mb-2 w-full">
               <input type="text" placeholder="Your Phone"  class="border p-2 rounded mb-2 w-full">
               <textarea placeholder="Additional Information" class="border p-2 rounded mb-2 w-full"></textarea>
+              <button (click)="choosePet()" class="bg-[#746f6c] hover:bg-[#746f6c86] text-white px-8 py-2 text-base mr-4" ><strong>Choose Pet</strong></button>
               <button (click)="bookAppointment()" class="bg-[#fe7936] hover:bg-[#e66322] text-white px-8 py-2 text-base">Book</button>
           </div>
         </div>
