@@ -4,7 +4,7 @@
       <thead class="bg-gray-50">
         <tr>
           <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone Number</th>
-          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Actions</th>
+          <th scope="col" class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Actions</th>
         </tr>
       </thead>
       <tbody class="bg-white divide-y divide-gray-200">
@@ -13,13 +13,13 @@
             <div class="text-sm text-gray-900">{{ ph.phoneNumber }}</div>
           </td>
           <td class="px-6 py-4 whitespace-nowrap text-center">
-            <button class="update-button px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500" (click)="delete(ph.phoneNumber)">Delete</button>
+            <button class="update-button px-4 py-2 bg-[#FE7A36] text-white rounded-md hover:bg-[#fe7936b1]" (click)="delete(ph.phoneNumber)">Delete</button>
           </td>
         </tr>
       </tbody>
     </table>
     <div class="mt-4 flex justify-end">
-      <button class="add-button px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500" (click)="toggleAddLocation()">Add Phone</button>
+      <button class="add-button px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500" (click)="toggleAddLocation()">Add Phone</button>
     </div>
   </div>
 </div>
