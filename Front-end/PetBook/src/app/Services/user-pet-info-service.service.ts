@@ -5,6 +5,7 @@ import { UserPetInfo } from '../Models/user-pet-info';
 import { AddPet } from '../Models/add-pet';
 import { RequestBreed } from '../Models/request-breed';
 import { EditPet } from '../Models/edit-pet';
+import { PetBreedEdit } from '../Models/pet-breed-edit';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,7 @@ import { EditPet } from '../Models/edit-pet';
 export class UserPetInfoServiceService {
   baseURL= "https://localhost:7066/api/Pet";
   requestBreedUrl= "https://localhost:7066/api/RequestBreed/retunIfItPaired";
+  URL_PetBreed= "https://localhost:7066/api/PetBreed";
 
   constructor(public http: HttpClient) {}
 
@@ -51,6 +53,10 @@ export class UserPetInfoServiceService {
         formData.append('idNoteBookImage', editedPet.idNoteBookImage);
       }
       return this.http.put<AddPet>(this.baseURL,formData);
+    }
+
+    EditUserPetBreed(petToEdit:PetBreedEdit){
+      return this.http.put(this.URL_PetBreed,petToEdit);
     }
 
     deletePet(id:number): Observable<any>{

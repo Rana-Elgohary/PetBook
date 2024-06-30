@@ -10,6 +10,7 @@ import { AddPetService } from '../../Services/add-pet.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PetBreed } from '../../Models/pet-breed';
 import { EditPet } from '../../Models/edit-pet';
+import { PetBreedEdit } from '../../Models/pet-breed-edit';
 
 @Component({
     selector: 'app-user-pet-info-edit',
@@ -27,8 +28,10 @@ export class UserPetInfoEditComponent implements OnInit {
     breedList: Breed[] = []
     editedUserPetInfo: EditPet = new EditPet(0,"", null, 0, "", null, 0, false, "", "");
     petBreedID: PetBreed = new PetBreed(0, 0);
+    petBreedIDOldValue:number = 0 
     petID: number = 0;
     url:string='https://localhost:7066/Resources/'
+    petToEdit:PetBreedEdit = new PetBreedEdit(0,0,0)
 
     validationErrorsForPet: { [key in keyof EditPet]?: boolean | string | null } = {};
     validationErrorsForBreedPet: { [key in keyof PetBreed]?: boolean | string | null } = {};
@@ -36,11 +39,16 @@ export class UserPetInfoEditComponent implements OnInit {
     ngOnInit(): void {
         this.activatedRoute.params.subscribe({
             next: (d) => {
-                console.log(d['id']);
                 this.addPet.getPetBreed(d['id']).subscribe({
                     next: (PetBreed) => {
-                        this.petBreedID = PetBreed;
-                        console.log(this.petBreedID);
+                        const petBreedArray = PetBreed as any as PetBreed[];
+                        if (petBreedArray.length > 0) {
+                            this.petBreedID = petBreedArray[0];
+                            console.log(this.petBreedID.breedID)
+                            this.petBreedIDOldValue = this.petBreedID.breedID;
+                            console.log(this.petBreedIDOldValue);
+                            console.log(this.petBreedID);
+                        } 
                     }
                 });
             }
@@ -133,7 +141,7 @@ export class UserPetInfoEditComponent implements OnInit {
         for (const key in this.petBreedID) {
           if (this.petBreedID.hasOwnProperty(key)) {
             const fieldBreedPet = key as keyof PetBreed;
-            if (!this.petBreedID[fieldBreedPet] && fieldBreedPet != "PetID") {
+            if (!this.petBreedID[fieldBreedPet] && fieldBreedPet != "petID") {
               this.validationErrorsForBreedPet[fieldBreedPet] = true;
               isValid = false;
             } else {
@@ -146,10 +154,23 @@ export class UserPetInfoEditComponent implements OnInit {
     }
 
     SaveEdit() {
+        console.log(this.petID, this.petBreedIDOldValue, this.petBreedID.breedID)
         if(this.isFormValid()){
+            this.petToEdit.petID = this.petID
+            this.petToEdit.OldBreedID = this.petBreedIDOldValue
+            this.petToEdit.NewBreedID = this.petBreedID.breedID
+            
             this.userPetInfoService.editUserPet(this.editedUserPetInfo ,this.petID).subscribe({ 
-                next: (d) => { console.log(d);
-                this.route.navigateByUrl("/Profile/userPetInfo");
+                next: (d) => { 
+                    console.log(d)
+                    this.userPetInfoService.EditUserPetBreed(this.petToEdit).subscribe({
+                        next:(d) => {
+                            this.route.navigateByUrl("/Profile/userPetInfo");
+                        },
+                        error: (err) => {
+                            console.error('EditUserPetBreed error:', err);
+                        }
+                    })
                 }
             });
         }
@@ -192,7 +213,7 @@ export class UserPetInfoEditComponent implements OnInit {
     onTBreedChange(event: any) {
         const selectedValue = event.target.value;
         // Assuming you have validation logic, update validationErrors object accordingly
-        this.validationErrorsForBreedPet.BreedID = selectedValue ? null : 'Breed is required.';
+        this.validationErrorsForBreedPet.breedID = selectedValue ? null : 'Breed is required.';
     }
     
     onReadyForBreedChange(event: any) {

@@ -63,13 +63,13 @@
                             <label class="text-slate-800 text-lg">Breed</label>
                             <select class="p-2 border-2 focus:outline-none focus:border-[#FE7A36] rounded-md"
                                     required
-                                    [(ngModel)]="petBreedID.BreedID"
+                                    [(ngModel)]="petBreedID.breedID"
                                     (change)="onTBreedChange($event)">
                                 <option value="" disabled selected hidden></option>
-                                <option *ngFor="let breed of breedList" [value]="petBreedID.BreedID">{{ breed.breed1 }}</option>
+                                <option *ngFor="let breed of breedList" [value]="breed.breedID">{{ breed.breed1 }}</option>
                             </select>
                         </div>
-                        <div *ngIf="validationErrorsForBreedPet['BreedID']" class="text-red-500 absolute">*Breed is required.</div>
+                        <div *ngIf="validationErrorsForBreedPet['breedID']" class="text-red-500 absolute">*Breed is required.</div>
                     </div>
                 
                     <div class="w-[100%] my-5 relative">

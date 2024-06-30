@@ -47,6 +47,43 @@ namespace PetBooK.PL.Controllers
             return Ok();
 
         }
+        //-----------------------------------------------------------------------------------------------------------
+
+        [HttpPut]
+        public IActionResult UpdatePetBreed(PetBreedEdit petToEdit)
+        {
+            try
+            {
+                if (petToEdit.PetID == 0 || petToEdit.OldBreedID == 0 || petToEdit.NewBreedID == 0)
+                {
+                    return BadRequest();
+                }
+
+                Pet_Breed PetBreed = unitOfWork.pet_BreedRepository.selectbyid(petToEdit.PetID, petToEdit.OldBreedID);
+                if(PetBreed == null)
+                {
+                    return NotFound();
+                }
+
+                unitOfWork.pet_BreedRepository.deleteEntity(PetBreed);
+                unitOfWork.SaveChanges();
+
+                Pet_Breed PetBreedNew = new Pet_Breed();
+                PetBreedNew.PetID = petToEdit.PetID;
+                PetBreedNew.BreedID = petToEdit.NewBreedID;
+
+                unitOfWork.pet_BreedRepository.add(PetBreedNew);
+                unitOfWork.SaveChanges();
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Error to fetch");
+            }
+
+        }
+
         //------------------------------------------------------------------------------------------------------------------
 
         [HttpGet("getByComposet/{PetID}/{BreedID}")]

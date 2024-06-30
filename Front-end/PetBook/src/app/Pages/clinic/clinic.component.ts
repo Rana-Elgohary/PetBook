@@ -57,8 +57,6 @@ export class ClinicComponent {
       Number(this.account.r.id),
       this.clinic.clinicID,
       this.appointment.date
-      
-      
     );
     
     console.log(this.appointment.date)

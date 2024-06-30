@@ -1,6 +1,5 @@
 export class PetBreed {
     constructor(
-        public PetID: number,
-        public BreedID:number){};
-    
+        public petID: number,
+        public breedID:number){};
 }
