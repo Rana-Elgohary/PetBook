@@ -1,17 +1,20 @@
 import { CanActivateFn, Router } from '@angular/router';
 import { inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { AlreadyLoggedInDialogComponent } from '../Components/already-logged-in-dialog/already-logged-in-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 export const noNavigateToLoginPageIfTokenGuard: CanActivateFn = (route, state) => {
   let t = localStorage.getItem("token")
-  if(t != null){
-    const dialog = inject(MatDialog);
-    const router = inject(Router);
+  const dialog = inject(MatDialog);
+  const router = inject(Router);
+  const snackBar = inject(MatSnackBar);
 
-    dialog.open(AlreadyLoggedInDialogComponent).afterClosed().subscribe(() => {
-      router.navigateByUrl('/Profile');
+  if(t != null){
+    snackBar.open('You are already logged in', 'Close', {
+      duration: 5000,
+      verticalPosition: 'top'
     });
+    router.navigateByUrl('');
     return false;
   }
   return true

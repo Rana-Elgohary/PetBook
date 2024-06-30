@@ -23,35 +23,37 @@ import { SecretaryComponent } from './Pages/secretary/secretary.component';
 import { SecrteryclinicComponent } from './Pages/secrteryclinic/secrteryclinic.component';
 import { UserProfileMainComponent } from './Pages/user-profile-main/user-profile-main.component';
 import { ShowReservationsComponent } from './Pages/show-reservations/show-reservations.component';
+import { navigateIfClientGuard } from './Guard/navigate-if-client.guard';
+import { navigateIfSecretaryGuard } from './Guard/navigate-if-secretary.guard';
 
 export const routes: Routes = [
     {path: "Login", component:UserLoginComponent, title:"Login", canActivate: [noNavigateToLoginPageIfTokenGuard]},
-    {path: "PetRegister", component:PetRegisterComponent, title:"Pet Register", canActivate:[noNavigateWithoutLoginGuard]},
+    {path: "PetRegister", component:PetRegisterComponent, title:"Pet Register", canActivate:[noNavigateWithoutLoginGuard, navigateIfClientGuard]},
     {path: "UserSignUp", component:UserSignUpComponent, title:"User Sign-Up", canActivate: [noNavigateToLoginPageIfTokenGuard]},
     
     {path: "Profile", component:UserProfileMainComponent, title:"Profile", children:[
         {path: "", redirectTo: "Account", pathMatch: "full"},
-        {path: "Account", component:UserDetailsComponent, title:"Account", canActivate:[noNavigateWithoutLoginGuard]},
-        {path:"pendingRequest", component:PendingRequestComponent , title:"pending Request", canActivate:[noNavigateWithoutLoginGuard]},
-        {path: "MyRequest", component:MyRequestComponent, title:"MY Request", canActivate:[noNavigateWithoutLoginGuard]},
-        {path: "userPetInfo",component: UserProfilePetInfoComponent, title:"Pet Information", canActivate:[noNavigateWithoutLoginGuard]},
-        {path: "Reservations",component: ShowReservationsComponent , title:"Reservatios", canActivate:[noNavigateWithoutLoginGuard]},
-    ], canActivate:[noNavigateWithoutLoginGuard]},
+        {path: "Account", component:UserDetailsComponent, title:"Account", canActivate:[noNavigateWithoutLoginGuard, navigateIfClientGuard]},
+        {path:"pendingRequest", component:PendingRequestComponent , title:"pending Request", canActivate:[noNavigateWithoutLoginGuard, navigateIfClientGuard]},
+        {path: "MyRequest", component:MyRequestComponent, title:"MY Request", canActivate:[noNavigateWithoutLoginGuard, navigateIfClientGuard]},
+        {path: "userPetInfo",component: UserProfilePetInfoComponent, title:"Pet Information", canActivate:[noNavigateWithoutLoginGuard, navigateIfClientGuard]},
+        {path: "Reservations",component: ShowReservationsComponent , title:"Reservatios", canActivate:[noNavigateWithoutLoginGuard, navigateIfClientGuard]},
+    ], canActivate:[noNavigateWithoutLoginGuard, navigateIfClientGuard]},
 
-    {path: "UpdateUser", component:UpdateUserDetailsComponent, title:"Edit", canActivate:[noNavigateWithoutLoginGuard]},
-    {path: "BreedSearch", component:BreedSearchComponent, title:"Search Breed"},
-    {path: 'Pet/details/:id', component: PetDetailsComponent,title:"Pet Details", canActivate:[noNavigateWithoutLoginGuard] },
-    { path: 'Pet/details/:id/:DoNotShowButton', component: PetDetailsComponent,title:"Pet Details", canActivate:[noNavigateWithoutLoginGuard]},
-    {path:"Vaccine",component:SearchVaccineComponent,title:"Vaccine"},
-    {path: 'search-vaccine-clinic/:VaccineId', component: SearchVaccineClicnicComponent },
-    {path:"userPetEdit/:id",component:UserPetInfoEditComponent, title: "Edit Pet Information", canActivate:[noNavigateWithoutLoginGuard]},
-    {path: 'Clinic/:clinicId', component: ClinicComponent,title:"Clinic Details", canActivate:[noNavigateWithoutLoginGuard] },
-    {path:"ReservationVaccine/:clinicId/:VaccineId",component:ReservationForVaccineComponent,title:"Reservation Vaccine", canActivate:[noNavigateWithoutLoginGuard]},
-    {path:"clinics",component:ClinicSearchComponent,title:"Clinics"},
-    {path:"vaccines",component:SearchVaccineClicnicComponent,title:"Vaccines"},
-    {path: 'secretary-vaccine/:ClinicId', component: SecretaryVaccineComponent ,title:"Secretary-vaccine", canActivate:[noNavigateWithoutLoginGuard]},
-    {path:"Secretary",component:SecretaryComponent,title:"Secretary", canActivate:[noNavigateWithoutLoginGuard]},
-    {path:"SecretaryClinic/:id",component:SecrteryclinicComponent,title:"Secretary", canActivate:[noNavigateWithoutLoginGuard]},
+    {path: "UpdateUser", component:UpdateUserDetailsComponent, title:"Edit", canActivate:[noNavigateWithoutLoginGuard, navigateIfClientGuard]},
+    {path: "BreedSearch", component:BreedSearchComponent, title:"Search Breed", canActivate:[navigateIfClientGuard]},
+    {path: 'Pet/details/:id', component: PetDetailsComponent,title:"Pet Details", canActivate:[noNavigateWithoutLoginGuard, navigateIfClientGuard] },
+    { path: 'Pet/details/:id/:DoNotShowButton', component: PetDetailsComponent,title:"Pet Details", canActivate:[noNavigateWithoutLoginGuard, navigateIfClientGuard]},
+    {path:"Vaccine",component:SearchVaccineComponent,title:"Vaccine", canActivate:[navigateIfClientGuard]},
+    {path: 'search-vaccine-clinic/:VaccineId', component: SearchVaccineClicnicComponent, canActivate:[navigateIfClientGuard] },
+    {path:"userPetEdit/:id",component:UserPetInfoEditComponent, title: "Edit Pet Information", canActivate:[noNavigateWithoutLoginGuard, navigateIfClientGuard]},
+    {path: 'Clinic/:clinicId', component: ClinicComponent,title:"Clinic Details", canActivate:[noNavigateWithoutLoginGuard, navigateIfClientGuard] },
+    {path:"ReservationVaccine/:clinicId/:VaccineId",component:ReservationForVaccineComponent,title:"Reservation Vaccine", canActivate:[noNavigateWithoutLoginGuard, navigateIfClientGuard]},
+    {path:"clinics",component:ClinicSearchComponent,title:"Clinics", canActivate:[navigateIfClientGuard]},
+    {path:"vaccines",component:SearchVaccineClicnicComponent,title:"Vaccines", canActivate:[navigateIfClientGuard]},
+    {path: 'secretary-vaccine/:ClinicId', component: SecretaryVaccineComponent ,title:"Secretary-vaccine", canActivate:[noNavigateWithoutLoginGuard, navigateIfSecretaryGuard]},
+    {path:"Secretary",component:SecretaryComponent,title:"Secretary", canActivate:[noNavigateWithoutLoginGuard, navigateIfSecretaryGuard]},
+    {path:"SecretaryClinic/:id",component:SecrteryclinicComponent,title:"Secretary", canActivate:[noNavigateWithoutLoginGuard, navigateIfSecretaryGuard]},
     {path:"",component:LandingPageComponent,title:"PetBook"},
     {path: '**', redirectTo: '/'}
 ];
