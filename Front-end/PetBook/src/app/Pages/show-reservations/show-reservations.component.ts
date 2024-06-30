@@ -45,7 +45,7 @@ export class ShowReservationsComponent implements OnInit  {
               this.reservationClinic.forEach(item=>{
                 this.ClinicService.getClinicsPhoneNumbers(item.clinicID).subscribe({
                   next:(phonesList)=>{
-                    console.log(phonesList);
+                    // console.log(phonesList);
                     this.reservationClinic.forEach(clinic=>
                       {
                         clinic.clinicPhones=phonesList;
@@ -63,7 +63,7 @@ export class ShowReservationsComponent implements OnInit  {
               this.reservationVacc.forEach(item=>{
                 this.ClinicService.getClinicsPhoneNumbers(item.clinicID).subscribe({
                   next:(phonesList)=>{
-                    console.log(phonesList);
+                    // console.log(phonesList);
                     this.reservationVacc.forEach(clinic=>
                       {
                         clinic.Phones=phonesList;

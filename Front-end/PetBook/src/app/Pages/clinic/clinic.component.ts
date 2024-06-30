@@ -61,7 +61,8 @@ export class ClinicComponent {
     
     console.log(this.appointment.date)
     console.log( this.clinic.clinicID)
-    this.clinicService.bookAppointment(reservation).subscribe(response => {
+    this.clinicService.bookAppointment(reservation).subscribe(
+      response => {
       alert('Appointment booked successfully');
     }, error => {
       alert('Failed to book appointment');
