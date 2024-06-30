@@ -10,7 +10,7 @@ export const noNavigateToLoginPageIfTokenGuard: CanActivateFn = (route, state) =
     const router = inject(Router);
 
     dialog.open(AlreadyLoggedInDialogComponent).afterClosed().subscribe(() => {
-      router.navigateByUrl('');
+      router.navigateByUrl('/Profile');
     });
     return false;
   }
