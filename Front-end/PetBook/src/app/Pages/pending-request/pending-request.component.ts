@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RequestBreed } from '../../Models/request-breed';
 import { MyRequestService } from '../../Services/my-request.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { PetDetails } from '../../Models/pet-details';
 import { AccountServiceService } from '../../Services/account-service.service';
@@ -23,8 +23,8 @@ export class PendingRequestComponent implements OnInit { // Implementing OnInit
   constructor(
     public myrequest: MyRequestService,
     public activateRoute: ActivatedRoute,
-    public AccountService:AccountServiceService 
-
+    public AccountService:AccountServiceService,
+    public router:Router
   ) {}
 
   Confirm(petIDSender: number, petIDReceiver: number): void {
@@ -127,5 +127,9 @@ export class PendingRequestComponent implements OnInit { // Implementing OnInit
     }, error => {
       console.error('Error deleting request:', error);
     });
+  }
+
+  ShowPetDetails(id:number){
+    this.router.navigateByUrl(`Pet/details/${id}/false`)
   }
 }

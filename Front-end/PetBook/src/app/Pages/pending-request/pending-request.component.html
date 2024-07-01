@@ -13,7 +13,10 @@
         <tbody class="bg-gray-100 text-lg">
           <tr *ngFor="let item of request; let i = index">
             <td class="px-6 py-4 whitespace-nowrap">{{ item.receiverPetName }}</td>
-            <td class="px-6 py-4 whitespace-nowrap">{{ item.senderPetName }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <button class="border border-[#FE7A36] rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-[#fe7936b1] focus:outline-none focus:shadow-outline" (click)="ShowPetDetails(item.petIDSender)">{{ item.senderPetName }} </button>
+
+            </td>
             <td class="px-6 py-4 whitespace-nowrap">{{ item.ownersenderName }}</td>
             <td class="px-6 py-4 whitespace-nowrap">
               <button class="border border-green-500 bg-green-500 text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-green-600 focus:outline-none focus:shadow-outline" (click)="Confirm(item.petIDSender, item.petIDReceiver)">Confirm</button>
