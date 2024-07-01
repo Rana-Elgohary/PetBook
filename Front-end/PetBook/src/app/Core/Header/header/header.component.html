@@ -13,7 +13,7 @@
         </div>
         <div class="hidden md:flex items-center space-x-4">
             <ul class="flex justify-between space-x-4 text-xl font-light">
-                @if(role=="2"&& user)
+                @if(role!="3"&& user)
                 {
                     <ng-container>
                         <li><a class="hover:font-normal" routerLink="">Home</a></li>

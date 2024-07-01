@@ -34,10 +34,10 @@ export class ShowReservationsComponent implements OnInit  {
   
 
   ngOnInit(): void {
-   
     this.userPetInfoService.getPetByUserId(this.userID).subscribe({
       next: (UserPetInfoData) => {
         this.userPetList = UserPetInfoData;
+        console.log(this.userPetList)
         this.userPetList.forEach(element => {
           this.clinicReservationService.getClinicReservationByPetId(element.petID).subscribe({
             next:(clinicReservations)=>{
@@ -45,7 +45,6 @@ export class ShowReservationsComponent implements OnInit  {
               this.reservationClinic.forEach(item=>{
                 this.ClinicService.getClinicsPhoneNumbers(item.clinicID).subscribe({
                   next:(phonesList)=>{
-                    // console.log(phonesList);
                     this.reservationClinic.forEach(clinic=>
                       {
                         clinic.clinicPhones=phonesList;
@@ -75,11 +74,18 @@ export class ShowReservationsComponent implements OnInit  {
               })
             }
           })
-          
         });
       }
+
     }); 
   } 
+
+  show(){
+    console.log(this.userPetList)
+
+    console.log(this.reservationClinic)
+    console.log(this.reservationVacc)
+  }
   
   DeleteClinicReservation( PetID:number,clinicID:number){
     Swal.fire({

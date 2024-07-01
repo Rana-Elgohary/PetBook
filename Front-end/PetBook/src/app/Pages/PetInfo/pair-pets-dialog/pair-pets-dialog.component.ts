@@ -12,7 +12,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
     <div class="background-image  rounded-lg shadow-lg overflow-y-scroll">
       <div mat-dialog-content class="w-full">
         <div *ngFor="let pet of data.pets" class="pet-item cursor-pointer mb-2 hover:bg-[#f0f0f0] flex justify-around items-center" (click)="selectPet(pet.petID)">
-          <img [src]="pet.photo" alt="Pet" class="w-12 h-12 rounded-full mr-2">
+          <img [src]="pet.photo" alt="Pet" class="w-12 h-12 rounded-full mr-2 object-cover">
           <span class="text-lg text-orange">{{ pet.name }}</span>
         </div>
       </div>

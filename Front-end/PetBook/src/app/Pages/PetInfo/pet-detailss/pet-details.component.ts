@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { PetDetailsService } from '../../../Services/pet-details.service';
 import { PetDetails } from '../../../Models/pet-details';
 import { UserPetDetails } from '../../../Models/user-pet-details';
-import { RequestForBreed } from '../../../Models/request-for-breed';
 import { AccountServiceService } from '../../../Services/account-service.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
@@ -30,7 +29,6 @@ export class PetDetailsComponent {
       public Account:AccountServiceService   ,
       private snackBar: MatSnackBar,
       private dialog: MatDialog,
-      private router: Router
      ) {}
   
     ngOnInit(): void {
@@ -97,6 +95,7 @@ export class PetDetailsComponent {
     userPetsWithTrueValues:PetDetails[] = []
 
     openPairPopup(): void {
+      this.userPetsWithTrueValues = []
       this.userPets.forEach(element => {
         if(element.readyForBreeding == true){
           this.userPetsWithTrueValues.push(element)

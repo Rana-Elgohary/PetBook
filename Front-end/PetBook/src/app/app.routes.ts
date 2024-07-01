@@ -25,6 +25,7 @@ import { UserProfileMainComponent } from './Pages/user-profile-main/user-profile
 import { ShowReservationsComponent } from './Pages/show-reservations/show-reservations.component';
 import { navigateIfClientGuard } from './Guard/navigate-if-client.guard';
 import { navigateIfSecretaryGuard } from './Guard/navigate-if-secretary.guard';
+import { navigateIfNotSecretaryGuard } from './Guard/navigate-if-not-secretary.guard';
 
 export const routes: Routes = [
     {path: "Login", component:UserLoginComponent, title:"Login", canActivate: [noNavigateToLoginPageIfTokenGuard]},
@@ -51,7 +52,7 @@ export const routes: Routes = [
     {path:"ReservationVaccine/:clinicId/:VaccineId",component:ReservationForVaccineComponent,title:"Reservation Vaccine", canActivate:[noNavigateWithoutLoginGuard, navigateIfClientGuard]},
     {path:"clinics",component:ClinicSearchComponent,title:"Clinics", canActivate:[navigateIfClientGuard]},
     {path:"Secretary",component:SecretaryComponent,title:"Secretary", canActivate:[noNavigateWithoutLoginGuard, navigateIfSecretaryGuard]},
-    {path:"",component:LandingPageComponent,title:"PetBook", canActivate:[navigateIfClientGuard]},
+    {path:"",component:LandingPageComponent,title:"PetBook", canActivate:[navigateIfNotSecretaryGuard]},
     {path: '**', redirectTo: '/'}
 ];
 

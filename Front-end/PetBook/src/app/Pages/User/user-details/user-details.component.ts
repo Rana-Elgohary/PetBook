@@ -21,8 +21,6 @@ private imageUrlBase: string = 'https://localhost:7066/Resources/';
   ngOnInit(): void {
     this.userid = parseInt(this.AccountService.r.id)
     this.loadUserData(this.userid);
-    console.log(this.userid)
-    console.log(parseInt(this.AccountService.r.id))
   }
 
   nameOfImage:string|null=null
