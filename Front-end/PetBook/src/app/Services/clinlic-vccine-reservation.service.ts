@@ -45,10 +45,11 @@ export class ClinlicVccineReservationService {
   }
 
   getVaccineReservationByPetId(id:number){
-    return this.http.get<any>(`${this.reservationUrl}/GetReservationforVaccinebypetID/${id}`)
+    return this.http.get<any[]>(`${this.reservationUrl}/GetReservationforVaccinebypetID/${id}`)
   }
 
-  DeleteVaccineDialogComponent(PetID:number,clinicID:number,VaccID:number){
+
+  DeleteVaccineDialogComponent(VaccID:number,clinicID:number,PetID:number){
     return this.http.delete<any>(`${this.reservationUrl}/${VaccID}/${clinicID}/${PetID}`)
   }
 }

@@ -195,7 +195,7 @@ namespace PetBooK.PL.Controllers
 
                 unit.reservationRepository.deleteEntity(reservation);
                 unit.SaveChanges();
-                return Ok("Successfully deleted");
+                return Ok(new { message = "Successfully Deleted" });
             }
             catch (Exception ex)
             {

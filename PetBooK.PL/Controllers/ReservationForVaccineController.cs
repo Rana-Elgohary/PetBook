@@ -102,7 +102,7 @@ namespace PetBooK.PL.Controllers
             {
                 unit.reservation_For_VaccineRepository.deleteEntity(deletedReservationForVaccine);
                 unit.SaveChanges();
-                return Ok("deleted");
+                return Ok(new { message = "Successfully deleted" });
             }
         }
 

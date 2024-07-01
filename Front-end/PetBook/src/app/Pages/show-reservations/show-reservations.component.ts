@@ -31,60 +31,60 @@ export class ShowReservationsComponent implements OnInit  {
   userPetList: UserPetInfo[] = [];
   reservationClinic: ClinicReservation[]=[];
   reservationVacc: VaccineReservation[]=[];
-  
 
   ngOnInit(): void {
+    this.fetchUserPets();
+  }
+
+  fetchUserPets(): void {
     this.userPetInfoService.getPetByUserId(this.userID).subscribe({
       next: (UserPetInfoData) => {
         this.userPetList = UserPetInfoData;
-        console.log(this.userPetList)
-        this.userPetList.forEach(element => {
-          this.clinicReservationService.getClinicReservationByPetId(element.petID).subscribe({
-            next:(clinicReservations)=>{
-              this.reservationClinic = clinicReservations;
-              this.reservationClinic.forEach(item=>{
-                this.ClinicService.getClinicsPhoneNumbers(item.clinicID).subscribe({
-                  next:(phonesList)=>{
-                    this.reservationClinic.forEach(clinic=>
-                      {
-                        clinic.clinicPhones=phonesList;
-                        
-                      }
-                    );
-                  }
-                })
-              })
+        this.fetchReservations();
+      }
+    });
+  }
+
+  fetchReservations(): void {
+    this.userPetList.forEach(pet => {
+      this.clinicReservationService.getClinicReservationByPetId(pet.petID).subscribe({
+        next: (clinicReservations) => {
+          clinicReservations.forEach(clinicRes => {
+            this.reservationClinic.push(clinicRes);
+            this.fetchClinicPhones(clinicRes.clinicID, 'clinic');
+          });
+        }
+      });
+
+      this.vaccineReservationService.getVaccineReservationByPetId(pet.petID).subscribe({
+        next: (vaccineReservations) => {
+          vaccineReservations.forEach(vaccineRes => {
+            this.reservationVacc.push(vaccineRes);
+            this.fetchClinicPhones(vaccineRes.clinicID, 'vaccine');
+          });
+        }
+      });
+    });
+  }
+
+  fetchClinicPhones(clinicID: number, type: 'clinic' | 'vaccine'): void {
+    this.ClinicService.getClinicsPhoneNumbers(clinicID).subscribe({
+      next: (phonesList) => {
+        if (type === 'clinic') {
+          this.reservationClinic.forEach(clinic => {
+            if (clinic.clinicID === clinicID) {
+              clinic.clinicPhones = phonesList;
             }
           });
-          this.vaccineReservationService.getVaccineReservationByPetId(element.petID).subscribe({
-            next:(vaccineReservations)=>{
-              this.reservationVacc=vaccineReservations;
-              this.reservationVacc.forEach(item=>{
-                this.ClinicService.getClinicsPhoneNumbers(item.clinicID).subscribe({
-                  next:(phonesList)=>{
-                    // console.log(phonesList);
-                    this.reservationVacc.forEach(clinic=>
-                      {
-                        clinic.Phones=phonesList;
-                        
-                      }
-                    );
-                  }
-                })
-              })
+        } else if (type === 'vaccine') {
+          this.reservationVacc.forEach(vaccine => {
+            if (vaccine.clinicID === clinicID) {
+              vaccine.Phones = phonesList;
             }
-          })
-        });
+          });
+        }
       }
-
-    }); 
-  } 
-
-  show(){
-    console.log(this.userPetList)
-
-    console.log(this.reservationClinic)
-    console.log(this.reservationVacc)
+    });
   }
   
   DeleteClinicReservation( PetID:number,clinicID:number){
@@ -97,13 +97,13 @@ export class ShowReservationsComponent implements OnInit  {
       cancelButtonText: 'No, keep it'
     }).then((result) => {
       if (result.isConfirmed) {
+        this.reservationClinic = this.reservationClinic.filter(reservation => !(reservation.petID === PetID && reservation.clinicID === clinicID));
         this.clinicReservationService.deleteClinicReservation(PetID,clinicID).subscribe({
           next: (d) => {
             console.log(d); 
+            Swal.fire('Delete!', 'The pet has been deleted.', 'success'); 
           }
         });
-        this.reservationClinic = this.reservationClinic.filter(reservation => !(reservation.petID === PetID && reservation.clinicID === clinicID));
-        Swal.fire('Delete!', 'The pet has been deleted.', 'success'); 
       }
     });
   }
@@ -118,13 +118,13 @@ export class ShowReservationsComponent implements OnInit  {
       cancelButtonText: 'No, keep it'
     }).then((result) => {
       if (result.isConfirmed) {
+        this.reservationVacc = this.reservationVacc.filter(reservation => !(reservation.petID === PetID && reservation.clinicID === clinicID && reservation.vaccineID===VaccID));
         this.vaccineReservationService.DeleteVaccineDialogComponent(VaccID,clinicID,PetID).subscribe({
           next: (d) => {
             console.log(d); 
+            Swal.fire('Delete!', 'The pet has been deleted.', 'success'); 
           }
         });
-        this.reservationVacc = this.reservationVacc.filter(reservation => !(reservation.petID === PetID && reservation.clinicID === clinicID,reservation.vaccineID===VaccID));
-        Swal.fire('Delete!', 'The pet has been deleted.', 'success'); 
       }
     });
   }
