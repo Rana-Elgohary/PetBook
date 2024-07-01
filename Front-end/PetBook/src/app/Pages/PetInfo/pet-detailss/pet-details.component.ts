@@ -33,9 +33,6 @@ export class PetDetailsComponent {
       private router: Router
      ) {}
   
-    //  this.route.queryParams.subscribe(params => {
-    //    this.IsButtonShown = params['DoNotShowButton'] || true;
-    //  });
     ngOnInit(): void {
 
       this.route.params.subscribe(params => {
