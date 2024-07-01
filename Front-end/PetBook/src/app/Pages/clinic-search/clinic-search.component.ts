@@ -30,7 +30,7 @@ export class ClinicSearchComponent implements OnInit{
   pageSize: number = 9;
   totalPages: number = 0;
 
-  //for auto correct 
+  //for auto correct
   clinicSuggestions: string[] = [];
   noResults: boolean = false;
   clinicsName: string[] = [];
@@ -38,13 +38,13 @@ export class ClinicSearchComponent implements OnInit{
   constructor(private clinicService:ClinicService){}
   ngOnInit(): void {
     this.getAllClinics()
-  } 
+  }
   getAllClinics() {
     this.clinicService.getAllClinics(this.pageNumber, this.pageSize).subscribe({
       next: (data) => {
         this.Clinics = data.data;
         this.MainData = data.allData;
-        this.MainData = this.Clinics;
+       // this.MainData = this.Clinics;
         this.Flag=false;
         this.clinicSearch=""
         this.countIsZero= this.Clinics.length===0;
@@ -84,8 +84,8 @@ export class ClinicSearchComponent implements OnInit{
 
   BackToClinics(){
     this.ClinicsByName=[];
-    this.getAllClinics() 
-    
+    this.getAllClinics()
+
   }
 
 
@@ -93,14 +93,14 @@ async getClinicPhones(id: number) {
     const phoneNumbers = await firstValueFrom(this.clinicService.getClinicsPhoneNumbers(id));
     if (phoneNumbers) {
       this.ClinicPhone = [];
-      phoneNumbers.forEach(ph => this.ClinicPhone.push(ph.phoneNumber));  
+      phoneNumbers.forEach(ph => this.ClinicPhone.push(ph.phoneNumber));
       const result = await Swal.fire({
         title: 'Clinic Phone Numbers',
-        html: this.ClinicPhone.join('<br>'), 
+        html: this.ClinicPhone.join('<br>'),
         icon: 'info',
         confirmButtonText: 'OK'
       });
-  
+
       if (result.isConfirmed) {
         this.ClinicPhone = [];
       }
@@ -130,7 +130,7 @@ async getClinicPhones(id: number) {
     return Math.ceil(this.totalPages / this.pageSize);
   }
 
-  //for auot correct 
+  //for auot correct
   hideSuggestions() {
     this.clinicSuggestions = [];
    }
@@ -146,7 +146,7 @@ async getClinicPhones(id: number) {
 
   getClinicsName() {
     this.ClinicNames = [];  // Make sure ClinicNames is reset
-    this.Clinics.forEach(element => {
+    this.MainData.forEach(element => {
       this.ClinicNames.push(element.name);
     });
     this.ClinicNames = [...new Set(this.ClinicNames)]; // Remove duplicates using Set

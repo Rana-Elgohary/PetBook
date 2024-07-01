@@ -27,7 +27,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class ClinicComponent {
   choosePet() {
     this.openPairPopup();
-  } 
+  }
   clinic: Clinic = new Clinic(0, "", 0, "");
   appointment: Reservation = new Reservation(1, 1, new Date(2020, 0, 6));
   clinicName: string = 'Default Clinic Name';
@@ -63,7 +63,7 @@ export class ClinicComponent {
       pets => {
         this.userPets = pets.map(pet => ({
           ...pet,
-          photo: this.url + pet.photo 
+          photo: this.url + pet.photo
         }));
         console.log(this.userPets)
       },
@@ -76,14 +76,14 @@ export class ClinicComponent {
     );
   }
   }
-
   getDoctors(clinicId: number): void {
-    this.clinicDoctor.GetDoctorsByClinicID(clinicId).subscribe(
-      data => {
-        this.ClinicDoctors = data
-        console.log(this.ClinicDoctors)
-      }
-    )
+    this.clinicDoctor.GetDoctorsByClinicID(clinicId).subscribe(data => {
+      this.ClinicDoctors = data.map((doctor: any) => {
+        doctor.photo = this.url + doctor.photo;
+        return doctor;
+      });
+      console.log(this.ClinicDoctors);
+    });
   }
 
   bookAppointment(): void {
@@ -93,9 +93,9 @@ export class ClinicComponent {
         this.clinic.clinicID,
         this.appointment.date
       );
-  
+
       console.log('Booking appointment with:', reservation);
-  
+
       this.clinicService.bookAppointment(reservation).subscribe(
         response => {
           console.log('Appointment booked successfully:', response);
@@ -119,8 +119,8 @@ export class ClinicComponent {
       );
     }
   }
-  
-  
+
+
   openPairPopup(): void {
 
     const dialogRef = this.dialog.open(PairPetsDialogComponent, {
@@ -142,7 +142,7 @@ export class ClinicComponent {
       console.log('Clinic Info:', data);
       if (Array.isArray(data) && data.length > 0) {
         this.clinicInfo = data[0];
-      } 
+      }
       else {
         this.clinicInfo = null;
       }

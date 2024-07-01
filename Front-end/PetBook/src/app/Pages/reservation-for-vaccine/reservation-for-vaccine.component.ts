@@ -63,7 +63,7 @@ choosePet() {
       switchMap(params => {
         this.clinicID = +params['clinicId'];
         this.VaccineID = +params['VaccineId'];
-        
+
         return this.clinicService.getClinicbyId(this.clinicID);
 
       })
@@ -73,15 +73,16 @@ choosePet() {
       this.searchClinicByName(clinic.name);
     });
   }
-  
+
   // Fetch doctors for the clinic
   getDoctors(clinicId: number): void {
-    this.clinicDoctor.GetDoctorsByClinicID(clinicId).subscribe(
-      data => {
-        this.ClinicDoctors = data
-        console.log(this.ClinicDoctors)
-      }
-    )
+    this.clinicDoctor.GetDoctorsByClinicID(clinicId).subscribe(data => {
+      this.ClinicDoctors = data.map((doctor: any) => {
+        doctor.photo = this.url + doctor.photo;
+        return doctor;
+      });
+      console.log(this.ClinicDoctors);
+    });
   }
 
   loadUserPets(): void {
@@ -90,7 +91,7 @@ choosePet() {
       pets => {
         this.userPets = pets.map(pet => ({
           ...pet,
-          photo: this.url + pet.photo 
+          photo: this.url + pet.photo
         }));
         console.log(this.userPets)
       },
